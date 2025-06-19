@@ -1,0 +1,110 @@
+{#
+  paragraph--faq-smart-section.html.twig
+  Used by the "FAQ Smart Section" paragraph type.
+
+  Fields:
+    - field_faq_section_title (overall title for the FAQ section)
+    - field_faq_items (references to the "faq_item" paragraphs)
+    - field_search_placeholder (custom placeholder text for search)
+#}
+
+{% set paragraph_id = paragraph.entity.id() %}
+{% set accordion_id = 'faq-' ~ paragraph_id %}
+{% set search_id = 'faq-search-' ~ paragraph_id %}
+{% set search_placeholder = content.field_search_placeholder[0]['#context']['value'] ?? 'Search FAQs and resources...' %}
+
+{# Add FAQ Schema markup for SEO #}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {% for item in content.field_faq_items %}
+      {% if item['#paragraph'] is defined %}
+        {
+          "@type": "Question",
+          "name": {{ item['#paragraph'].field_faq_question.value|json_encode|raw }},
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": {{ item['#paragraph'].field_faq_answer.value|striptags|json_encode|raw }}
+          }
+        }{% if not loop.last %},{% endif %}
+      {% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+
+<div class="faq-smart-section" itemscope itemtype="https://schema.org/FAQPage">
+  {% if content.field_faq_section_title %}
+    <h3 class="faq-section-title">
+      {{ content.field_faq_section_title }}
+    </h3>
+  {% endif %}
+  
+  {# Search bar with global search capabilities #}
+  <div class="faq-search-container mb-4">
+    <div class="input-group">
+      <span class="input-group-text">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </span>
+      <input type="text" 
+             class="form-control faq-search" 
+             id="{{ search_id }}" 
+             placeholder="{{ search_placeholder }}"
+             aria-label="Search FAQs and resources">
+      <button class="btn btn-primary btn-sm" type="button" id="{{ search_id }}-button">
+        Search
+      </button>
+    </div>
+    <div id="{{ search_id }}-results" class="faq-search-results mt-2 d-none" role="region" aria-live="polite" aria-atomic="true">
+      {# Search results will be populated here via JS #}
+    </div>
+    {# Screen reader announcements for search status #}
+    <div class="visually-hidden" role="status" aria-live="assertive" aria-atomic="true" id="{{ search_id }}-status"></div>
+  </div>
+
+  {# FAQ categories/filters #}
+  <div class="faq-filters">
+    <div class="filter-group" role="group" aria-label="FAQ filters">
+      <button type="button" class="filter-btn active" data-filter="all">All</button>
+      <button type="button" class="filter-btn" data-filter="services">Services</button>
+      <button type="button" class="filter-btn" data-filter="resources">Resources</button>
+    </div>
+  </div>
+
+  {# Accordion for FAQs #}
+  <div class="accordion faq-accordion" id="{{ accordion_id }}">
+    {% for item in content.field_faq_items %}
+      {% if item['#paragraph'] is defined %}
+        {% set item_id = 'faq-' ~ item['#paragraph'].id() %}
+        
+        <div class="accordion-item faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <h2 class="accordion-header" id="heading-{{ item_id }}">
+            <button class="accordion-button collapsed" type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapse-{{ item_id }}"
+                    aria-expanded="false"
+                    aria-controls="collapse-{{ item_id }}"
+                    itemprop="name">
+              {% if item['#paragraph'].field_faq_question.value %}
+                {{ item['#paragraph'].field_faq_question.value }}
+              {% endif %}
+            </button>
+          </h2>
+          <div id="collapse-{{ item_id }}"
+               class="accordion-collapse collapse"
+               aria-labelledby="heading-{{ item_id }}"
+               data-bs-parent="#{{ accordion_id }}"
+               itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div class="accordion-body" itemprop="text">
+              {% if item['#paragraph'].field_faq_answer.value %}
+                {{ item['#paragraph'].field_faq_answer.value }}
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>

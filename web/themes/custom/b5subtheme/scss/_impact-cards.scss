@@ -1,0 +1,499 @@
+/***********************************************
+ * Impact Cards Component
+ * 
+ * Complete styling for impact cards used on home page.
+ * Includes flip animations, responsive design, and color variants.
+ ***********************************************/
+
+/* Field wrapper - reset to work with Bootstrap grid */
+.field--name-field-impact-cards {
+  display: block;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+
+  .field__item {
+    width: 100%;
+    display: block;
+    margin: 0;
+  }
+}
+
+/* Stagger rules moved to _home-page.scss for better organization */
+
+/* Impact card styles */
+.impact-card {
+  box-sizing: border-box;
+  min-height: 190px;
+  max-width: 515px;
+  height: 225px;
+  display: flex;
+  position: relative;
+  width: 100%;
+  overflow: visible;
+  perspective: 1000px;
+  transition: border-color 0.3s ease,
+              box-shadow   0.3s ease,
+              transform     0.1s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  border: 6px solid $color-white;
+  background-color: transparent;
+  z-index: 1;
+
+  @include mobile {
+    width: 300px;
+    height: 120px;
+    min-height: 120px;
+    max-height: 120px;
+    border-width: 3px;
+    perspective: none;
+    
+    &[role="button"] {
+      cursor: default;
+      
+      &:hover, &:active {
+        transform: none;
+      }
+    }
+  }
+
+  .card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+                
+    @include mobile {
+      transform-style: initial;
+    }
+  }
+  
+  &.is-flipped .card-inner { 
+    transform: rotateY(180deg);
+    
+    @include mobile {
+      transform: none;
+    }
+  }
+
+  .card-front,
+  .card-back {
+    position: absolute;
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    display: flex; 
+    flex-direction: column;
+    
+    @include mobile {
+      backface-visibility: visible;
+      -webkit-backface-visibility: visible;
+    }
+  }
+
+  .card-front {
+    background-color: inherit;
+    color: inherit;
+    
+    @include mobile {
+      position: static;
+      transform: none;
+    }
+  }
+  
+  .card-back {
+    transform: rotateY(180deg);
+    background: $color-white;
+    color: $color-primary;
+    padding: 1rem 1.5rem 1rem 1.5rem;
+    position: relative;
+    transition: box-shadow 0.3s ease;
+    
+    @include mobile {
+      display: none;
+    }
+  }
+
+  /* Mobile-specific class styling */
+  &.mobile-card {
+    cursor: pointer;
+    
+    .card-inner {
+      transform: none;
+      transform-style: initial;
+    }
+    
+    .card-back {
+      display: none;
+    }
+    
+    .card-front {
+      position: static;
+      backface-visibility: visible;
+      transform: none;
+    }
+  }
+
+  /* Blue card variant */
+  &.impact-card--blue {
+    .card-front {
+      background-color: $color-primary;
+      color: $color-white;
+    }
+    
+    &:not(.is-flipped):hover {
+      border-color: $color-primary;
+      box-shadow: 0 0 10px 3px rgba(18,99,160,0.4);
+      
+      .card-front {
+        background-color: $color-white;
+        color: $color-primary;
+      }
+      
+      .impact-card__title { 
+        color: $color-primary; 
+      }
+      
+      .impact-card__link  { 
+        color: $color-primary; 
+      }
+      
+      /* Show underline under impact number on hover */
+      .impact-number {
+        &::after {
+          width: 100%;
+        }
+      }
+      
+      @include mobile {
+        border-color: $color-white;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        transform: none;
+        
+        .card-front {
+          background-color: $color-primary;
+          color: $color-white;
+        }
+        
+        .impact-card__title { 
+          color: inherit; 
+        }
+        
+        .impact-card__link  { 
+          color: inherit; 
+        }
+      }
+    }
+  }
+
+  /* Gray card variant */
+  &.impact-card--gray {
+    .card-front {
+      background-color: #5a5a5a;
+      color: $color-white;
+    }
+    
+    &:not(.is-flipped):hover {
+      border-color: #5a5a5a;
+      box-shadow: 0 0 10px 3px rgba(90,90,90,0.4);
+      
+      .card-front { 
+        background-color: $color-white; 
+        color: #5a5a5a; 
+      }
+      
+      .impact-card__title { 
+        color: #5a5a5a; 
+      }
+      
+      .impact-card__link  { 
+        color: #5a5a5a; 
+      }
+      
+      /* Show underline under impact number on hover */
+      .impact-number {
+        &::after {
+          width: 80%;
+        }
+      }
+      
+      @include mobile {
+        border-color: $color-gray-border;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        transform: none;
+        
+        .card-front { 
+          background-color: #5a5a5a; 
+          color: $color-white; 
+        }
+        
+        .impact-card__title { 
+          color: inherit; 
+        }
+        
+        .impact-card__link  { 
+          color: inherit; 
+        }
+      }
+    }
+    
+    &.is-flipped {
+      border-color: #5a5a5a;
+      
+      .card-back  { 
+        color: #5a5a5a; 
+      }
+      
+      .impact-card__back-heading { 
+        color: #5a5a5a; 
+      }
+      
+      .impact-card__back-close {
+        background: #5a5a5a;
+        border-color: #5a5a5a;
+        
+        &:hover {
+          background: $color-white;
+          color: #5a5a5a;
+          transform: translateY(-3px);
+          box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        // Remove outline for mouse users
+        &:focus:not(:focus-visible) {
+          outline: none;
+        }
+        
+        // Show outline only for keyboard navigation
+        &:focus-visible {
+          outline: 2px solid #5a5a5a; 
+        }
+      }
+    }
+  }
+
+  /* Flipped card hover state */
+  &.is-flipped:hover {
+    transform: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    border-color: $color-primary;
+  }
+
+  /* Card link styling */
+  .impact-card__link {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+    padding: 1.5rem 1.5rem .25rem;
+    flex: 1;
+    
+    &:hover { 
+      text-decoration: none; 
+    }
+    
+    @include mobile {
+      padding: 0.75rem;
+      cursor: pointer;
+      min-height: 44px;
+    }
+  }
+
+  .impact-card__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    height: 100%;
+  }
+
+  .impact-card__title {
+    color: inherit;
+    text-transform: capitalize;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0 0 0.75rem 0;
+    line-height: 1.2;
+    transition: all 0.3s ease;
+    
+    @include mobile {
+      font-size: 1.1rem;
+      margin-bottom: 0.4rem;
+      line-height: 1.2;
+      
+      span, .field--name-field-topic-title {
+        display: block;
+      }
+      
+      &::after {
+        display: none;
+        content: none;
+      }
+    }
+  }
+
+  .impact-card__description {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    color: inherit;
+    flex-grow: 1;
+    
+    @include mobile {
+      font-size: 0.85rem;
+      line-height: 1.3;
+    }
+  }
+
+  .impact-number {
+    display: inline-block;
+    margin: 0;
+    font-size: 54px;
+    font-weight: 700;
+    line-height: 1.1;
+    transition: transform .3s ease, color .3s ease;
+    position: relative;
+    
+    /* Underline on hover (desktop only) */
+    &::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: -8px;
+      width: 0;
+      height: 3px;
+      background: currentColor;
+      transform: translateX(-50%);
+      transition: width 0.3s ease;
+      
+      @include mobile {
+        display: none;
+      }
+    }
+    
+    @include mobile {
+      font-size: 32px;
+      line-height: 1.0;
+    }
+  }
+
+  .impact-text {
+    margin-top: .75rem;
+    align-self: flex-start;
+    text-align: left;
+    width: 100%;
+    font-size: 30px;
+    transition: color .3s ease;
+    
+    @include mobile {
+      font-size: 18px;
+      margin-top: 0.5rem;
+    }
+  }
+
+  .impact-card__back-heading {
+    font-size: 1.5rem;
+    text-align: center;
+    font-weight: 700;
+    color: $color-primary;
+    margin: 0;
+  }
+
+  .impact-card__back-detail {
+    font-size: 1.2rem;
+    line-height: 1.5;
+    text-align: center;
+    color: $color-black;
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-top: 0.5rem;
+  }
+
+  .impact-card__back-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 1rem;
+    background: $color-primary;
+    color: $color-white;
+    border: 3px solid $color-primary;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: bold;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    height: auto;
+    line-height: 1;
+    
+    &:hover {
+      background: $color-white;
+      color: $color-primary;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    // Remove outline for mouse users
+    &:focus:not(:focus-visible) {
+      outline: none;
+    }
+    
+    // Show outline only for keyboard navigation
+    &:focus-visible {
+      outline: 2px solid $color-primary; 
+      outline-offset: 2px; 
+    }
+  }
+
+  /* Interactive states */
+  &:not(.is-flipped) { 
+    cursor: pointer; 
+    
+    &:active { 
+      transform: scale(0.98);
+      
+      @include mobile {
+        transform: none;
+      }
+    }
+  }
+  
+  // Remove outline for mouse users, but keep for keyboard navigation
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+  
+  // Show outline only for keyboard navigation
+  &:focus-visible {
+    outline: 3px solid $color-primary; 
+    outline-offset: 2px; 
+  }
+  
+  &.is-flipped {
+    cursor: default;
+    
+    a { 
+      pointer-events: auto; 
+      cursor: pointer; 
+    }
+  }
+}
+
+/* Large screen specific adjustments */
+@include desktop {
+  .field--name-field-impact-cards > .field__item:nth-child(odd) {
+    transform: translateY(0.75rem);
+  }
+}

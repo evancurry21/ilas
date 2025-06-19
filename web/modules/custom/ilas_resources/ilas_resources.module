@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for ILAS Resources module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function ilas_resources_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.ilas_resources':
+      $output = '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('The ILAS Resources module provides resource content type functionality.') . '</p>';
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function ilas_resources_theme() {
+  return [
+    'node__resource' => [
+      'base hook' => 'node',
+    ],
+    'node__resource__teaser' => [
+      'base hook' => 'node',
+    ],
+  ];
+}

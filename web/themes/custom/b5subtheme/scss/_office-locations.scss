@@ -1,0 +1,46 @@
+/**
+ * Office Locations Page Styles
+ * 
+ * Specific styles for the office locations map and layout.
+ * Uses standard page layout for header/footer.
+ */
+
+@import 'variables_theme';
+@import 'mixins';
+
+.node--office-locations {
+
+  .content-section{
+    padding-top: 0;
+  }
+  // Topic cards wrapper
+  .office-info-topic-cards-wrapper {
+    padding: 0rem 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    
+    // Topic cards use main styles from _topic-cards.scss
+  }
+
+  // Map section with blue border
+  .office-locations-map-wrapper {
+    margin: 0rem auto 3rem;
+    
+    .leaflet-container {
+      width: 100%;
+      height: 525px;
+      border: 6px solid $color-primary;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      
+      @include tablet {
+        height: 400px;
+      }
+      
+      @include mobile {
+        height: 300px;
+        border-width: 4px;
+      }
+    }
+  }
+}

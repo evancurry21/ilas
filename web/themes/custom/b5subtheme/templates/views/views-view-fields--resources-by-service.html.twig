@@ -1,0 +1,12 @@
+{#
+/**
+ * @file
+ * Theme override to display fields in resources by service view.
+ * This template hides all field labels and wrappers.
+ */
+#}
+
+{# Output fields without any labels or wrappers #}
+{% for field in fields -%}
+  {{ field.content }}
+{%- endfor %}

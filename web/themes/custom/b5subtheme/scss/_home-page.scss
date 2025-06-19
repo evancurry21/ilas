@@ -1,0 +1,488 @@
+/**
+ * Home Page Styles
+ * 
+ * Custom styles for the home page layout.
+ * This page uses a custom header/footer implementation 
+ * and does NOT use the standard page.html.twig layout.
+ */
+
+@import 'variables_theme';
+@import 'mixins';
+
+/*--------------------------------------*
+ * 1) GRAY HERO BANNER - Title with curved background
+ *--------------------------------------*/
+.curved-page-header {
+  @include curved-section-base(14rem);
+  @include full-bleed-bg($color-gray-bg, z('background'));
+  @include curved-bottom($color-white, $curve-height-desktop, $curve-height-mobile, z('background'), $curve-border-width solid $color-gray-border);
+
+  .col-md-8 {
+    float: none;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .curved-page-header-title {
+    font-size: 3.5rem;
+    font-weight: bold;
+    margin: 0;
+    color: $color-primary;
+    position: relative;
+    z-index: 3;
+    white-space: nowrap;
+    word-break: break-word;
+    text-align: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+
+    @include tablet {
+      font-size: 2.5rem;
+      white-space: normal;
+    }
+    @include mobile {
+      font-size: 2.25rem;
+      position: relative;
+      left: auto;
+      transform: none;
+      width: 100%;
+      white-space: normal;
+      word-break: break-word;
+    }
+  }
+}
+
+/*--------------------------------------*
+ * 2) WHITE HERO CONTENT SECTION - Subtitle, CTA, Image
+ *--------------------------------------*/
+.hero-content-section {
+  background: $color-white;
+  padding: 0;
+  position: relative;
+  z-index: 1;
+
+  @include tablet {
+    padding: 2.5rem 0;
+  }
+  @include mobile {
+    padding: 2rem 0;
+  }
+
+  .hero-sub-heading {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: $color-black;
+
+    @include mobile {
+      text-align: center;
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  .hero-button-group {
+
+    @include mobile {
+      text-align: center;
+    }
+
+    // Hero button uses standardized button styles
+    .btn-hero {
+      // Any hero-specific overrides can go here
+      // For now, it just uses the standard .btn-primary styles
+      
+      @include mobile {
+        max-width: 250px;
+        margin: 0 auto;
+      }
+    }
+  }
+
+  .hero-media {
+    width: 100%;
+    height: auto;
+
+    @include mobile {
+      margin: 2rem 0;
+    }
+
+    img,
+    .field--type-image img,
+    picture img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      border-radius: 8px;
+
+      @include mobile {
+        max-height: 250px;
+        margin: 0 auto;
+      }
+    }
+  }
+}
+
+/*--------------------------------------*
+ * 3) BLUE "HOW WE HELP" SECTION - Section heading + topic cards with SVG background
+ *--------------------------------------*/
+.how-we-help-section {
+  position: relative;
+  padding: 0;
+  background: transparent;
+  overflow: visible;
+  min-height: 600px;
+
+  @include tablet {
+    padding: 4rem 0 6rem;
+    min-height: 450px;
+  }
+  @include mobile {
+    padding: 3rem 0 4rem;
+    min-height: 300px;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 50%;
+    width: 100vw;
+    height: 800px;
+    margin-left: -50vw;
+    background-image: url('/themes/custom/b5subtheme/images/curved-background.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+    pointer-events: none;
+
+    @include tablet {
+      height: 450px;
+    }
+
+    @include mobile {
+      height: 300px;
+    }
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-heading {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-top: 14.5rem;
+    color: $color-white;
+    text-align: center;
+
+    @include tablet {
+      font-size: 2.2rem;
+    }
+    @include mobile {
+      font-size: 1.7rem;
+    }
+  }
+
+  .topic-cards-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+    position: relative;
+    z-index: 10;
+
+    @include mobile {
+      gap: 1.25rem;
+    }
+  }
+
+  .topic-card-col {
+    min-width: 0;
+    width: 100%;
+    max-width: 450px;
+    position: relative;
+    z-index: z('overlay');
+
+    @include mobile {
+      max-width: 100%;
+    }
+  }
+
+  .topic-card__description {
+    font-size: 1.5rem;
+    
+    @include mobile {
+      font-size: 0.9rem;
+    }
+  }
+
+
+}
+
+/*--------------------------------------*
+ * 4) IMPACT SECTION - Impact title, quote and cards
+ *--------------------------------------*/
+.impact-section {
+  padding: 10rem 0 2.5rem;
+  position: relative;
+  z-index: z('content');
+
+  @include tablet {
+    padding: 2.5rem 0;
+  }
+  @include mobile {
+    padding: 2rem 0;
+  }
+
+  .impact-title {
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin: 0;
+    color: $color-primary;
+    text-align: center;
+
+    @include tablet {
+      font-size: 2.2rem;
+    }
+    @include mobile {
+      font-size: 1.7rem;
+    }
+  }
+
+  .impact-quote {
+    font-size: 2rem;
+    padding: 0;
+    text-align: center;
+    margin: 0 auto 2rem;
+    max-width: calc(100% - 4rem);
+    line-height: 1.4;
+
+    @include mobile {
+      font-size: 1.1rem;
+      max-width: calc(100% - 3rem);
+    }
+  }
+
+  .impact-cards-wrapper {
+    position: relative;
+    z-index: 1;
+
+    .impact-row-1,
+    .impact-row-2 {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      
+      .col-md-6 {
+        flex: 0 0 auto;
+        max-width: 515px;
+        width: auto;
+      }
+    }
+    
+    .impact-row-1 {
+      margin-bottom: 1rem;
+    }
+
+    .impact-card-col {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto 1rem auto;
+
+      @include mobile {
+        max-width: 100%;
+      }
+    }
+  }
+}
+
+/*--------------------------------------*
+ * 5) FINAL BLUE CURVE SECTION
+ *--------------------------------------*/
+.final-blue-curve-section {
+  @include bottom-blue-curve();
+}
+
+/*--------------------------------------*
+ * Animations
+ *--------------------------------------*/
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-1,
+.animate-2 {
+  opacity: 0;
+}
+
+.animate-1 {
+  animation: fadeInLeft 0.6s ease-out forwards;
+}
+
+.animate-2 {
+  animation: fadeInUp 0.6s ease-out 0.2s forwards;
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .animate-1,
+  .animate-2 {
+    animation: none;
+    opacity: 1;
+  }
+  
+  .btn-hero,
+  .impact-card,
+  .impact-number {
+    transition: none;
+    
+    &:hover,
+    &:focus,
+    &:focus-within {
+      transform: none;
+    }
+  }
+  
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/*───────────────────────────────────────────────*
+ * Diamond Stagger for Impact Cards (Desktop)    *
+ *───────────────────────────────────────────────────*/
+@include desktop {
+  .impact-section .impact-cards-wrapper {
+    .impact-row-1 .col-md-6:first-child .impact-card-col {
+      margin-top: 2rem !important;
+    }
+    .impact-row-2 .col-md-6:last-child .impact-card-col {
+      margin-top: -2rem !important;
+    }
+  }
+}
+
+/* Reset offsets on smaller screens */
+@include mobile {
+  .impact-section .impact-cards-wrapper .impact-card-col {
+    margin-top: 0 !important;
+  }
+}
+
+@include tablet {
+  .impact-section .impact-cards-wrapper .impact-card-col {
+    margin-top: 0 !important;
+  }
+}
+
+/* Help overlay mobile optimization */
+@media (max-width: 767.98px) {
+  .help-overlay {
+    padding: 1rem;
+  }
+  
+  .help-panel {
+    width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 8px;
+    
+    .help-panel-header {
+      padding: 1rem;
+      font-size: 1.1rem;
+    }
+    
+    .help-panel-content {
+      flex-direction: column;
+      padding: 1rem;
+    }
+    
+    .help-column {
+      margin-bottom: 1.5rem;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+      
+      h3 {
+        font-size: 1.1rem;
+        margin-bottom: 0.75rem;
+      }
+      
+      ul {
+        li {
+          margin-bottom: 0.5rem;
+          
+          a {
+            font-size: 0.95rem;
+            line-height: 1.4;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* Search overlay mobile improvements */
+@media (max-width: 767.98px) {
+  .search-overlay {
+    padding: 1rem;
+    
+    .search-overlay-form {
+      .search-input-wrapper {
+        .search-overlay-input {
+          font-size: 16px; // Prevents zoom on iOS
+          padding: 0.75rem 3rem 0.75rem 1rem;
+        }
+        
+        .search-overlay-submit,
+        .search-close {
+          width: 2.5rem;
+          height: 2.5rem;
+        }
+      }
+    }
+  }
+}
+
+/* Navigation improvements for smaller tablets */
+@media (max-width: 991.98px) {
+  .navbar {
+    .navbar-toggler {
+      border: none;
+      padding: 0.25rem 0.5rem;
+      
+      &:focus {
+        box-shadow: none;
+      }
+    }
+    
+    .navbar-collapse {
+      margin-top: 1rem;
+      
+      .nav-link {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+    }
+  }
+}

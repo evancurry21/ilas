@@ -1,0 +1,183 @@
+{# 
+  themes/custom/b5subtheme/templates/partials/mobile-menu-panel.html.twig
+  
+  Mobile slide-out menu overlay.
+#}
+
+<div
+  id="mobileMenuOverlay"
+  class="mobile-menu-overlay"
+  role="dialog"
+  aria-labelledby="mobileMenuTitle"
+  aria-hidden="true"
+>
+  <div class="mobile-menu-backdrop" id="mobileMenuBackdrop"></div>
+
+  <div class="mobile-menu-panel" id="mobileMenuPanel">
+    {# Header with logo and close button #}
+    <div class="mobile-menu-header">
+      <div class="mobile-menu-logo">
+        {#
+          {{ directory }} outputs the path to your theme root.
+          We append /images/ since that’s where the SVG lives.
+        #}
+        <img
+          src="/themes/custom/b5subtheme/images/logo-greyscale.svg"
+          alt="{{ 'Home'|t }}"
+        />
+      </div>
+      <button
+        type="button"
+        class="mobile-menu-close"
+        id="mobileMenuClose"
+        aria-label="{{ 'Close mobile menu'|t }}"
+      >
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    {# Navigation Menu #}
+    <nav class="mobile-menu-nav" id="mobileMenuTitle">
+      {# Apply for Help #}
+      <div class="mobile-nav-item">
+        <a href="/apply-for-help" class="mobile-nav-link no-submenu">
+          <span class="menu-text">{{ 'Apply for Help'|t }}</span>
+        </a>
+      </div>
+
+      {# What We Do #}
+      <div class="mobile-nav-item">
+        <div class="mobile-nav-link">
+          <a href="/what-we-do" class="menu-text-link">{{ 'What We Do'|t }}</a>
+          <button
+            class="menu-toggle"
+            aria-expanded="false"
+            aria-controls="what-we-do-submenu"
+            aria-label="{{ 'Toggle What We Do submenu'|t }}"
+          >
+            <i class="fa-solid fa-plus menu-icon" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="mobile-submenu" id="what-we-do-submenu">
+          <div class="mobile-submenu-item">
+            <a href="/services" class="mobile-submenu-link">{{ 'Services'|t }}</a>
+          </div>
+          <div class="mobile-submenu-item">
+            <a href="/legal-topics" class="mobile-submenu-link">{{ 'Legal Resources'|t }}</a>
+          </div>
+          <div class="mobile-submenu-item">
+            <a href="/senior-legal-risk-detector" class="mobile-submenu-link">{{ 'Risk Detector'|t }}</a>
+          </div>
+          <div class="mobile-submenu-item">
+            <a href="/faq" class="mobile-submenu-link">{{ 'FAQ'|t }}</a>
+          </div>
+        </div>
+      </div>
+
+      {# Our Impact #}
+      <div class="mobile-nav-item">
+        <a href="/our-impact" class="mobile-nav-link no-submenu">
+          <span class="menu-text">{{ 'Our Impact'|t }}</span>
+        </a>
+      </div>
+
+      {# About Us #}
+      <div class="mobile-nav-item">
+        <div class="mobile-nav-link">
+          <a href="/about-idaho-legal-aid-services" class="menu-text-link">{{ 'About Us'|t }}</a>
+          <button
+            class="menu-toggle"
+            aria-expanded="false"
+            aria-controls="about-submenu"
+            aria-label="{{ 'Toggle About Us submenu'|t }}"
+          >
+            <i class="fa-solid fa-plus menu-icon" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="mobile-submenu" id="about-submenu">
+          <div class="mobile-submenu-item">
+            <a href="/about-us/board-directors" class="mobile-submenu-link">{{ 'Board of Directors'|t }}</a>
+          </div>
+          <div class="mobile-submenu-item">
+            <a href="/financials-reports" class="mobile-submenu-link">{{ 'Financials & Reports'|t }}</a>
+          </div>
+          <div class="mobile-submenu-item">
+            <a href="/locations" class="mobile-submenu-link">{{ 'Locations'|t }}</a>
+          </div>
+        </div>
+      </div>
+
+      {# Donate #}
+      <div class="mobile-nav-item">
+        <div class="mobile-nav-link">
+          <a href="/donate" class="menu-text-link">{{ 'Donate'|t }}</a>
+          <button
+            class="menu-toggle"
+            aria-expanded="false"
+            aria-controls="donate-submenu"
+            aria-label="{{ 'Toggle Donate submenu'|t }}"
+          >
+            <i class="fa-solid fa-plus menu-icon" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="mobile-submenu" id="donate-submenu">
+          <div class="mobile-submenu-item">
+            <a href="/donate/ways-to-give" class="mobile-submenu-link">{{ 'Ways to Give'|t }}</a>
+          </div>
+          <div class="mobile-submenu-item">
+            <a href="/donate/access-to-justice" class="mobile-submenu-link">{{ 'Access to Justice'|t }}</a>
+          </div>
+          <div class="mobile-submenu-item">
+            <a href="/donate/questions" class="mobile-submenu-link">{{ 'Donation Questions'|t }}</a>
+          </div>
+        </div>
+      </div>
+
+      {# Get Involved #}
+      <div class="mobile-nav-item">
+        <div class="mobile-nav-link">
+          <a href="/get-involved" class="menu-text-link">{{ 'Get Involved'|t }}</a>
+          <button
+            class="menu-toggle"
+            aria-expanded="false"
+            aria-controls="get-involved-submenu"
+            aria-label="{{ 'Toggle Get Involved submenu'|t }}"
+          >
+            <i class="fa-solid fa-plus menu-icon" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="mobile-submenu" id="get-involved-submenu">
+          <div class="mobile-submenu-item">
+            <a href="/pro-bono-program" class="mobile-submenu-link">{{ 'Pro Bono Program'|t }}</a>
+          </div>
+          <div class="mobile-submenu-item">
+            <a href="/get-involved/law-students" class="mobile-submenu-link">{{ 'Law Students'|t }}</a>
+          </div>
+          <div class="mobile-submenu-item">
+            <a href="/feedback" class="mobile-submenu-link">{{ 'Feedback'|t }}</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    {# Search Section #}
+    <div class="mobile-menu-search">
+      <form class="mobile-search-form" action="/search" method="get">
+        <input
+          type="search"
+          name="search"
+          class="mobile-search-input"
+          placeholder="{{ 'Search our site...'|t }}"
+          aria-label="{{ 'Search'|t }}"
+        />
+        <button
+          type="submit"
+          class="mobile-search-button"
+          aria-label="{{ 'Submit search'|t }}"
+        >
+          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

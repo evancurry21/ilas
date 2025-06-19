@@ -1,0 +1,135 @@
+/**
+ * @file
+ * ILAS Hotspot module styles.
+ */
+
+.ilas-hotspot-container {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.hotspot-background {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.hotspot-item {
+  position: absolute;
+  z-index: 10;
+}
+
+.hotspot-trigger {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.hotspot-trigger:hover {
+  transform: scale(1.1);
+}
+
+.hotspot-trigger img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hotspot-trigger {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* Category specific styling - removed color backgrounds */
+
+/* Popover styling to match theme */
+.popover {
+  font-family: inherit; /* Use the same font as the parent theme */
+  max-width: 350px; /* Increase max width for better readability */
+}
+
+.popover-header {
+  font-family: inherit;
+  font-weight: bold;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.popover-body {
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* Category-specific popover header colors and borders */
+/* Consumer Rights - Light Blue */
+.popover.popover-consumer-rights {
+  border: 2px solid #83ced3 !important;
+}
+.popover.popover-consumer-rights .popover-header {
+  background-color: #83ced3;
+  color: #000;
+  border-bottom: 1px solid #83ced3;
+}
+
+/* Older Adults - Medium Blue */
+.popover.popover-older-adults {
+  border: 2px solid #3995c8 !important;
+}
+.popover.popover-older-adults .popover-header {
+  background-color: #3995c8;
+  color: #fff;
+  border-bottom: 1px solid #3995c8;
+}
+
+/* Housing - Dark Blue */
+.popover.popover-housing {
+  border: 2px solid #41708c !important;
+}
+.popover.popover-housing .popover-header {
+  background-color: #41708c;
+  color: #fff;
+  border-bottom: 1px solid #41708c;
+}
+
+/* Health - Pink */
+.popover.popover-health {
+  border: 2px solid #b7436a !important;
+}
+.popover.popover-health .popover-header {
+  background-color: #b7436a;
+  color: #fff;
+  border-bottom: 1px solid #b7436a;
+}
+
+/* Individual Rights - Orange */
+.popover.popover-individual-rights {
+  border: 2px solid #e18137 !important;
+}
+.popover.popover-individual-rights .popover-header {
+  background-color: #e18137;
+  color: #fff;
+  border-bottom: 1px solid #e18137;
+}
+
+/* Family - Yellow */
+.popover.popover-family {
+  border: 2px solid #fbc15d !important;
+}
+.popover.popover-family .popover-header {
+  background-color: #fbc15d;
+  color: #000;
+  border-bottom: 1px solid #fbc15d;
+}

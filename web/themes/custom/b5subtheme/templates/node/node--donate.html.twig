@@ -1,0 +1,75 @@
+{# Disable standard layout - must be at the very top #}
+{% set disable_standard_layout = true %}
+
+{# node--donate.html.twig #}
+
+{{ attach_library('b5subtheme/donation-form') }}
+
+<article{{ attributes.addClass('node', 'node--type-donate', 'donate-page') }}>
+
+  {# The top curved gray header area, containing ONLY the title #}
+  <header class="curved-page-header">
+    {% if content.field_donor_title %}
+      <h1 class="curved-page-header-title">
+        {{ content.field_donor_title }}
+      </h1>
+    {% endif %}
+  </header>
+
+  {# The rest of the content below the curve #}
+  {% if content.field_donor_body %}
+    <div class="main-content">
+      {{ content.field_donor_body }}
+    </div>
+  {% endif %}
+
+  {# Custom Donation Form #}
+  <div class="custom-donation-form">
+    <div class="form-header">
+      <h3>Donate Today</h3>
+      <p><strong>Every $1 you give to legal aid generates $7 in savings for our community.</strong> Use the form below to make your donation today!</p>
+    </div>
+    
+    <div class="amount-selection">
+      <div class="amount-buttons">
+        <button class="amount-btn" data-amount="25">$25</button>
+        <button class="amount-btn" data-amount="50">$50</button>
+        <button class="amount-btn" data-amount="100">$100</button>
+        <button class="amount-btn" data-amount="250">$250</button>
+        <button class="amount-btn" data-amount="500">$500</button>
+        <button class="amount-btn" data-amount="1000">$1,000</button>
+      </div>
+      
+      <div class="custom-amount">
+        <label for="custom-amount-input">Custom Amount:</label>
+        <input type="number" id="custom-amount-input" placeholder="Enter amount" min="1">
+      </div>
+    </div>
+    
+    <div class="donation-frequency">
+      <h4>Donation Frequency</h4>
+      <div class="frequency-options">
+        <button class="frequency-btn active" data-frequency="one-time">One-time</button>
+        <button class="frequency-btn" data-frequency="monthly">Monthly</button>
+        <button class="frequency-btn" data-frequency="quarterly">Quarterly</button>
+      </div>
+    </div>
+    
+    <a href="https://donorbox.org/ilas" class="donate-button" target="_blank">
+      Donate Now
+    </a>
+    
+    <div class="secure-notice">
+      <i class="fas fa-lock"></i>
+      Secure donation processing powered by Donorbox
+    </div>
+  </div>
+
+  {# Blue Curved Section #}
+  <div class="curved-section-blue">
+    <div class="curved-section-container">
+      {# Empty container as per the original design requirement #}
+    </div>
+  </div>
+
+</article>

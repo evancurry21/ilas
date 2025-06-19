@@ -1,0 +1,77 @@
+{#
+  paragraph--two_column_info.html.twig
+  Fields:
+    - field_left_title, field_left_subtitle, field_left_body
+    - field_left_link_url (link field), field_left_link_text
+    - field_right_title, field_right_subtitle, field_right_body
+    - field_right_link_url (link field), field_right_link_text
+#}
+
+<div class="row justify-content-center brand-l col-padding-sm text-center mb-5">
+  {# LEFT COLUMN #}
+  <div class="col-md-5 column-border">
+    {% if content.field_left_title %}
+      <div class="column-title">
+        {{ content.field_left_title }}
+      </div>
+    {% endif %}
+    
+    {% if content.field_left_subtitle %}
+      <div class="column-subtitle">
+        {{ content.field_left_subtitle }}
+      </div>
+    {% endif %}
+    
+    {% if content.field_left_body %}
+      <div class="column-body mb-3">
+        {{ content.field_left_body }}
+      </div>
+    {% endif %}
+
+    {% if content.field_left_link_url.0['#url'] is defined and content.field_left_link_text.0 is defined %}
+      <p>
+        <a class="btn btn-primary"
+           style="--bs-btn-padding-y: .75rem; --bs-btn-padding-x: 1.25rem; --bs-btn-font-size: .75rem;"
+           href="{{ content.field_left_link_url.0['#url'] }}">
+          {{ content.field_left_link_text.0 }}
+        </a>
+      </p>
+    {% endif %}
+  </div>
+
+  {# SPACER COLUMN #}
+  <div class="col-md-1">
+    {# Empty spacer column #}
+  </div>
+
+  {# RIGHT COLUMN #}
+  <div class="col-md-5 column-border">
+    {% if content.field_right_title %}
+      <div class="column-title">
+        {{ content.field_right_title }}
+      </div>
+    {% endif %}
+    
+    {% if content.field_right_subtitle %}
+      <div class="column-subtitle">
+        {{ content.field_right_subtitle }}
+      </div>
+    {% endif %}
+    
+    {% if content.field_right_body %}
+      <div class="column-body mb-3">
+        {{ content.field_right_body }}
+      </div>
+    {% endif %}
+
+    {% if content.field_right_link_url.0['#url'] is defined and content.field_right_link_text.0 is defined %}
+      <p>
+        <a class="btn btn-primary"
+           style="--bs-btn-padding-y: .75rem; --bs-btn-padding-x: 1.25rem; --bs-btn-font-size: .75rem;"
+           href="{{ content.field_right_link_url.0['#url'] }}">
+          {{ content.field_right_link_text.0 }}
+        </a>
+      </p>
+    {% endif %}
+  </div>
+</div>

@@ -1,0 +1,245 @@
+/**
+ * @file
+ * Down Arrow Accordion Component Styles
+ * 
+ * A collapsible accordion component with:
+ * - Centered heading with animated chevron icon
+ * - Smooth expand/collapse transitions
+ * - Responsive grid layout for download buttons
+ * - Hover and focus states for accessibility
+ * 
+ * BEM Naming Convention:
+ * - Block: .down-arrow-accordion, .daa-header, .daa-panel, .daa-downloads
+ * - Element: __wrapper, __inner, __toggle, __title, __icon, __content, __item
+ * - Modifier: --expanded, --collapsed, --empty
+ */
+
+@import 'variables_theme';
+@import 'mixins';
+@import 'accordion'; // Import base accordion styles for container
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Force FL-ROW containers to show content properly
+// TODO: Consider scoping these overrides more specifically
+// ─────────────────────────────────────────────────────────────────────────────
+.fl-row,
+.fl-row-content-wrap {
+  height: auto !important;
+  overflow: visible !important;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Main Accordion Container
+// ─────────────────────────────────────────────────────────────────────────────
+.down-arrow-accordion {
+  // Individual accordion spacing only (no container styling)
+  padding-bottom: 2rem;
+  
+  // Remove padding for the last accordion
+  &:last-child {
+    padding-bottom: 0;
+  }
+}
+
+// Container for grouping multiple accordions
+.down-arrow-accordion-group {
+  // Inherit container styling from base accordion
+  background-color: $color-gray-bg;
+  border: 6px solid $color-primary;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  border-radius: 0.25rem;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  
+  @include mobile {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Accordion Header Section
+// ─────────────────────────────────────────────────────────────────────────────
+.daa-header {
+  &__wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  &__inner {
+    width: 100%;
+    max-width: 800px; // Constrain width for better readability
+  }
+  
+  // Interactive toggle button
+  &__toggle {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacer-sm;
+    padding: $spacer-md $spacer-lg;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: $transition-base;
+    
+    // Focus styles for accessibility
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 4px;
+      border-radius: $border-radius;
+    }
+    
+    // Remove outline for mouse users
+    &:focus:not(:focus-visible) {
+      outline: none;
+    }
+    
+    // Hover state
+    &:hover {
+      transform: translateY(-2px);
+      
+      .daa-header__title {
+        color: darken($color-primary, 15%);
+      }
+      
+      .daa-header__icon {
+        color: darken($color-primary, 15%);
+        // Remove any transform on hover - only rotation should happen on click
+      }
+    }
+  }
+  
+  // Heading title
+  &__title {
+    margin: 0;
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: $color-primary;
+    text-align: center;
+    transition: color $transition-fast;
+    
+    // Responsive font sizes
+    @media (max-width: $tablet-breakpoint) {
+      font-size: 2rem;
+    }
+    
+    @media (max-width: $mobile-breakpoint) {
+      font-size: 1.75rem;
+    }
+  }
+  
+  // Chevron icon
+  &__icon {
+    font-size: 2rem;
+    color: $color-primary;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    
+    // Default state (expanded) - rotate 180deg
+    i {
+      display: inline-block;
+      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transform: rotate(180deg);
+    }
+    
+    // Icon rotation for collapsed state
+    i.collapsed {
+      transform: rotate(0deg);
+    }
+    
+    // Responsive icon sizes
+    @media (max-width: $tablet-breakpoint) {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Collapsible Panel Section
+// ─────────────────────────────────────────────────────────────────────────────
+.daa-panel {
+  // Smooth collapse animation
+  &.collapse,
+  &.collapsing {
+    transition: height 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+  }
+  
+  &__content {
+    padding: $spacer-xl 0;
+    max-width: 100%; // Full width within container
+  }
+  
+  &__empty {
+    text-align: center;
+    color: $color-gray-text;
+    font-style: italic;
+    padding: $spacer-xl;
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Download Buttons Grid
+// ─────────────────────────────────────────────────────────────────────────────
+.daa-downloads {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacer-sm;
+  justify-content: center;
+  max-width: 900px;
+  margin: 0 auto;
+  
+  // Mobile adjustments
+  @media (max-width: $mobile-breakpoint) {
+    gap: $spacer-xs;
+  }
+  
+  // Download button item - inherits from .btn and .btn-primary
+  &__item {
+    // Make buttons smaller width
+    display: inline-flex;
+    width: auto !important;
+    padding: 0.5rem 1.5rem !important;
+    font-size: 1rem !important;
+    
+    // Override only what's needed for accordion context
+    white-space: nowrap; // Keep text on one line
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    
+    // Ensure all font properties inherit from .btn
+    font-family: inherit;
+    font-weight: inherit;
+    line-height: 1.4;
+    text-transform: none; // Reset any transforms
+    
+    // Ensure button text is always visible (not just on hover)
+    .daa-downloads__name {
+      display: block;
+      // Inherit all font properties from parent button
+      font: inherit;
+    }
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Legacy class mappings for backward compatibility
+// These can be removed once all content is updated
+// ─────────────────────────────────────────────────────────────────────────────
+.pp-er {
+  @extend .daa-header;
+  
+  &-wrap { @extend .daa-header__wrapper; }
+  &-inner { @extend .daa-header__inner; }
+  &-title-wrap { @extend .daa-header__toggle; }
+  &-title { @extend .daa-header__title; }
+  &-arrow { @extend .daa-header__icon; }
+}
+
+.pp-button-group {
+  @extend .daa-downloads;
+  
+  &-item { @extend .daa-downloads__item; }
+}

@@ -1,0 +1,47 @@
+{#
+/**
+ * @file
+ * Theme override for resources topic filter navigation.
+ * Displays pill-shaped buttons to filter resources by topic.
+ */
+#}
+
+{{ attach_library('b5subtheme/resources') }}
+
+<div class="topic-nav resource-filters mb-4">
+  <ul class="nav nav-pills flex-wrap gap-2">
+    <li class="nav-item">
+      <button class="nav-link pill-link active" data-filter="all">
+        All Topics
+      </button>
+    </li>
+    
+    {# Get unique topics from all resources in this view #}
+    {% set topics = [] %}
+    {% for row in rows %}
+      {% if row.content['#node'] is defined %}
+        {% set node = row.content['#node'] %}
+        {% if node.field_topics is defined %}
+          {% for topic in node.field_topics %}
+            {% if topic.entity %}
+              {% set topic_name = topic.entity.label %}
+              {% set topic_id = topic.entity.id %}
+              {% if topic_name not in topics|keys %}
+                {% set topics = topics|merge({(topic_name): topic_id}) %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+    
+    {# Display topic pills #}
+    {% for topic_name, topic_id in topics %}
+      <li class="nav-item">
+        <button class="nav-link pill-link" data-filter="topic-{{ topic_id }}">
+          {{ topic_name }}
+        </button>
+      </li>
+    {% endfor %}
+  </ul>
+</div>

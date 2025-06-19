@@ -1,0 +1,16 @@
+{# block--topic-card.html.twig #}
+{% set classes = [
+  'topic-card',
+  content.field_color.0['#markup'] ? 'topic-card--' ~ content.field_color.0['#markup']|clean_class,
+] %}
+
+<div{{ attributes.addClass(classes) }}>
+  <a href="{{ content.field_link.0['#url'] }}" class="topic-card__link">
+    <div class="topic-card__content">
+      <h2 class="topic-card__title">{{ label }}</h2>
+      <div class="topic-card__description">
+        {{ content.body }}
+      </div>
+    </div>
+  </a>
+</div>

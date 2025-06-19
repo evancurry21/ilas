@@ -1,0 +1,156 @@
+/* _help-overlay.scss */
+@import 'variables_theme';
+/**********************************************
+ * HELP OVERLAY: FADE + SLIDE FROM RIGHT
+ **********************************************/
+
+/* 1) Keep the overlay in the layout, but invisible initially */
+.help-overlay {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 9999;
+  transition: opacity 0.6s ease; /* fade in/out the backdrop */
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto; /* now clickable */
+  }
+}
+
+/* 2) Dark backdrop behind the panel, fades with parent's opacity */
+.help-overlay-backdrop {
+  position: absolute;
+  top: 0; 
+  left: 0;
+  width: 100%; 
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* 3) The white panel, slides in from the right */
+.help-panel {
+  position: absolute;
+  top: 5%;
+  right: -800px;               /* offscreen horizontally */
+  width: 700px;                /* bigger panel width */
+  max-height: 80vh;            /* if content is tall, it scrolls internally */
+  background-color: #fff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  padding: 1.5rem;
+  overflow-y: auto;
+  border-radius: 8px;
+  transition: right 0.6s ease; /* sliding animation */
+
+  /* Slide panel to visible position when .active is toggled */
+  .help-overlay.active & {
+    right: 5%;
+  }
+}
+
+/* 4) Header link (Get The Help You Need + arrow on the far right) */
+.help-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1263a0;
+  text-decoration: none;
+  transition: color 0.3s ease;
+
+  .header-text {
+    margin-right: 1rem; /* spacing before arrow if you like */
+  }
+
+  i.fa-solid.fa-arrow-right-long {
+    font-size: 1.25rem;
+  }
+
+  &:hover {
+    text-decoration: none;      /* no underline */
+    color: #0b4e7b;             /* slight color shift on hover */
+  }
+}
+
+/* Darker horizontal line */
+.help-panel-divider {
+  border: none;
+  border-top: 2px solid #999;
+  margin: 1rem 0;
+}
+
+/* 5) The content area with two columns, centered text, etc. */
+.help-panel-content {
+  display: flex;
+  gap: 2rem;
+  
+  .help-column {
+    flex: 1;
+    text-align: center; /* center headings & links in each column */
+
+    /* HEADINGS (LEGAL TOPICS / RESOURCES) 
+       bigger font, no underline on hover, blue background */
+    h3 {
+      a {
+        text-decoration: none;
+        color: #1263a0;
+        font-size: 1.2rem; 
+        font-weight: bold;
+        display: inline-block;
+        padding: 0.5rem 1.25rem;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+
+        &:hover,
+        &:focus {
+          background-color: #1263a0 !important;
+          color: #fff !important;
+          text-decoration: none;
+        }
+        
+        &:focus-visible {
+          outline: 2px solid #1263a0;
+          outline-offset: 2px;
+        }
+      }
+    }
+
+    ul {
+      list-style: none;
+      margin: 0; 
+      padding: 0;
+
+      li {
+        margin-bottom: 0.5rem;
+        
+        a {
+          color: #000;
+          font-weight: 600;
+          font-size: 1rem;
+          text-decoration: none;
+          display: inline-block;
+          padding: 0.5rem 1.25rem;
+          border-radius: 4px;
+          transition: all 0.3s ease;
+
+          &:hover,
+          &:focus {
+            background-color: #1263a0 !important;
+            color: #fff !important;
+            text-decoration: none;
+          }
+          
+          &:focus-visible {
+            outline: 2px solid #1263a0;
+            outline-offset: 2px;
+          }
+        }
+      }
+    }
+  }
+}

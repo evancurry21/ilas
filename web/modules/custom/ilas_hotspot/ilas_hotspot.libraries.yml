@@ -1,0 +1,11 @@
+hotspot:
+  version: 1.x
+  css:
+    theme:
+      css/ilas-hotspot.css: {}
+  js:
+    js/ilas-hotspot.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - bootstrap5/popover

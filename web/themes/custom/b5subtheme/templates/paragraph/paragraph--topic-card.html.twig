@@ -1,0 +1,25 @@
+{# paragraph--topic-card.html.twig #}
+
+{# Normalize the raw field value into a safe, lowercase class name #}
+{% set color = content.field_topic_color[0]['#markup']|clean_class %}
+
+{# Build our classes array using the normalized color #}
+{% set classes = [
+  'topic-card',
+  'topic-card--' ~ color
+] %}
+
+<div{{ attributes.addClass(classes) }} role="button" tabindex="0">
+  {% if content.field_topic_link|render %}
+    <a href="{{ content.field_topic_link[0]['#url'] }}" class="topic-card__link">
+      <div class="topic-card__content">
+        <h2 class="topic-card__title">
+          {{ content.field_topic_title }}
+        </h2>
+        <div class="topic-card__description">
+          {{ content.field_topic_description }}
+        </div>
+      </div>
+    </a>
+  {% endif %}
+</div>

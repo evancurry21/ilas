@@ -1,0 +1,106 @@
+{# 
+  @file
+  Down Arrow Accordion Component Template
+  
+  Displays a collapsible section with:
+  - Centered heading with animated chevron icon
+  - Grid of download buttons when expanded
+  - Proper ARIA attributes for accessibility
+  - Optimized rendering with caching
+  
+  Variables:
+  - paragraph: The paragraph entity
+  - content: Rendered content fields
+#}
+
+{{ attach_library('b5subtheme/down-arrow-accordion') }}
+
+{# Cache the processed file data #}
+{% set paragraph_id = paragraph.id() %}
+{% set cache_tags = ['paragraph:' ~ paragraph_id] %}
+
+{# — SINGLE CONTAINER FOR ENTIRE ACCORDION — #}
+<div class="down-arrow-accordion down-arrow-accordion--{{ paragraph_id }}"
+     data-node="{{ paragraph_id }}">
+  
+  {# — HEADER / TOGGLE — #}
+  <div class="daa-header">
+    <div class="daa-header__wrapper">
+      <div class="daa-header__inner">
+        <button class="daa-header__toggle"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#daa-panel-{{ paragraph_id }}"
+                aria-expanded="false"
+                aria-controls="daa-panel-{{ paragraph_id }}">
+          <h2 class="daa-header__title">
+            {{ content.field_daa_heading|render|striptags|trim }}
+          </h2>
+          <span class="daa-header__icon" aria-hidden="true">
+            <i class="fa fa-chevron-down collapsed"></i>
+          </span>
+          <span class="visually-hidden">Toggle {{ content.field_daa_heading|render|striptags|trim }} section</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  {# — COLLAPSED CONTENT — #}
+  <div id="daa-panel-{{ paragraph_id }}" 
+       class="collapse daa-panel"
+       aria-labelledby="daa-heading-{{ paragraph_id }}">
+    <div class="daa-panel__content">
+
+    {# Optimized file collection with caching #}
+    {% set files_data = [] %}
+    {% if paragraph.field_daa_items|length %}
+      {% for item in paragraph.field_daa_items %}
+        {% set child = item.entity %}
+        {% if child and child.field_daa_button_files|length %}
+          {% for media_ref in child.field_daa_button_files %}
+            {% set media = media_ref.entity %}
+            {% if media %}
+              {# Determine file entity based on media type #}
+              {% set file = null %}
+              {% if media.field_media_document.entity %}
+                {% set file = media.field_media_document.entity %}
+              {% elseif media.field_media_file.entity %}
+                {% set file = media.field_media_file.entity %}
+              {% endif %}
+              
+              {% if file %}
+                {% set files_data = files_data|merge([{
+                  'url': file_url(file.uri.value),
+                  'name': media.name.value ?: file.filename.value,
+                  'size': file.filesize.value,
+                  'mime': file.filemime.value
+                }]) %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    {# Render download button grid if files exist #}
+    {% if files_data|length %}
+      <div class="daa-downloads" role="group" aria-label="Download files">
+        {% for file in files_data %}
+          <a href="{{ file.url }}"
+             class="btn btn-primary daa-downloads__item"
+             target="_blank"
+             rel="noopener noreferrer"
+             download
+             aria-label="Download {{ file.name }} ({{ (file.size / 1024 / 1024)|round(2) }} MB)">
+            <span class="daa-downloads__name">{{ file.name }}</span>
+            <span class="daa-downloads__size visually-hidden">{{ (file.size / 1024 / 1024)|round(2) }} MB</span>
+          </a>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="daa-panel__empty">No downloads available.</p>
+    {% endif %}
+
+    </div>
+  </div>
+</div>

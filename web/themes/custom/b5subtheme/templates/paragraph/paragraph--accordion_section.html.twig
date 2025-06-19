@@ -1,0 +1,68 @@
+{#
+  paragraph--accordion_section.html.twig
+  Used by the "Accordion Section" paragraph type.
+
+  Fields:
+    - field_title (the top‐level title for the entire accordion)
+    - field_accordion_items (references the "accordion_item" paragraphs)
+#}
+
+{% set paragraph_id = paragraph.entity.id() %}
+{% set accordion_id = 'accordion-' ~ paragraph_id %}
+
+<div class="accordion-section mb-5 brand-l shadow-1 col-padding-sm p-3">
+  {% if paragraph.field_title.value %}
+    <h3 class="accordion-section-title mb-3 text-center">
+      {{ paragraph.field_title.value }}
+    </h3>
+  {% endif %}
+
+  <div class="accordion" id="{{ accordion_id }}">
+    {% for item_wrapper in content.field_accordion_items %}
+      {% if item_wrapper['#paragraph'] is defined %}
+        {% set item = item_wrapper['#paragraph'] %}
+        {% set item_id = 'item-' ~ item.id() %}
+
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="heading-{{ item_id }}">
+            <button class="accordion-button collapsed" type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapse-{{ item_id }}"
+                    aria-expanded="false"
+                    aria-controls="collapse-{{ item_id }}">
+              {{ item.field_accordion_title.value }}
+            </button>
+          </h2>
+          <div id="collapse-{{ item_id }}"
+               class="accordion-collapse collapse"
+               aria-labelledby="heading-{{ item_id }}"
+               data-bs-parent="#{{ accordion_id }}">
+            <div class="accordion-body">
+              {# Body content #}
+              {{ item.field_accordion_body.value|raw }}
+
+              {# Loop through each uploaded file (now unlimited) #}
+              {% for ref in item.field_accordion_file %}
+                {% if ref.entity %}
+                  {% set media = ref.entity %}
+                  {% if media.field_media_document.entity %}
+                    {% set file = media.field_media_document.entity %}
+                    <div class="accordion-file mt-3">
+                      <a href="{{ file_url(file.uri.value) }}"
+                         class="btn btn-outline-secondary btn-sm"
+                         download>
+                        <i class="fas fa-download me-1" aria-hidden="true"></i>
+                        {{ file.filename.value }}
+                      </a>
+                    </div>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>

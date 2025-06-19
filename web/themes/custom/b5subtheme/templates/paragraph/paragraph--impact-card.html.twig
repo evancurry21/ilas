@@ -1,0 +1,71 @@
+{# paragraph--impact-card.html.twig #}
+
+{#
+  IMPORTANT: This impact card paragraph type is using topic card fields.
+  The actual fields available are:
+  - field_topic_title (not field_impact_title)
+  - field_topic_description (not field_impact_number/text)
+  - field_topic_color (not field_impact_color)
+  - field_back_detail (not field_impact_back_detail)
+  - field_topic_link (if needed)
+#}
+
+{# Get the color value from field_topic_color #}
+{% if content.field_topic_color[0]['#markup'] %}
+  {% set color_value = content.field_topic_color[0]['#markup']|lower|trim %}
+{% else %}
+  {% set color_value = 'blue' %}
+{% endif %}
+{# Validate color value - only allow 'blue' or 'gray' #}
+{% set color = (color_value == 'gray') ? 'gray' : 'blue' %}
+
+{# Build our classes array using the normalized color #}
+{% set classes = [
+  'impact-card',
+  'impact-card--' ~ color
+] %}
+
+<div{{ attributes.addClass(classes) }} role="button" tabindex="0">
+  <div class="card-inner">
+    {# Front of card #}
+    <div class="card-front">
+      <div class="impact-card__link">
+        <div class="impact-card__content">
+          <h3 class="impact-card__title">
+            {{ content.field_topic_title }}
+          </h3>
+          <div class="impact-card__description">
+            {# Parse the description to extract number and text if they're combined #}
+            {% set description = content.field_topic_description|render|striptags|trim %}
+            {% set parts = description|split(' ', 2) %}
+            {% if parts[0] matches '/^\\d+$/' %}
+              <span class="impact-number">{{ parts[0] }}</span>
+              <div class="impact-text">{{ parts[1]|default('') }}</div>
+            {% else %}
+              <div class="impact-text">{{ content.field_topic_description }}</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    {# Back of card #}
+    <div class="card-back">
+      <button class="impact-card__back-close" aria-label="Close details and return to front" type="button">
+        <span>Back</span>
+      </button>
+      <h4 class="impact-card__back-heading">
+        {# Special handling for Community Outreach - shorten to just Outreach #}
+        {% set back_title = content.field_topic_title|render|striptags|trim %}
+        {% if back_title|lower == 'community outreach' %}
+          Outreach
+        {% else %}
+          {{ content.field_topic_title }}
+        {% endif %}
+      </h4>
+      <div class="impact-card__back-detail">
+        {{ content.field_back_detail }}
+      </div>
+    </div>
+  </div>
+</div>

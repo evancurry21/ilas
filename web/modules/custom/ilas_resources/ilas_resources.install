@@ -1,0 +1,321 @@
+<?php
+
+/**
+ * @file
+ * Install file for ILAS Resources module.
+ */
+
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\node\Entity\NodeType;
+use Drupal\taxonomy\Entity\Vocabulary;
+use Drupal\taxonomy\Entity\Term;
+
+/**
+ * Implements hook_install().
+ */
+function ilas_resources_install() {
+  // -- 1.  Content type: Resource ---------------------------
+  if (!NodeType::load('resource')) {
+    NodeType::create([
+      'type' => 'resource',
+      'name' => 'Resource',
+      'description' => 'Downloads, links, and forms.',
+    ])->save();
+  }
+
+  // -- 2.  Vocabularies ------------------------------------
+  $service_vocab = _ilas_resources_create_vocab('service_areas', 'Service Areas');
+  $topic_vocab   = _ilas_resources_create_vocab('topics', 'Topics');
+
+  // -- 3.  Seed Service‑Area terms -------------------------
+  foreach ([
+    'Safe & Stable Housing',
+    'Family Safety & Stability',
+    'Advocacy for Older Adults',
+    'Health & Essential Benefits',
+    'Consumer Protection',
+    'Individual Rights',
+  ] as $term) {
+    if (!_ilas_resources_term_exists($term, $service_vocab->id())) {
+      Term::create(['name' => $term, 'vid' => $service_vocab->id()])->save();
+    }
+  }
+
+  // -- 4‑A.  Fields on Resource ----------------------------
+  _ilas_resources_add_field('resource', 'field_service_areas', 'entity_reference',
+    'Service Areas', [
+      'target_type' => 'taxonomy_term',
+      'handler_settings' => ['target_bundles' => [$service_vocab->id() => $service_vocab->id()]],
+    ]);
+  _ilas_resources_add_field('resource', 'field_topics', 'entity_reference',
+    'Topics', [
+      'target_type' => 'taxonomy_term',
+      'handler_settings' => ['target_bundles' => [$topic_vocab->id() => $topic_vocab->id()]],
+    ]);
+  _ilas_resources_add_field('resource', 'field_file', 'file', 'File download');
+  _ilas_resources_add_field('resource', 'field_link', 'link', 'External link');
+  _ilas_resources_add_field('resource', 'field_section_heading', 'string', 'Section Heading');
+  _ilas_resources_add_field('resource', 'field_main_content', 'text_long', 'Main Content');
+  _ilas_resources_add_field('resource', 'field_external_resources', 'entity_reference_revisions', 'External Resources', [
+    'target_type' => 'paragraph',
+    'handler_settings' => ['target_bundles' => ['external_resource' => 'external_resource']],
+  ]);
+  _ilas_resources_add_field('resource', 'field_sections', 'entity_reference_revisions', 'Sections', [
+    'target_type' => 'paragraph',
+    'handler_settings' => [
+      'target_bundles' => [
+        'two_column_info' => 'two_column_info',
+        'accordion_section' => 'accordion_section',
+      ],
+    ],
+  ]);
+
+  // -- 4‑B.  Service reference on your "Legal Content" pages
+  if (NodeType::load('legal_content')) {
+    _ilas_resources_add_field('legal_content', 'field_service_area', 'entity_reference',
+      'Related Service Area', [
+        'target_type' => 'taxonomy_term',
+        'handler_settings' => ['target_bundles' => [$service_vocab->id() => $service_vocab->id()]],
+      ]);
+    _ilas_resources_add_field('legal_content', 'field_main_content', 'text_long', 'Main Content');
+    _ilas_resources_add_field('legal_content', 'field_sections', 'entity_reference_revisions', 'Sections', [
+      'target_type' => 'paragraph',
+      'handler_settings' => [
+        'target_bundles' => [
+          'two_column_info' => 'two_column_info',
+          'accordion_section' => 'accordion_section',
+        ],
+      ],
+    ]);
+  }
+}
+
+/* ----------  Helper functions ---------- */
+
+function _ilas_resources_create_vocab($machine, $label) {
+  $vocab = Vocabulary::load($machine) ?: Vocabulary::create(['vid' => $machine, 'name' => $label]);
+  $vocab->save();
+  return $vocab;
+}
+
+function _ilas_resources_term_exists($name, $vid) {
+  return !empty(\Drupal::entityTypeManager()
+    ->getStorage('taxonomy_term')
+    ->loadByProperties(['name' => $name, 'vid' => $vid]));
+}
+
+function _ilas_resources_add_field($bundle, $field_name, $type, $label, array $settings = []) {
+  // Determine entity type based on bundle
+  $entity_type = 'node';
+  
+  // Special handling for entity reference revisions
+  if ($type === 'entity_reference_revisions') {
+    $cardinality = -1; // Unlimited
+  } else {
+    $cardinality = ($type === 'entity_reference' && isset($settings['handler_settings'])) ? -1 : 1;
+  }
+  
+  if (!FieldStorageConfig::loadByName($entity_type, $field_name)) {
+    FieldStorageConfig::create([
+      'entity_type' => $entity_type,
+      'field_name'  => $field_name,
+      'type'        => $type,
+      'cardinality' => $cardinality,
+      'settings'    => $settings,
+    ])->save();
+  }
+  if (!FieldConfig::loadByName($entity_type, $bundle, $field_name)) {
+    FieldConfig::create([
+      'entity_type' => $entity_type,
+      'bundle'      => $bundle,
+      'field_name'  => $field_name,
+      'label'       => $label,
+    ])->save();
+  }
+}
+
+/**
+ * Bulk‑seed Topics and link them to Service Areas.
+ */
+function ilas_resources_update_10001() {
+  // --------------- 1) Ensure the linking field is present ------------------
+  $field_name = 'field_service_areas';
+  $vocab_id   = 'topics';
+
+  // Field storage (taxonomy_term bundle "topics").
+  if (!FieldStorageConfig::loadByName('taxonomy_term', $field_name)) {
+    FieldStorageConfig::create([
+      'entity_type'  => 'taxonomy_term',
+      'field_name'   => $field_name,
+      'type'         => 'entity_reference',
+      'cardinality'  => -1,
+      'settings'     => [
+        'target_type' => 'taxonomy_term',
+        'handler'     => 'default',
+        'handler_settings' => [
+          'target_bundles' => ['service_areas' => 'service_areas'],
+        ],
+      ],
+    ])->save();
+  }
+
+  // Field instance on the "topics" bundle.
+  if (!FieldConfig::loadByName('taxonomy_term', $vocab_id, $field_name)) {
+    FieldConfig::create([
+      'entity_type' => 'taxonomy_term',
+      'bundle'      => $vocab_id,
+      'field_name'  => $field_name,
+      'label'       => 'Related Service Areas',
+    ])->save();
+  }
+
+  // --------------- 2) Build mapping ---------------------------------------
+  $mapping = [
+    'Money, Debt, Bankruptcy' => ['Consumer Protection'],
+    'Small Claims'            => ['Consumer Protection'],
+    'Debt Collection'         => ['Consumer Protection'],
+    'Garnishment'             => ['Consumer Protection'],
+    'Repossession'            => ['Consumer Protection'],
+    'Credit'                  => ['Consumer Protection'],
+    'Credit Reports'          => ['Consumer Protection'],
+    'Repairing Credit'        => ['Consumer Protection'],
+    'Bankruptcy'              => ['Consumer Protection'],
+    'Loans'                   => ['Consumer Protection'],
+    'Predatory Lending'       => ['Consumer Protection'],
+    'Pay Day Loans'           => ['Consumer Protection'],
+    'Student Loans'           => ['Consumer Protection'],
+    'Mortgage Loans'          => ['Consumer Protection'],
+    'Identity Theft'          => ['Consumer Protection'],
+    'Trade Practices'         => ['Consumer Protection'],
+    'Automobiles'             => ['Consumer Protection'],
+    'Chapter 7'               => ['Consumer Protection'],
+    'Chapter 11'              => ['Consumer Protection'],
+    'Chapter 13'              => ['Consumer Protection'],
+    'Debt Management'         => ['Consumer Protection'],
+    'Debt Counseling'         => ['Consumer Protection'],
+    'Exemptions'              => ['Consumer Protection'],
+
+    'Family Law'              => ['Family Safety & Stability'],
+    'Domestic Violence'       => ['Family Safety & Stability'],
+    'Sexual Violence'         => ['Family Safety & Stability'],
+    'Stalking'                => ['Family Safety & Stability'],
+    'Personal Safety'         => ['Family Safety & Stability'],
+    'Divorce'                 => ['Family Safety & Stability'],
+    'Separation'              => ['Family Safety & Stability'],
+    'Annulment'               => ['Family Safety & Stability'],
+    'Custody'                 => ['Family Safety & Stability'],
+    'Parenting Time'          => ['Family Safety & Stability'],
+    'Visitation'              => ['Family Safety & Stability'],
+    'Child Support'           => ['Family Safety & Stability'],
+    'Property'                => ['Family Safety & Stability'],
+    'Contempt'                => ['Family Safety & Stability'],
+    'Adoption'                => ['Family Safety & Stability'],
+    'Adult Name Change'       => ['Family Safety & Stability'],
+    'Minor Name Change'       => ['Family Safety & Stability'],
+    'Juvenile Guardianship'   => ['Family Safety & Stability'],
+    'Juvenile Conservatorship'=> ['Family Safety & Stability'],
+    'Minor Guardianship'      => ['Family Safety & Stability'],
+    'Minor Conservatorship'   => ['Family Safety & Stability'],
+    'Accounting'              => ['Family Safety & Stability'],
+    'Conservator'             => ['Family Safety & Stability'],
+    'Juveniles/Minors'        => ['Family Safety & Stability'],
+    'Expungement'             => ['Family Safety & Stability'],
+
+    'Employment'              => ['Individual Rights'],
+    'Unemployment'            => ['Individual Rights'],
+    'Workplace Safety'        => ['Individual Rights'],
+    'Pensions'                => ['Individual Rights', 'Advocacy for Older Adults'],
+    'VAWA'                    => ['Individual Rights'],
+    'Naturalization'          => ['Individual Rights'],
+    'Electronic Filing'       => ['Individual Rights'],
+    'Voting Rights'           => ['Individual Rights'],
+    'SSDI'                    => ['Individual Rights'],
+    'Social Security Disability Insurance' => ['Individual Rights'],
+    'Veterans'                => ['Individual Rights'],
+    'Military'                => ['Individual Rights'],
+    'Indian Law'              => ['Individual Rights'],
+
+    'Health Benefits'         => ['Health & Essential Benefits'],
+    'Medical Benefits'        => ['Health & Essential Benefits'],
+    'SNAP'                    => ['Health & Essential Benefits'],
+    'TANF'                    => ['Health & Essential Benefits'],
+    'Medicare'                => ['Health & Essential Benefits'],
+    'Medicaid'                => ['Health & Essential Benefits'],
+
+    'Housing'                 => ['Safe & Stable Housing'],
+    'Evictions'               => ['Safe & Stable Housing'],
+    'Lockouts'                => ['Safe & Stable Housing'],
+    'Repairs'                 => ['Safe & Stable Housing'],
+    'Lead Paint'              => ['Safe & Stable Housing'],
+    'Security Deposits'       => ['Safe & Stable Housing'],
+    'Reasonable Accommodations' => ['Safe & Stable Housing'],
+    'Housing Discrimination'  => ['Safe & Stable Housing'],
+    'Federal Fair Housing Act'=> ['Safe & Stable Housing'],
+    'Tenant Rights'           => ['Safe & Stable Housing'],
+    'Renter Safety'           => ['Safe & Stable Housing'],
+    'Utility Shutoffs'        => ['Safe & Stable Housing'],
+    'Subsidized Housing'      => ['Safe & Stable Housing'],
+    'Public Housing'          => ['Safe & Stable Housing'],
+    'Mobile Home Issues'      => ['Safe & Stable Housing'],
+    'Home Equity Conversion'  => ['Safe & Stable Housing'],
+    'Reverse Mortgage'        => ['Safe & Stable Housing'],
+    'Foreclosure'             => ['Safe & Stable Housing'],
+
+    'Senior Citizens'         => ['Advocacy for Older Adults'],
+    'Adult Conservatorship'   => ['Advocacy for Older Adults'],
+    'Adult Guardianship'      => ['Advocacy for Older Adults'],
+    'Probate'                 => ['Advocacy for Older Adults'],
+    'SSI'                     => ['Advocacy for Older Adults', 'Individual Rights'],
+    'Supplemental Security Income' => ['Advocacy for Older Adults'],
+    'Caregivers'              => ['Advocacy for Older Adults'],
+    'Caregiving'              => ['Advocacy for Older Adults'],
+    'Power of Attorney'       => ['Advocacy for Older Adults'],
+    'POA'                     => ['Advocacy for Older Adults'],
+    'Advanced Directive'      => ['Advocacy for Older Adults'],
+    'Living Will'             => ['Advocacy for Older Adults'],
+    'Wills'                   => ['Advocacy for Older Adults'],
+    'Small Estates'           => ['Advocacy for Older Adults'],
+    'End of Life Planning'    => ['Advocacy for Older Adults'],
+    'Holographic Wills'       => ['Advocacy for Older Adults'],
+    'Beneficiaries'           => ['Advocacy for Older Adults'],
+    'Widow/Spouse Benefits'   => ['Advocacy for Older Adults'],
+    'Retirement Benefits'     => ['Advocacy for Older Adults'],
+    'Overpayment'             => ['Advocacy for Older Adults'],
+  ];
+
+  // --------------- 3) Load Service‑Area lookup -----------------------------
+  $service_lookup = [];
+  $service_terms = \Drupal::entityTypeManager()
+    ->getStorage('taxonomy_term')
+    ->loadByProperties(['vid' => 'service_areas']);
+  foreach ($service_terms as $term) {
+    $service_lookup[$term->getName()] = $term->id();
+  }
+
+  // --------------- 4) Create/Update Topic terms ---------------------------
+  $topic_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+
+  foreach ($mapping as $topic_name => $service_names) {
+    // Load or create the Topic term.
+    $topic_terms = $topic_storage->loadByProperties([
+      'name' => $topic_name,
+      'vid'  => $vocab_id,
+    ]);
+    $topic = $topic_terms ? reset($topic_terms)
+                          : $topic_storage->create(['name' => $topic_name, 'vid' => $vocab_id]);
+
+    // Build array of service term IDs.
+    $service_tids = [];
+    foreach ($service_names as $service_label) {
+      if (isset($service_lookup[$service_label])) {
+        $service_tids[] = ['target_id' => $service_lookup[$service_label]];
+      }
+    }
+    // Set the reference field.
+    $topic->set($field_name, $service_tids);
+    $topic->save();
+  }
+
+  return t('Topics seeded and linked to Service Areas.');
+}

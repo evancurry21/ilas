@@ -1,0 +1,70 @@
+{#
+/**
+ * @file
+ * Theme override to display a resource node teaser.
+ *
+ * Used in resource listing views to display resource cards.
+ */
+#}
+
+{# Add data attributes for filtering #}
+{% set topic_classes = [] %}
+{% for item in node.field_topics %}
+  {% if item.entity %}
+    {% set topic_classes = topic_classes|merge(['topic-' ~ item.entity.id]) %}
+  {% endif %}
+{% endfor %}
+
+<div{{ attributes.addClass('card', 'h-100', 'resource-card').setAttribute('data-topics', topic_classes|join(' ')) }}>
+  <div class="card-body text-center">
+    {# Card title #}
+    <h3 class="card-title">{{ label }}</h3>
+    
+    {# Service areas #}
+    {% if node.field_service_areas %}
+      <div class="resource-service-areas mb-2">
+        {% for item in node.field_service_areas %}
+          {% if item.entity %}
+            <span class="service-area-badge">{{ item.entity.label }}</span>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+    
+    {# Topics with pipe separators #}
+    {% if node.field_topics %}
+      <div class="resource-topics mb-3">
+        {% for item in node.field_topics %}
+          {% if item.entity %}
+            <span class="topic-item">{{ item.entity.label }}</span>
+            {% if not loop.last %}<span class="topic-separator">|</span>{% endif %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+    
+    {# Description - extract up to 2 lines from main content #}
+    {% if node.field_main_content.value %}
+      <div class="resource-description">
+        {% set description = node.field_main_content.value|striptags|trim %}
+        <p>{{ description|slice(0, 150) }}{% if description|length > 150 %}...{% endif %}</p>
+      </div>
+    {% elseif node.body.value %}
+      <div class="resource-description">
+        {% set description = node.body.value|striptags|trim %}
+        <p>{{ description|slice(0, 150) }}{% if description|length > 150 %}...{% endif %}</p>
+      </div>
+    {% else %}
+      <div class="resource-description">
+        <p>Access important resources and information to help you navigate legal issues.</p>
+      </div>
+    {% endif %}
+    
+    {# Learn More button - uses standardized button styles #}
+    <div class="resource-actions mt-auto">
+      <a href="{{ url }}" class="btn btn-primary">
+        Learn More
+      </a>
+    </div>
+  </div>
+</div>

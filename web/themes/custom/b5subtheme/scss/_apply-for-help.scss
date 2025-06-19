@@ -1,0 +1,31 @@
+/**
+ * Apply for Help Page Styles
+ * 
+ * Most styles now come from standardized components in _layout-components.scss
+ * Only page-specific customizations remain here.
+ */
+
+@import 'variables_theme';
+@import 'mixins';
+
+.node--apply-for-help {
+  // Subtitle section styling (unique to this page)
+  .subtitle-section {
+    padding: 2rem 1rem 0.5rem 1rem;
+    text-align: center;
+
+    .apply-subtitle {
+      margin: 0;
+      font-size: 2.5rem;
+      color: $color-primary;
+      font-weight: 700;
+
+      @include mobile {
+        font-size: 1.2rem;
+      }
+    }
+  }
+
+  // Note: Schedule section table styling has been moved to _layout-components.scss
+  // as .apply-schedule-section for reusability
+}

@@ -1,0 +1,133 @@
+{#
+/**
+ * @file
+ * Theme override to display a resource node.
+ *
+ * Available variables:
+ * - node: The node entity with limited access to object properties and methods.
+ * - label: The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ */
+#}
+
+{{ attach_library('b5subtheme/resources') }}
+
+<article{{ attributes.addClass('node', 'node--type-resource', 'node--view-mode-full', 'resource-full') }}>
+  <div class="container">
+    <div class="row">
+      {# Main content column #}
+      <div class="col-lg-8">
+        {# Page title #}
+        <h1 class="page-title">{{ label }}</h1>
+        
+        {# Main content field #}
+        {% if content.field_main_content %}
+          <div class="main-content">
+            {{ content.field_main_content }}
+          </div>
+        {% endif %}
+        
+        {# Resource sections #}
+        {% if content.field_sections %}
+          <div class="resource-sections">
+            {{ content.field_sections }}
+          </div>
+        {% endif %}
+        
+        {# External resources section #}
+        {% if content.field_external_resources %}
+          <div class="resource-external mt-4">
+            <h2 class="external-resources-heading">External Resources</h2>
+            <ul class="external-resources inline-list">
+              {{ content.field_external_resources }}
+            </ul>
+          </div>
+        {% endif %}
+        
+        {# File download section #}
+        {% if content.field_file %}
+          <div class="resource-file mt-4">
+            <h3>Download Resource</h3>
+            {{ content.field_file }}
+          </div>
+        {% endif %}
+        
+        {# External link section #}
+        {% if content.field_link %}
+          <div class="resource-link mt-4">
+            <h3>External Link</h3>
+            {{ content.field_link }}
+          </div>
+        {% endif %}
+      </div>
+      
+      {# Sidebar column #}
+      <div class="col-lg-4 sidebar-column">
+        <div class="sidebar-card card">
+          <div class="card-header">
+            <h3>Resource Information</h3>
+          </div>
+          
+          <div class="card-body">
+            {# Service Areas #}
+            {% if content.field_service_areas %}
+              <div class="service-areas mb-3">
+                <h4>Service Areas</h4>
+                <ul class="service-areas-list">
+                  {% for item in node.field_service_areas %}
+                    {% if item.entity %}
+                      <li>
+                        <span class="badge bg-primary">{{ item.entity.label }}</span>
+                      </li>
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endif %}
+            
+            {# Topics #}
+            {% if content.field_topics %}
+              <div class="topics mb-3">
+                <h4>Topics</h4>
+                <ul class="topics-list">
+                  {% for item in node.field_topics %}
+                    {% if item.entity %}
+                      <li>{{ item.entity.label }}</li>
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endif %}
+            
+            {# Last updated #}
+            <div class="last-updated">
+              <h4>Last Updated</h4>
+              <p>{{ node.changed.value|date('F j, Y') }}</p>
+            </div>
+          </div>
+          
+          {# Card footer with action buttons #}
+          <div class="card-footer">
+            {% if node.field_file.entity %}
+              <a href="{{ file_url(node.field_file.entity.uri.value) }}" 
+                 class="sidebar-btn" 
+                 download>
+                <i class="fas fa-download me-1"></i> Download
+              </a>
+            {% elseif node.field_link.0.uri %}
+              <a href="{{ node.field_link.0.uri }}" 
+                 class="sidebar-btn" 
+                 target="_blank"
+                 rel="noopener">
+                <i class="fas fa-external-link-alt me-1"></i> View
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>

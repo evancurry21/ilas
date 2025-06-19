@@ -1,0 +1,11 @@
+{#
+/**
+ * @file
+ * Theme override for a field.
+ */
+#}
+<div{{ attributes.addClass('page-subheader') }}>
+  {% for item in items %}
+    {{ item.content }}
+  {% endfor %}
+</div>

@@ -1,0 +1,230 @@
+// Smart FAQ Section Styles
+@import 'variables_theme';
+@import 'mixins';
+@import 'accordion'; // Import base accordion styles
+
+// FAQ-specific variables
+$faq-bg-color: $color-gray-bg;
+$faq-border-color: $color-gray-border;
+$faq-text-muted: lighten($color-gray-border, 20%);
+$faq-focus-color: $color-primary;
+$faq-focus-shadow: 0 0 0 0.25rem rgba($color-primary, 0.25);
+
+// Extend base accordion-section styles
+.faq-smart-section {
+    @extend .accordion-section;
+    
+    // FAQ-specific title selector
+    .faq-section-title {
+      @extend .accordion-section-title;
+    }
+    
+    // Search styling
+    .faq-search-container {
+      max-width: 700px;
+      margin: 0 auto;
+      
+      // Search icon background uses primary color
+      .input-group-text {
+        background-color: $color-primary !important;
+        border-color: $color-primary !important;
+        color: $color-white !important;
+        
+        // Override Bootstrap's bg-primary if it's set to black
+        &.bg-primary {
+          background-color: $color-primary !important;
+        }
+      }
+      
+      // Make search button smaller
+      .btn-sm {
+        padding: 0.375rem 1rem;
+        font-size: 0.875rem;
+        min-height: auto;
+      }
+      
+      .faq-search-results {
+        border: 1px solid $faq-border-color;
+        border-radius: 0.25rem;
+        background-color: $color-white;
+        max-height: 300px;
+        overflow-y: auto;
+        
+        h5 {
+          padding: 0.75rem;
+          border-bottom: 1px solid $faq-border-color;
+          margin-bottom: 0;
+        }
+        
+        .list-group-item {
+          padding: 0.75rem;
+          
+          a {
+            color: $color-primary;
+            font-weight: 600;
+            
+            &:focus {
+              outline: 2px solid $faq-focus-color;
+              outline-offset: 2px;
+            }
+          }
+          
+          p {
+            color: $faq-text-muted;
+            margin-top: 0.25rem;
+          }
+        }
+      }
+    }
+    
+    // Filters styling
+    .faq-filters {
+      margin-bottom: 1.5rem;
+      text-align: center;
+      
+      .filter-group {
+        display: inline-flex;
+        gap: 0.5rem;
+        background-color: $faq-bg-color;
+        border-radius: 4px;
+        padding: 0.25rem;
+      }
+      
+      .filter-btn {
+        // Match homepage button style
+        display: inline-block;
+        font-family: $font-family-sans-serif;
+        font-weight: 600;
+        text-align: center;
+        text-decoration: none !important;
+        text-transform: uppercase;
+        white-space: nowrap;
+        vertical-align: middle;
+        user-select: none;
+        border: 2px solid $color-primary;
+        padding: 0.5rem 1.25rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        min-height: 44px;
+        min-width: 120px;
+        
+        // Default state (like btn-secondary)
+        background-color: transparent;
+        color: $color-primary;
+        
+        // Hover state - matches homepage button behavior
+        &:hover,
+        &:focus {
+          background-color: $color-primary !important;
+          border-color: $color-primary !important;
+          color: $color-white !important;
+          text-decoration: none !important;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        // Active/pressed state
+        &:active {
+          transform: translateY(0);
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        // Selected filter state (like btn-primary)
+        &.active {
+          background-color: $color-primary !important;
+          border-color: $color-primary !important;
+          color: $color-white !important;
+          font-weight: 700;
+          
+          &:hover,
+          &:focus {
+            background-color: $color-white !important;
+            border-color: $color-primary !important;
+            color: $color-primary !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          }
+          
+          &:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          }
+        }
+        
+        // Focus state for accessibility
+        &:focus-visible {
+          outline: 2px solid $color-primary;
+          outline-offset: 2px;
+        }
+        
+        // Remove default focus outline for mouse users
+        &:focus:not(:focus-visible) {
+          outline: none;
+        }
+        
+        // Disabled state
+        &:disabled,
+        &.disabled {
+          opacity: 0.65;
+          cursor: not-allowed;
+          pointer-events: none;
+        }
+        
+        // Mobile - remove transform effects like homepage buttons
+        @include mobile {
+          &:hover,
+          &:focus,
+          &:active {
+            transform: none;
+          }
+        }
+      }
+    }
+    
+    // Accordion items inherit all base styles from accordion.scss
+    // No need to redefine them here
+  }
+  
+  // Loading states
+  .loading-skeleton {
+    .skeleton-item {
+      height: 20px;
+      background: linear-gradient(90deg, $faq-bg-color 25%, lighten($faq-bg-color, 10%) 50%, $faq-bg-color 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      
+      &:nth-child(2) { width: 80%; }
+      &:nth-child(3) { width: 60%; }
+    }
+  }
+  
+  // Search highlight
+  mark.search-highlight {
+    background-color: rgba(#ffc107, 0.3); // Bootstrap warning color
+    color: inherit;
+    padding: 0.1em 0.2em;
+    border-radius: 2px;
+  }
+  
+  // No results message
+  .no-results {
+    text-align: center;
+    color: $faq-text-muted;
+    
+    h5 {
+      color: $color-gray-border;
+      margin-bottom: 1rem;
+    }
+  }
+  
+  
+  // Animations (fadeIn is inherited from accordion.scss)
+  @keyframes loading {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }

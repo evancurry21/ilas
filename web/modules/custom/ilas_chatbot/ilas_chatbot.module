@@ -1,0 +1,60 @@
+<?php
+
+/**
+ * @file
+ * Contains ilas_chatbot.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function ilas_chatbot_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.ilas_chatbot':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('The ILAS Chatbot module integrates Google Dialogflow to provide conversational AI assistance for legal aid services.') . '</p>';
+      $output .= '<h3>' . t('Configuration') . '</h3>';
+      $output .= '<ol>';
+      $output .= '<li>' . t('Create a Dialogflow agent in Google Cloud Console') . '</li>';
+      $output .= '<li>' . t('Configure intents for legal categories') . '</li>';
+      $output .= '<li>' . t('Add the Chatbot block to your site') . '</li>';
+      $output .= '<li>' . t('Configure the block with your agent ID') . '</li>';
+      $output .= '</ol>';
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function ilas_chatbot_page_attachments(array &$attachments) {
+  // Check if chatbot should be loaded globally
+  $config = \Drupal::config('ilas_chatbot.settings');
+  
+  if ($config->get('load_globally')) {
+    $attachments['#attached']['library'][] = 'ilas_chatbot/chatbot';
+    $attachments['#attached']['drupalSettings']['ilasChatbot'] = [
+      'agentId' => $config->get('agent_id'),
+      'languageCode' => $config->get('language_code'),
+      'welcomeIntent' => $config->get('welcome_intent'),
+      'formMappings' => $config->get('form_mappings'),
+    ];
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function ilas_chatbot_theme() {
+  return [
+    'ilas_chatbot_block' => [
+      'variables' => [
+        'agent_id' => NULL,
+        'language_code' => NULL,
+      ],
+    ],
+  ];
+}

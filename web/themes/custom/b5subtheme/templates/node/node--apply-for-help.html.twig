@@ -1,0 +1,71 @@
+{#
+/**
+ * @file
+ * Template for Apply for Help content type.
+ * 
+ * Uses standard page layout with curved header and footer.
+ * 
+ * Available variables:
+ * - content: Rendered content fields
+ * - attributes: HTML attributes for the article element
+ * - label: The node title (shown in standard header)
+ */
+#}
+
+<article{{ attributes.addClass('node', 'node--apply-for-help') }}>
+
+  {# Main body content #}
+  {% if content.field_body %}
+    <div class="main-content">
+      {{ content.field_body }}
+    </div>
+  {% endif %}
+
+  {# Legal title section #}
+  {% if content.field_apply_legal_title %}
+    <section class="content-section content-section--centered">
+      <div class="container">
+        <h2 class="section-title">
+          {{ content.field_apply_legal_title }}
+        </h2>
+      </div>
+    </section>
+  {% endif %}
+
+  {# Topic cards #}
+  {% if content.field_topic_cards %}
+    <section class="content-section">
+      <div class="container">
+        {{ content.field_topic_cards }}
+      </div>
+    </section>
+  {% endif %}
+
+  {# Subtitle field #}
+  {% if content.field_subtitle %}
+    <section class="subtitle-section text-center">
+      <h3 class="apply-subtitle">
+        {{ content.field_subtitle }}
+      </h3>
+    </section>
+  {% endif %}
+
+  {# Legal body content #}
+  {% if content.field_apply_legal_body %}
+    <section class="content-section content-section--centered">
+      <div class="container">
+        {{ content.field_apply_legal_body }}
+      </div>
+    </section>
+  {% endif %}
+
+  {# Schedule field #}
+  {% if content.field_apply_schedule %}
+    <section class="content-section content-section--centered apply-schedule-section">
+      <div class="container">
+        {{ content.field_apply_schedule }}
+      </div>
+    </section>
+  {% endif %}
+
+</article>

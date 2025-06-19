@@ -1,0 +1,126 @@
+{# node--home-page.html.twig #}
+<article{{ attributes }}>
+
+  {# --------------------------------------------------------- #}
+  {# 1) GRAY HERO SECTION (Curved) - Title Only, Centered      #}
+  {# --------------------------------------------------------- #}
+  <section class="curved-page-header">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+          <h1 class="curved-page-header-title">
+            {{ content.field_hero_title }}
+          </h1>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# --------------------------------------------------------- #}
+  {# 2) WHITE HERO CONTENT SECTION - Subtitle, CTA, Image     #}
+  {# --------------------------------------------------------- #}
+  <section class="hero-content-section">
+    <div class="container">
+      <div class="row align-items-center justify-content-center">
+        <div class="col-md-6">
+          <div class="hero-sub-heading">
+            {{ content.field_hero_subtitle }}
+          </div>
+          <div class="hero-button-group">
+            <a href="{{ content.field_cta_link.0['#url'] }}" class="btn btn-primary btn-hero">
+              {% if content.field_cta_button_text|render %}
+                {{ content.field_cta_button_text.0 }}
+              {% else %}
+                Learn More
+              {% endif %}
+            </a>
+          </div>
+        </div>
+        <div class="col-md-6 d-flex justify-content-end">
+          <div class="hero-media">
+            {{ content.field_hero_image }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# --------------------------------------------------------- #}
+  {# 3) BLUE "HOW WE HELP" SECTION - Section heading + topic cards #}
+  {# --------------------------------------------------------- #}
+  <section class="how-we-help-section">
+    <div class="container">
+      {% if content.field_section_heading is not empty %}
+        <div class="row">
+          <div class="col-12 text-center">
+            <h2 class="section-heading">
+              {{ content.field_section_heading }}
+            </h2>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if content.field_topic_cards is not empty %}
+        <div class="row">
+          <div class="col-12">
+            <div class="topic-cards-row">
+              {% for item in content.field_topic_cards|filter((i,k) => k|first != '#') %}
+                <div class="topic-card-col animate-{{ loop.index }}">
+                  {{ item }}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+
+  {# --------------------------------------------------------- #}
+  {# 4) IMPACT SECTION - Impact title, quote and cards        #}
+  {# --------------------------------------------------------- #}
+  <section class="impact-section">
+    <div class="container">
+      {% if content.field_impact_title is not empty %}
+        <h2 class="impact-title">{{ content.field_impact_title }}</h2>
+      {% endif %}
+      
+      {% if content.field_impact_quote is not empty %}
+        <div class="impact-quote">{{ content.field_impact_quote }}</div>
+      {% endif %}
+
+      {% if content.field_impact_cards is not empty %}
+        <div class="impact-cards-wrapper">
+          <div class="impact-row-1">
+            {% for item in content.field_impact_cards|filter((i,k) => k|first != '#')|slice(0,2) %}
+              <div class="col-md-6">
+                <div class="impact-card-col animate-{{ loop.index }}">
+                  {{ item }}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          <div class="impact-row-2">
+            {% for item in content.field_impact_cards|filter((i,k) => k|first != '#')|slice(2,2) %}
+              <div class="col-md-6">
+                <div class="impact-card-col animate-{{ loop.index + 2 }}">
+                  {{ item }}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+
+  {# --------------------------------------------------------- #}
+  {# 5) FINAL BLUE CURVE SECTION                              #}
+  {# --------------------------------------------------------- #}
+  <div class="final-blue-curve-section">
+    <div class="curved-section-container">
+      {# This container is needed for the mixin styles to work properly #}
+    </div>
+  </div>
+
+</article>

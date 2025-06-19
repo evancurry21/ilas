@@ -1,0 +1,16 @@
+{#
+/**
+ * @file
+ * Theme override for field containing down-arrow accordion items.
+ * Wraps all accordion items in a single container.
+ */
+#}
+<div class="field field--name-field-daa-items field--type-entity-reference-revisions field--label-hidden field__items">
+  <div class="down-arrow-accordion-group">
+    {% for item in items %}
+      <div class="field__item">
+        {{ item.content }}
+      </div>
+    {% endfor %}
+  </div>
+</div>

@@ -1,0 +1,116 @@
+# Drupal files directory (user uploads, generated files)
+/web/sites/default/files/
+/web/sites/*/files/
+/web/private/
+/web/files/
+
+# Drupal settings (contains database credentials and sensitive data)
+/web/sites/*/settings.local.php
+/web/sites/*/local.settings.php
+/web/sites/default/settings.php
+
+# Backup files
+/web/backups/
+*.sql
+*.sql.gz
+*.tar.gz
+*.zip
+*.bak
+
+# Test files
+/web/test_*.sql.gz
+/web/backup-*.sql.gz
+
+# DDEV
+/.ddev/
+
+# Vendor directory (Composer dependencies)
+/vendor/
+
+# Node modules
+node_modules/
+/web/core/node_modules/
+/web/*/node_modules/
+
+# IDE files
+.idea/
+.vscode/
+*.sublime-*
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.cache
+
+# Drupal cache and generated files
+/web/sites/default/files/css/
+/web/sites/default/files/js/
+/web/sites/default/files/styles/
+/web/sites/default/files/php/
+/web/sites/default/files/languages/
+
+# Drupal console and drush files
+/console/
+/.drush/
+/drush/contrib/
+
+# Patch and diff files
+*.patch
+*.diff
+*.orig
+*.rej
+
+# Google Drive backup configuration (if it contains credentials)
+.rclone.conf
+
+# Environment files
+.env
+.env.local
+
+# Compiled source
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Packages
+*.7z
+*.dmg
+*.iso
+*.jar
+*.rar
+
+# Logs and databases (additional patterns)
+error_log
+access_log
+*.log
+*.sqlite
+
+# Private keys
+*.pem
+*.key
+*.crt
+
+# Session files
+/web/sites/default/files/private/
+/web/sites/default/files/tmp/
+
+# Backup manifest files (contain paths, not code)
+/web/backups/manifest_*.txt
+
+# Ignore files from Google Drive setup
+/GOOGLE_DRIVE_BACKUP_SETUP.md
+
+# Dialogflow configuration (may contain API keys)
+/DIALOGFLOW_SETUP.md

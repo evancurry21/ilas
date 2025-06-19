@@ -1,0 +1,75 @@
+{#
+/**
+ * @file
+ * Generic menu template with Bootstrap dropdown support for ALL menus.
+ * This will apply to both main navigation and additional (right) menu.
+ */
+#}
+{{ attach_library('b5subtheme/dropdown-menu') }}
+
+{% import _self as menus %}
+
+{#
+  We call a macro which calls itself to render the full tree.
+  @see https://twig.symfony.com/doc/1.x/tags/macro.html
+#}
+{{ menus.menu_links(items, attributes, 0, aria_label, menu_name) }}
+
+{% macro menu_links(items, attributes, menu_level, aria_label, menu_name) %}
+  {% import _self as menus %}
+  {% if items %}
+    <ul{{ attributes.addClass('navbar-nav') }}>
+      {% for item in items %}
+        {% set classes = [
+          'nav-item',
+          item.is_expanded ? 'dropdown',
+          item.is_collapsed ? 'dropdown',
+          item.in_active_trail ? 'active',
+        ] %}
+        
+        {% set link_classes = [
+          'nav-link',
+          item.is_expanded or item.is_collapsed ? 'dropdown-toggle',
+        ] %}
+        
+        {% set link_attributes = item.url.isRouted ? item.url.getOption('attributes') ?: {} : {} %}
+        {% set link_attributes = link_attributes|merge({
+          'class': link_classes,
+        }) %}
+        
+        {# Add Bootstrap dropdown attributes for items with children #}
+        {% if item.is_expanded or item.is_collapsed %}
+          {% set link_attributes = link_attributes|merge({
+            'aria-expanded': 'false',
+            'aria-haspopup': 'true',
+            'role': 'button',
+          }) %}
+          {# data-bs-toggle will be added by JavaScript for mobile only #}
+        {% endif %}
+
+        <li{{ item.attributes.addClass(classes) }}>
+          {% if item.url.isRouted %}
+            {{ link(item.title, item.url, link_attributes) }}
+          {% else %}
+            <span{{ link_attributes|without('href', 'data-bs-toggle', 'aria-expanded', 'role') }}>{{ item.title }}</span>
+          {% endif %}
+          
+          {# Render dropdown menu for children #}
+          {% if item.below %}
+            <ul class="dropdown-menu">
+              {% for child in item.below %}
+                <li>
+                  {% if child.url.isRouted %}
+                    {{ link(child.title, child.url, {'class': ['dropdown-item']}) }}
+                  {% else %}
+                    <span class="dropdown-item">{{ child.title }}</span>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endmacro %}

@@ -1,0 +1,318 @@
+/**
+ * Donate Page Styles
+ * 
+ * Custom donation form and layout styles.
+ * This page uses custom header/footer implementation.
+ */
+
+.node--type-donate.donate-page {
+  position: relative;
+
+  // Custom header implementation for donate page
+  .donate-header {
+    @include curved-section-base(8rem);
+    @include full-bleed-bg($color-gray-bg);
+    @include curved-bottom(
+      $bg-color: $color-white,
+      $border: 12px solid $color-gray-border
+    );
+
+    .donate-title {
+      position: relative;
+      z-index: z('foreground');
+      font-size: 3.5rem;
+      font-weight: bold;
+      text-align: center;
+      margin: 0;
+      color: $color-primary;
+      white-space: normal;
+      word-break: break-word;
+      
+      @include tablet {
+        font-size: 2.5rem;
+      }
+      
+      @include mobile {
+        font-size: 2.25rem;
+      }
+    }
+  }
+
+  .donate-body {
+    margin-bottom: 3rem;
+    padding: 0 1rem;
+    font-size: 1.5rem;
+    line-height: 1.6;
+    text-transform: none;
+    color: $color-black;
+    text-align: center;
+    
+    @include tablet {
+      font-size: 1.4rem;
+    }
+    
+    @include mobile {
+      font-size: 1.25rem;
+    }
+    
+    p {
+      margin-bottom: 1rem;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+    
+    ul, ol {
+      margin: 1rem 0;
+      padding-left: 2rem;
+    }
+    
+    h2, h3, h4, h5, h6 {
+      margin: 1.5rem 0 1rem;
+      font-weight: 600;
+    }
+    
+    a {
+      color: $color-primary;
+      text-decoration: underline;
+      
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+
+  .custom-donation-form {
+    max-width: 600px;
+    margin: 3rem auto;
+    padding: 2rem;
+    background: $color-white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    
+    @include mobile {
+      margin: 2rem 1rem;
+      padding: 1.5rem;
+    }
+
+    .form-header {
+      text-align: center;
+      margin-bottom: 2rem;
+      
+      h3 {
+        color: $color-primary;
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        
+        @include mobile {
+          font-size: 1.25rem;
+        }
+      }
+      
+      p {
+        color: #666;
+        margin-bottom: 0;
+        
+        @include mobile {
+          font-size: 0.9rem;
+        }
+      }
+    }
+
+    .amount-selection {
+      margin-bottom: 2rem;
+      
+      .amount-buttons {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+        
+        @include mobile {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 0.5rem;
+        }
+        
+        .amount-btn {
+          padding: 1rem;
+          border: 2px solid #e0e0e0;
+          background: $color-white;
+          border-radius: 6px;
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: $color-black;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          min-height: 44px;
+          
+          @include mobile {
+            padding: 0.75rem 0.5rem;
+            font-size: 1rem;
+          }
+          
+          &:hover, &.active {
+            border-color: $color-primary;
+            background-color: $color-primary;
+            color: $color-white;
+          }
+          
+          &:focus {
+            outline: 2px solid $color-primary;
+            outline-offset: 2px;
+          }
+        }
+      }
+      
+      .custom-amount {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        
+        @include mobile {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 0.75rem;
+        }
+        
+        label {
+          font-weight: 500;
+          color: #333;
+          white-space: nowrap;
+          
+          @include mobile {
+            white-space: normal;
+          }
+        }
+        
+        input {
+          flex: 1;
+          padding: 0.75rem;
+          border: 2px solid #e0e0e0;
+          border-radius: 6px;
+          font-size: 1rem;
+          min-height: 44px;
+          
+          &:focus {
+            outline: none;
+            border-color: $color-primary;
+            box-shadow: 0 0 0 2px rgba($color-primary, 0.2);
+          }
+        }
+      }
+    }
+
+    .donation-frequency {
+      margin-bottom: 2rem;
+      
+      h4 {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+        color: #333;
+        
+        @include mobile {
+          font-size: 1rem;
+        }
+      }
+      
+      .frequency-options {
+        display: flex;
+        gap: 0.5rem;
+        
+        @include mobile {
+          flex-direction: column;
+        }
+        
+        .frequency-btn {
+          flex: 1;
+          padding: 0.75rem 1rem;
+          border: 2px solid #e0e0e0;
+          background: #fff;
+          border-radius: 6px;
+          font-weight: 500;
+          color: #333;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          min-height: 44px;
+          
+          &:hover, &.active {
+            border-color: $color-primary;
+            background-color: $color-primary;
+            color: #fff;
+          }
+          
+          &:focus {
+            outline: 2px solid $color-primary;
+            outline-offset: 2px;
+          }
+        }
+      }
+    }
+
+    .donate-button {
+      width: 100%;
+      padding: 1rem 2rem;
+      background-color: $color-primary;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+      min-height: 44px;
+      
+      @include mobile {
+        font-size: 1.1rem;
+      }
+      
+      &:hover {
+        background-color: darken($color-primary, 10%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        color: #fff;
+        text-decoration: none;
+      }
+      
+      &:focus {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
+      }
+      
+      &:active {
+        transform: translateY(0);
+      }
+    }
+
+    .secure-notice {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      color: #666;
+      
+      @include mobile {
+        font-size: 0.85rem;
+      }
+      
+      i {
+        color: $color-primary;
+        margin-right: 0.5rem;
+      }
+    }
+  }
+
+  // Hide the old DonorBox embed
+  .donorbox-embed {
+    display: none !important;
+    visibility: hidden;
+  }
+  
+  // Custom blue curve section for donate page
+  .curved-section-blue {
+    @include bottom-blue-curve();
+  }
+}

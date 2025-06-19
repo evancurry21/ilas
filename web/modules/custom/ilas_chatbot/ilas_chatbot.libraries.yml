@@ -1,0 +1,13 @@
+chatbot:
+  version: 1.x
+  js:
+    js/ilas-chatbot-fix.js: { weight: -100 }
+    js/ilas-chatbot.js: {}
+    https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1: { type: external, attributes: { async: true } }
+  css:
+    theme:
+      css/ilas-chatbot.css: {}
+      css/ilas-chatbot-override.css: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings

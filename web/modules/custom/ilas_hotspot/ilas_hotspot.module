@@ -1,0 +1,86 @@
+<?php
+
+/**
+ * @file
+ * ILAS Hotspot module implementation.
+ */
+
+/**
+ * Create a hotspot render array.
+ * 
+ * @param string $background_image
+ *   Path to the background image.
+ * @param array $hotspots
+ *   Array of hotspot data.
+ * @param bool $responsive
+ *   Whether the hotspot should be responsive.
+ * 
+ * @return array
+ *   Render array for the hotspot.
+ */
+function ilas_hotspot_create($background_image, array $hotspots, $responsive = TRUE) {
+  $build = [
+    '#type' => 'container',
+    '#attributes' => [
+      'class' => ['ilas-hotspot-container'],
+      'data-responsive' => $responsive,
+    ],
+    '#attached' => [
+      'library' => ['ilas_hotspot/hotspot'],
+    ],
+  ];
+
+  // Background image
+  $build['background'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'img',
+    '#attributes' => [
+      'src' => $background_image,
+      'alt' => t('Impact graphic'),
+      'class' => ['hotspot-background'],
+    ],
+  ];
+
+  // Add hotspots
+  foreach ($hotspots as $index => $hotspot) {
+    $build['hotspot_' . $index] = [
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => ['hotspot-item', 'hotspot-' . $hotspot['category']],
+        'data-category' => $hotspot['category'],
+        'data-placement' => $hotspot['placement'],
+      ],
+    ];
+
+    $build['hotspot_' . $index]['trigger'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'button',
+      '#attributes' => [
+        'class' => ['hotspot-trigger'],
+        'data-bs-toggle' => 'popover',
+        'data-bs-content' => $hotspot['content'],
+        'data-bs-title' => $hotspot['title'],
+        'data-bs-placement' => $hotspot['placement'],
+        'data-bs-html' => 'true',
+      ],
+      '#value' => '<img src="' . $hotspot['icon'] . '" alt="' . $hotspot['title'] . '" />',
+    ];
+  }
+
+  return $build;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function ilas_hotspot_theme($existing, $type, $theme, $path) {
+  return [
+    'ilas_hotspot' => [
+      'variables' => [
+        'background_image' => NULL,
+        'hotspots' => [],
+        'responsive' => TRUE,
+      ],
+    ],
+  ];
+}

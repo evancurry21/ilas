@@ -1,0 +1,42 @@
+@import 'variables_theme';
+
+.column-border {
+    border: 6px solid $color-primary;
+    z-index:20;
+    padding: 1rem;            // some inside spacing
+    margin-top: 2rem;
+    background-color: $color-gray-bg;
+  }
+  
+  // If you want to style titles/subtitles/body specifically:
+  .column-title {
+    font-size: 2.5rem;
+    font-weight: 700 !important;
+    margin: 0 0 1.5rem 0;
+    color: $color-primary;
+    text-align: center;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    
+    @include tablet {
+      font-size: 2.2rem;
+    }
+    
+    @include mobile {
+      font-size: 1.7rem;
+      margin-bottom: 1rem;
+    }
+  }
+  .column-subtitle {
+    color: #4a4a4a; 
+    font-size: 1.5rem;
+    margin-bottom: .25rem;
+  }
+  .column-body {
+    color: #000; 
+    font-size: 1.25rem;
+  }
+
+  // Buttons in two-column-info sections use standardized button styles
+  // No custom overrides needed - uses global .btn-primary from _buttons.scss
+  

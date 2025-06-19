@@ -1,0 +1,180 @@
+// ===================================
+// Configuration Variables
+// ===================================
+$curve-border-width: 12px !default;
+$curve-height-desktop: 75px !default;
+$curve-height-mobile: 50px !default;
+$curve-offset: -50px !default;
+$section-padding-y-desktop: 2.75rem !default;
+$section-padding-y-tablet: 2.5rem !default;
+$section-padding-y-mobile: 2rem !default;
+
+// Bottom blue curve specific
+$blue-curve-bg-height-desktop: 300px !default;
+$blue-curve-bg-height-mobile: 250px !default;
+$blue-curve-cutout-height-desktop: 50px !default;
+$blue-curve-cutout-height-mobile: 35px !default;
+$blue-curve-container-max-width: 1200px !default;
+$blue-curve-container-margin-desktop: 5rem !default;
+$blue-curve-container-margin-tablet: 4rem !default;
+$blue-curve-container-margin-mobile: 3rem !default;
+
+// Z-index scale system
+$z-layers: (
+  'background': -1,
+  'default': 0,
+  'foreground': 1,
+  'overlay': 10
+) !default;
+
+@function z($layer) {
+  @return map-get($z-layers, $layer);
+}
+
+// ===================================
+// Utility Mixins
+// ===================================
+
+// Full-bleed element base
+@mixin full-bleed-element($position: absolute, $top: 0) {
+  content: '';
+  position: $position;
+  top: $top;
+  left: 50%;
+  width: 100vw;
+  margin-left: -50vw;
+}
+
+// Standard Bootstrap breakpoint mixins
+@mixin mobile {
+  @media (max-width: 767.98px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: 768px) and (max-width: 991.98px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: 992px) {
+    @content;
+  }
+}
+
+// ===================================
+// Core Section Mixins
+// ===================================
+
+// 1) Base curved section container mixin
+@mixin curved-section-base(
+  $min-height: 8rem,
+  $padding-desktop: $section-padding-y-desktop 1rem 6rem,
+  $padding-tablet: $section-padding-y-tablet 1rem 7rem,
+  $padding-mobile: $section-padding-y-mobile 1rem 5rem
+) {
+  position: relative;
+  display: block;
+  text-align: center;
+  justify-content: center;
+  min-height: $min-height;
+  padding: $padding-desktop;
+  z-index: z('default');
+  
+  @include tablet {
+    padding: $padding-tablet;
+  }
+  
+  @include mobile {
+    padding: $padding-mobile;
+  }
+}
+
+// 2) Full-bleed background mixin
+@mixin full-bleed-bg($bg-color, $z-index: z('background')) {
+  &::before {
+    @include full-bleed-element();
+    bottom: 0;
+    background: $bg-color;
+    z-index: $z-index;
+  }
+}
+
+// 3) Unified curved bottom mixin
+@mixin curved-bottom(
+  $bg-color: $color-white,
+  $height: $curve-height-desktop,
+  $mobile-height: $curve-height-mobile,
+  $z-index: z('background'),
+  $border: none
+) {
+  &::after {
+    @include full-bleed-element(absolute, auto);
+    bottom: -1px;
+    height: $height;
+    background: $bg-color;
+    border-top-left-radius: 50% 100%;
+    border-top-right-radius: 50% 100%;
+    z-index: $z-index;
+    
+    @if $border != none {
+      border-top: $border;
+      box-sizing: border-box;
+    }
+    
+    @include mobile {
+      height: $mobile-height;
+    }
+  }
+}
+
+// 4) Simplified bottom blue curve
+@mixin bottom-blue-curve() {
+  position: relative;
+  padding: 0;
+  margin-top: 0;
+
+  &::before {
+    @include full-bleed-element(absolute, $curve-offset);
+    height: $blue-curve-bg-height-desktop;
+    background-color: $color-primary;
+    z-index: z('foreground');
+    
+    @include mobile {
+      height: $blue-curve-bg-height-mobile;
+    }
+  }
+
+  &::after {
+    @include full-bleed-element(absolute, $curve-offset);
+    height: $blue-curve-cutout-height-desktop;
+    background-color: $color-white;
+    border-bottom-left-radius: 50% 100%;
+    border-bottom-right-radius: 50% 100%;
+    border-bottom: $curve-border-width solid $color-gray-border;
+    box-sizing: border-box;
+    z-index: z('foreground');
+    
+    @include mobile {
+      height: $blue-curve-cutout-height-mobile;
+    }
+  }
+
+  .curved-section-container {
+    position: relative;
+    z-index: z('foreground');
+    max-width: $blue-curve-container-max-width;
+    margin: $blue-curve-container-margin-desktop auto;
+    padding: 0 1rem;
+    
+    @include tablet {
+      margin: $blue-curve-container-margin-tablet auto;
+    }
+    
+    @include mobile {
+      margin: $blue-curve-container-margin-mobile 1rem;
+    }
+  }
+}

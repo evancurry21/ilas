@@ -1,0 +1,43 @@
+{#
+/**
+ * @file
+ * Template for Office Locations content type.
+ * 
+ * Uses standard page layout with curved header and footer.
+ * 
+ * Available variables:
+ * - content: Rendered content fields
+ * - attributes: HTML attributes for the article element
+ */
+#}
+
+<article{{ attributes.addClass('node', 'node--office-locations') }}>
+
+  {# Main content using standard .main-content class #}
+  {% if content.field_main_content %}
+    <div class="main-content">
+      {{ content.field_main_content }}
+    </div>
+  {% endif %}
+
+  {# Topic cards section with consistent wrapper #}
+  {% if content.field_topic_cards %}
+    <section class="content-section">
+      <div class="container">
+        {{ content.field_topic_cards }}
+      </div>
+    </section>
+  {% endif %}
+
+  {# Map section #}
+  <section class="office-locations-map-wrapper">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+          {{ drupal_view('office_locations_map', 'block_1') }}
+        </div>
+      </div>
+    </div>
+  </section>
+
+</article>

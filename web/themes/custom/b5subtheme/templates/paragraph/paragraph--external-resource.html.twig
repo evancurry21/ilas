@@ -1,0 +1,26 @@
+{#
+/**
+ * @file
+ * Inline‑icon list style for an External Resource item.
+ */
+#}
+<li{{ attributes.addClass('d-flex', 'flex-column', 'mb-2') }}>
+  {# 1) Description/body above #}
+  {% if paragraph.field_external_resource.value %}
+    <div class="resource-description mb-1">
+      {{ paragraph.field_external_resource.value }}
+    </div>
+  {% endif %}
+
+  {# 2) Link line with icon #}
+  {% if paragraph.field_external_link.uri %}
+    <div class="link-line d-flex align-items-center">
+      <i class="fas fa-external-link-alt me-2" aria-hidden="true"></i>
+      <a href="{{ paragraph.field_external_link.uri }}"
+         target="_blank"
+         rel="noopener">
+        {{ paragraph.field_external_title.value }}
+      </a>
+    </div>
+  {% endif %}
+</li>

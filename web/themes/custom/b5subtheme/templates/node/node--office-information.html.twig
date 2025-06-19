@@ -1,0 +1,75 @@
+{#
+/**
+ * @file
+ * Template for Office Information content type.
+ * 
+ * Uses standard page layout with curved header and footer.
+ * Subtitle support is built into page.html.twig.
+ * 
+ * Available variables:
+ * - content: Rendered content fields
+ * - attributes: HTML attributes for the article element
+ * - node: The node entity
+ */
+#}
+
+<article{{ attributes.addClass('node', 'node--office-information') }}>
+
+  {# Main content section with two-column layout #}
+  <section class="content-section">
+    <div class="container">
+      <div class="row justify-content-center">
+        
+        {# Left Column - Office Information #}
+        <div class="col-md-5 mb-4 mb-md-0">
+          <div class="info-card">
+            <h2 class="info-card__title">Office Information</h2>
+            
+            <dl class="info-list">
+              {% if node.field_address.value %}
+                <dt>Address:</dt>
+                <dd>{{ node.field_address.value }}</dd>
+              {% endif %}
+              
+              {% if node.field_telephone.value %}
+                <dt>Telephone:</dt>
+                <dd>{{ node.field_telephone.value }}</dd>
+              {% endif %}
+              
+              {% if node.field_office_hours.value %}
+                <dt>Office Hours:</dt>
+                <dd>{{ node.field_office_hours.value }}</dd>
+              {% endif %}
+            </dl>
+            
+            {% if content.field_office_location_map %}
+              <div class="office-map mt-4">
+                {{ content.field_office_location_map }}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="col-md-1"></div>
+        
+        {# Right Column - Get Legal Help #}
+        <div class="col-md-5">
+          <div class="info-card">
+            <h2 class="info-card__title">Get Legal Help</h2>
+            
+            {% if content.field_legal_advice_line %}
+              <dl class="info-list">
+                <dt>Legal Advice Line:</dt>
+                <dd>{{ content.field_legal_advice_line }}</dd>
+              </dl>
+            {% endif %}
+            
+            {# Additional fields can be added here #}
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+</article>

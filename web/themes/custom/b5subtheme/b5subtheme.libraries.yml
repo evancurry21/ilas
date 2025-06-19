@@ -1,0 +1,124 @@
+global-styling:
+  css:
+    theme:
+      css/style.css: {}
+
+bootstrap-icons:
+  css:
+    theme:
+      "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css":
+        type: external
+
+fontawesome:
+  css:
+    theme:
+      "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css":
+        type: external
+
+custom-scripts:
+  js:
+    js/scripts.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+
+
+
+premium-application:
+  version: 1.0
+  css:
+    theme:
+      css/style.css: {}
+  js:
+    js/premium-application.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once
+    - b5subtheme/fontawesome
+    - core/drupal.ajax     
+
+smart-faq:
+  version: 2.0
+  css:
+    component:
+      css/style.css: {}
+  js:
+    js/smart-faq-enhanced.js: { weight: -10 }
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once
+    - bootstrap5/collapse
+    - b5subtheme/fontawesome
+
+down-arrow-accordion:
+  version: 1.0
+  css:
+    component:
+      css/style.css: {}
+  js:
+    js/down-arrow-accordion.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once
+    - bootstrap5/collapse
+    - b5subtheme/fontawesome
+
+dropdown-menu:
+  version: 1.0
+  js:
+    js/dropdown-menu.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once
+    - bootstrap5/dropdown
+
+mobile-menu:
+  version: 1.0
+  js:
+    js/mobile-menu.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
+donation-form:
+  version: 1.0
+  js:
+    js/donation-form.min.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once
+
+search-overlay:
+  version: 1.0
+  js:
+    js/search-overlay.min.js: { minified: true }
+  dependencies:
+    - core/drupal
+    - core/once
+    - core/drupal.ajax
+
+scroll-behaviors:
+  version: 1.0
+  js:
+    js/scroll-behaviors.js: { weight: -10 }
+  dependencies:
+    - core/drupal
+    - b5subtheme/fontawesome
+
+resources:
+  version: 1.0
+  css:
+    theme:
+      css/style.css: {}
+  js:
+    js/resources.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once
+    - b5subtheme/fontawesome

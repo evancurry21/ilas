@@ -1,0 +1,40 @@
+{#
+/**
+ * @file
+ * Search overlay template for utility bar.
+ */
+#}
+<div id="searchOverlay" class="search-overlay utility-bar-search" aria-hidden="true" style="display: none;">
+  <div class="search-container">
+    <form action="/search" method="get" class="search-form">
+      <div class="search-input-wrapper">
+        {# Search icon inside the input #}
+        <i class="fa-solid fa-magnifying-glass search-icon" aria-hidden="true"></i>
+        
+        <input type="search" 
+               name="keys" 
+               class="search-input" 
+               placeholder="{{ 'Search for legal help, resources, or information...'|t }}"
+               aria-label="{{ 'Search'|t }}"
+               autocomplete="off">
+        
+        {# Loading indicator #}
+        <div class="search-loading">
+          <i class="fa-solid fa-spinner fa-spin"></i>
+        </div>
+        
+        {# Close button inside the input #}
+        <button type="button" class="search-close" aria-label="{{ 'Close search'|t }}">
+          <i class="fa-solid fa-times" aria-hidden="true"></i>
+        </button>
+      </div>
+      
+      {# Search results dropdown #}
+      <div class="search-results-dropdown" aria-live="polite" aria-atomic="true" style="display: none;">
+        <div class="search-results-content">
+          {# Results will be dynamically inserted here #}
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

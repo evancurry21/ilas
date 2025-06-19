@@ -1,0 +1,47 @@
+{#
+  paragraph--faq-item.html.twig
+  Used by the "FAQ Item" paragraph type.
+
+  Fields:
+    - field_faq_question (the question displayed in the header)
+    - field_faq_answer (the answer displayed when expanded)
+    - field_faq_category (optional: category for filtering)
+#}
+
+{% set classes = [
+  'faq-item',
+  'paragraph',
+  'paragraph--type--' ~ paragraph.bundle|clean_class,
+  'paragraph--id--' ~ paragraph.id(),
+  view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+] %}
+
+{% set item_id = 'faq-item-' ~ paragraph.id() %}
+{% set category = content.field_faq_category[0]['#markup']|default('general') %}
+
+<div{{ attributes.addClass(classes) }} data-faq-id="{{ paragraph.id() }}" data-category="{{ category|clean_class }}">
+  
+  {# Question - Hidden but available for screen readers and search #}
+  <div class="faq-question visually-hidden-focusable">
+    {{ content.field_faq_question }}
+  </div>
+  
+  {# Answer - Hidden but available for screen readers and search #}
+  <div class="faq-answer visually-hidden">
+    {{ content.field_faq_answer }}
+  </div>
+  
+  {# Category badge (if available) #}
+  {% if content.field_faq_category|render %}
+    <span class="faq-category-badge badge bg-secondary">
+      {{ content.field_faq_category }}
+    </span>
+  {% endif %}
+  
+  {# Additional metadata for enhanced functionality #}
+  <div class="faq-metadata visually-hidden">
+    <span class="faq-updated">{{ paragraph.getChangedTime()|format_date('short') }}</span>
+    <span class="faq-views">{{ paragraph.field_view_count.value|default(0) }}</span>
+  </div>
+
+</div>

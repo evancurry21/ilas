@@ -1,0 +1,17 @@
+{#
+/**
+ * @file
+ * Theme override to display a list of rows for the resources-by-service view.
+ * Only use if your View is set to Format: Unformatted list.
+ * For Grid, see Bootstrap/grid template suggestions.
+ */
+#}
+
+<div class="row row-cols-1 row-cols-md-2 g-4 resource-card-grid">
+  {% for row in rows %}
+    <div class="col d-flex">
+      {{ row.content }}
+    </div>
+  {% endfor %}
+</div>
+

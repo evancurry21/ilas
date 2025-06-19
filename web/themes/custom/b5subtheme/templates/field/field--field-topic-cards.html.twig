@@ -1,0 +1,19 @@
+{#
+  Override for the Topic-Cards field. Adds a special class if
+  the number of cards is less than six.
+#}
+{% set card_count = items|length %}
+{# always keep the core class, add “few-cards” when < 6 #}
+{% set wrapper_classes = [
+    'field--name-field-topic-cards',
+    card_count < 6 ? 'topic-cards--few'
+] %}
+
+<div{{ attributes.addClass(wrapper_classes) }}>
+  {% for item in items %}
+    {# Preserve your existing .field__item wrapper #}
+    <div{{ item.attributes.addClass('field__item') }}>
+      {{ item.content }}
+    </div>
+  {% endfor %}
+</div>

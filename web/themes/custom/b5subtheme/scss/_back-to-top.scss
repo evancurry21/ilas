@@ -1,0 +1,90 @@
+// Back to Top Button Styles
+@import 'variables_theme';
+@import 'mixins';
+
+// Button styling that matches existing design
+.back-to-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 9998; // High priority, below mobile menu (9999)
+  width: 50px;
+  height: 50px;
+  background-color: $color-primary;
+  color: $color-white;
+  border: 2px solid $color-primary;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
+  
+  // Icon styling
+  i {
+    font-size: 1.25rem;
+    transition: transform 0.3s ease;
+  }
+  
+  // Hover state matching existing button patterns
+  &:hover,
+  &:focus {
+    background-color: $color-white;
+    color: $color-primary;
+    transform: translateY(-3px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+    
+    i {
+      transform: translateY(-2px);
+    }
+  }
+  
+  // Focus state for accessibility
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 3px;
+  }
+  
+  // Show state when scrolled
+  &.show {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  // Mobile positioning
+  @include mobile {
+    bottom: 1.5rem;
+    right: 1rem;
+    width: 45px;
+    height: 45px;
+    
+    i {
+      font-size: 1.1rem;
+    }
+  }
+  
+  // Tablet positioning
+  @include tablet {
+    bottom: 1.75rem;
+    right: 1.5rem;
+  }
+}
+
+// Smooth scroll behavior
+html {
+  scroll-behavior: smooth;
+}
+
+// Respect reduced motion preferences
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  
+  .back-to-top {
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+}

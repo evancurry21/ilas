@@ -1,0 +1,172 @@
+/**
+ * ILAS Chatbot Styles
+ * Professional responsive design system
+ */
+
+/* Container and positioning - High specificity to override conflicts */
+body .ilas-chatbot-container,
+body df-messenger {
+  position: fixed !important;
+  bottom: 20px !important;
+  left: 20px !important;
+  right: auto !important;
+  z-index: 9999 !important;
+}
+
+/* Dialogflow Messenger overrides */
+df-messenger {
+  --df-messenger-bot-message: #f1f3f4;
+  --df-messenger-button-titlebar-color: var(--bs-primary, #0d6efd);
+  --df-messenger-chat-background-color: #fafafa;
+  --df-messenger-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --df-messenger-send-icon: var(--bs-primary, #0d6efd);
+  --df-messenger-user-message: var(--bs-primary, #0d6efd);
+  --df-messenger-minimized-chat-close-icon-color: #fff;
+  --df-messenger-fab-color: var(--bs-primary, #0d6efd);
+}
+
+/* Chat bubble customization */
+df-messenger-chat-bubble {
+  bottom: 0;
+  left: 0;
+  transition: all 0.3s ease;
+  --df-messenger-fab-color: var(--bs-primary, #0d6efd);
+  --df-messenger-fab-icon-color: #fff;
+}
+
+df-messenger-chat-bubble:hover {
+  transform: scale(1.05);
+}
+
+/* Ensure the FAB button uses primary color */
+df-messenger::part(chat-bubble) {
+  background-color: var(--bs-primary, #0d6efd) !important;
+}
+
+/* Force left positioning for the chat window */
+df-messenger::part(chat-wrapper) {
+  left: 20px !important;
+  right: auto !important;
+}
+
+/* Override any black backgrounds */
+df-messenger,
+df-messenger-chat,
+df-messenger-chat-bubble,
+.df-messenger-wrapper {
+  background: transparent !important;
+}
+
+/* Specific overrides for the chat button */
+df-messenger .df-messenger-wrapper {
+  left: 20px !important;
+  right: auto !important;
+  bottom: 20px !important;
+}
+
+/* Force primary color on all chat elements */
+df-messenger .df-messenger-chat-open {
+  background-color: var(--bs-primary, #0d6efd) !important;
+  color: white !important;
+}
+
+/* Form container */
+.ilas-form-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 800px;
+  height: 80vh;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  z-index: 10000;
+  transition: opacity 0.3s ease;
+}
+
+.ilas-form-container.hidden {
+  display: none;
+}
+
+/* Form iframe */
+.ilas-form-iframe {
+  width: 100%;
+  height: calc(100% - 40px);
+  border: none;
+  border-radius: 0 0 8px 8px;
+}
+
+/* Close button */
+.ilas-form-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.ilas-form-close:hover {
+  background: #d32f2f;
+  transform: rotate(90deg);
+}
+
+/* Loading state */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 18px;
+  color: #666;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .ilas-chatbot-container {
+    bottom: 0;
+    left: 0;
+  }
+  
+  df-messenger-chat-bubble {
+    bottom: 10px;
+    left: 10px;
+  }
+  
+  .ilas-form-container {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    border-radius: 0;
+  }
+  
+  .ilas-form-iframe {
+    border-radius: 0;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  df-messenger {
+    --df-messenger-bot-message: #e0e0e0;
+    --df-messenger-user-message: #000;
+    --df-messenger-chat-background-color: #fff;
+  }
+}

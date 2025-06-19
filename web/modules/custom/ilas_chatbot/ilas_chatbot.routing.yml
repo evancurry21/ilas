@@ -1,0 +1,26 @@
+ilas_chatbot.form_config:
+  path: '/api/chatbot/form/{form_type}'
+  defaults:
+    _controller: '\Drupal\ilas_chatbot\Controller\ChatbotController::getFormConfig'
+    _title: 'Form Configuration'
+  requirements:
+    _permission: 'access content'
+  methods: [GET]
+
+ilas_chatbot.embed_form:
+  path: '/form/embed/{webform_id}'
+  defaults:
+    _controller: '\Drupal\ilas_chatbot\Controller\ChatbotController::embedForm'
+    _title: 'Embedded Form'
+  requirements:
+    _permission: 'access content'
+
+ilas_chatbot.webhook:
+  path: '/api/chatbot/webhook'
+  defaults:
+    _controller: '\Drupal\ilas_chatbot\Controller\ChatbotController::webhook'
+  requirements:
+    _permission: 'access content'
+  methods: [POST]
+  options:
+    no_cache: TRUE

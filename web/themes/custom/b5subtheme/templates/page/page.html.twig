@@ -1,0 +1,201 @@
+{#
+/**
+ * @file
+ * Theme override to display a single page with centered logo and split menu.
+ */
+#}
+
+{{ attach_library('b5subtheme/fontawesome') }}
+{{ attach_library('b5subtheme/custom-scripts') }}
+{{ attach_library('b5subtheme/mobile-menu') }}
+
+{# Header Section #}
+<header role="banner">
+  
+  {# Utility Bar #}
+  <div class="utility-bar text-white fw-bold">
+    <div class="container position-relative">
+      {# Normal utility bar content #}
+      <div class="utility-bar-content" id="utilityBarContent">
+        
+        {# Legal Advice Hotline #}
+        <div class="d-flex align-items-center hotline flex-nowrap">
+          <a href="tel:208-746-7541" class="text-white text-decoration-none d-flex align-items-center text-nowrap" aria-label="{{ 'Call Legal Advice Hotline at 208-746-7541'|t }}">
+            <i class="fa-solid fa-phone-volume me-2" aria-hidden="true"></i>
+            <span class="d-none d-xl-inline">{{ 'Legal Advice Hotline:'|t }}&nbsp;</span>
+            208-746-7541
+          </a>
+        </div>
+        
+        {# Search #}
+        <div class="d-flex align-items-center search-col">
+          <button type="button" class="text-white text-decoration-none d-flex align-items-center bg-transparent border-0 search-trigger" id="searchToggle" data-search-trigger aria-label="{{ 'Open search'|t }}" aria-expanded="false" aria-controls="searchOverlay">
+            <i class="fa-solid fa-magnifying-glass me-2" aria-hidden="true"></i>
+            {{ 'Search'|t }}
+          </button>
+        </div>
+        
+        {# Exit #}
+        <div class="d-flex align-items-center exit-link">
+          <a href="https://www.google.com" class="text-white text-decoration-none d-flex align-items-center" aria-label="{{ 'Exit site securely'|t }}">
+            <i class="fa-solid fa-arrow-right-from-bracket me-2" aria-hidden="true"></i>
+            {{ 'Exit'|t }}
+          </a>
+        </div>
+        
+        {# Get Help #}
+        <div class="d-flex align-items-center get-help">
+          <button type="button" class="text-white text-decoration-none d-flex align-items-center bg-transparent border-0" id="helpToggle" aria-label="{{ 'Get help menu'|t }}" aria-expanded="false" aria-controls="helpOverlay">
+            <i class="fa-solid fa-heart me-2" aria-hidden="true"></i>
+            {{ 'Get Help'|t }}
+          </button>
+        </div>
+        
+      </div>
+      
+      {# Include search overlay #}
+      {% include '@b5subtheme/includes/search-overlay.html.twig' %}
+    </div>
+  </div>
+  
+  {# Main Navigation #}
+  <nav class="navbar navbar-expand-lg centered-logo-navbar" role="navigation" aria-label="{{ 'Main navigation'|t }}">
+    <div class="container">
+      
+      {# Logo - always present but positioned differently per viewport #}
+      <a href="{{ path('<front>') }}" class="navbar-brand site-logo" title="{{ 'Home'|t }}" rel="home">
+        <img src="/themes/custom/b5subtheme/images/Primary Logo & Tagline(2)_0.svg" alt="{{ 'Idaho Legal Aid Services'|t }}" />
+      </a>
+      
+      {# Mobile toggle button - triggers custom slide-out menu #}
+      <button class="navbar-toggler d-lg-none" 
+              type="button"
+              aria-controls="mobileMenuOverlay"
+              aria-expanded="false" 
+              aria-label="{{ 'Toggle navigation'|t }}">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      {# Navigation content - Desktop only #}
+      {# Desktop: unified menu #}
+      <div class="d-none d-lg-block unified-menu">
+        {{ drupal_menu('main') }}
+      </div>
+      
+    </div>
+  </nav>
+
+</header>
+
+{# Main Content #}
+<main role="main" class="main-content">
+  <a id="main-content" tabindex="-1"></a>
+
+  {% if page.breadcrumb %}
+    {{ page.breadcrumb }}
+  {% endif %}
+
+  {# Determine layout type #}
+  {% set use_standard_layout = not is_front %}
+  
+  {# Check for custom page types #}
+  {% if node is defined and node.getType is defined %}
+    {% set custom_types = ['home_page', 'donate'] %}
+    {% if node.getType() in custom_types %}
+      {% set use_standard_layout = false %}
+    {% endif %}
+  {% endif %}
+  
+  {# Manual override #}
+  {% if disable_standard_layout is defined and disable_standard_layout %}
+    {% set use_standard_layout = false %}
+  {% endif %}
+
+  {# Sidebar classes #}
+  {% set sidebar_first_classes = (page.sidebar_first and page.sidebar_second)
+    ? 'col-12 col-sm-6 col-lg-3'
+    : 'col-12 col-lg-3' %}
+
+  {% set sidebar_second_classes = (page.sidebar_first and page.sidebar_second)
+    ? 'col-12 col-sm-6 col-lg-3'
+    : 'col-12 col-lg-3' %}
+
+  {% set content_classes = (page.sidebar_first and page.sidebar_second)
+    ? 'col-12 col-lg-6'
+    : ((page.sidebar_first or page.sidebar_second)
+      ? 'col-12 col-lg-9'
+      : 'col-12'
+    ) %}
+
+  {# Standard Layout with Gray Curved Header #}
+  {% if use_standard_layout %}
+    
+    {# Gray Curved Header #}
+    {% if node and node.getTitle() %}
+      <section class="curved-page-header">
+        <div class="container">
+          <h1 class="curved-page-header-title">{{ node.getTitle() }}</h1>
+        </div>
+      </section>
+    {% endif %}
+
+    {# Standard Content Layout #}
+    <div class="container">
+      <div class="row">
+        {% if page.sidebar_first %}
+          <div class="order-2 order-lg-1 {{ sidebar_first_classes }}">
+            {{ page.sidebar_first }}
+          </div>
+        {% endif %}
+
+        <div class="order-1 order-lg-2 {{ content_classes }} standard-layout">
+          {{ page.content }}
+        </div>
+
+        {% if page.sidebar_second %}
+          <div class="order-3 {{ sidebar_second_classes }}">
+            {{ page.sidebar_second }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    {# Blue Section Below #}
+    <div class="curved-section-blue">
+      <div class="curved-section-container">
+        {# Additional content can go here #}
+      </div>
+    </div>
+
+  {% else %}
+    
+    {# Custom/Front Page Layout #}
+    <div class="container">
+      <div class="row">
+        {% if page.sidebar_first %}
+          <div class="order-2 order-lg-1 {{ sidebar_first_classes }}">
+            {{ page.sidebar_first }}
+          </div>
+        {% endif %}
+
+        <div class="order-1 order-lg-2 {{ content_classes }}">
+          {{ page.content }}
+        </div>
+
+        {% if page.sidebar_second %}
+          <div class="order-3 {{ sidebar_second_classes }}">
+            {{ page.sidebar_second }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+  {% endif %}
+</main>
+
+{# Include footer #}
+{% include '@b5subtheme/layout/footer.html.twig' %}
+
+{# Include help overlay #}
+{% include '@b5subtheme/includes/help-overlay.html.twig' %}
+{% include '@b5subtheme/includes/mobile-menu.html.twig' %}

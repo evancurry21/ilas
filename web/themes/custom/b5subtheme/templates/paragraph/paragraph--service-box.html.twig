@@ -1,0 +1,23 @@
+{# paragraph--service-box.html.twig #}
+{% set classes = [
+  'service-box',
+  'shadow-1',
+  'h-100',
+  content.field_box_color[0]['#markup'] ? 'brand-' ~ content.field_box_color[0]['#markup'],
+] %}
+
+<div{{ attributes.addClass(classes) }}>
+  {% if content.field_box_link|render %}
+    <a href="{{ content.field_box_link[0]['#url'] }}" class="service-box-link">
+  {% endif %}
+      {% if content.field_box_prefix|render %}
+        <span class="service-box-prefix">{{ content.field_box_prefix }}</span>
+      {% endif %}
+      <h4 class="service-box-title">{{ content.field_box_title }}</h4>
+      <div class="service-box-description">
+        {{ content.field_box_description }}
+      </div>
+  {% if content.field_box_link|render %}
+    </a>
+  {% endif %}
+</div>

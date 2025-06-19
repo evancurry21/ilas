@@ -1,0 +1,3 @@
+options:
+  uri: 'http://localhost'
+  root: '/home/evancurry/ilas/web'

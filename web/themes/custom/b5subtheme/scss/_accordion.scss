@@ -1,0 +1,163 @@
+// Standardized Accordion Styles
+@import 'variables_theme';
+@import 'mixins';
+
+// Container styling - matching two-column-info
+.accordion-section {
+  background-color: $color-gray-bg;
+  border: 6px solid $color-primary;
+  margin-bottom: 2rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  border-radius: 0.25rem;
+  padding: 1rem;
+  
+  @include mobile {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.accordion-section .accordion {
+  border: none;
+}
+
+/* This targets the top-level "Accordion Section" title */
+.accordion-section .accordion-section-title {
+  font-size: 2.5rem;
+  color: $color-primary;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  
+  @include mobile {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+}
+
+
+.accordion-section .accordion-item {
+  border: none;
+  border-bottom: 2px solid $color-primary;
+  margin-bottom: 0.5rem;
+  transition: all 0.3s ease;
+  background-color: transparent;
+  
+  &:hover {
+    border-bottom-width: 4px;
+    transform: translateX(5px);
+    
+    .accordion-button {
+      color: darken($color-primary, 10%);
+    }
+  }
+  
+  &:last-child {
+    border-bottom: none;
+    
+    &:hover {
+      border-bottom: 4px solid $color-primary;
+    }
+  }
+}
+
+// Remove default accordion button styles
+.accordion-section .accordion-header .accordion-button {
+  color: $color-primary;
+  font-weight: 600;
+  font-size: 1.5rem;
+  background: none;
+  box-shadow: none;
+  padding-left: 3rem;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+// Override default accordion button after/before elements
+.accordion-section .accordion-header .accordion-button::after {
+  display: none; // Remove default dropdown icon
+}
+
+// Add custom plus/minus icon using Font Awesome
+.accordion-section .accordion-header .accordion-button::before {
+  font-family: "Font Awesome 6 Free";
+  content: "\f067"; // Plus icon
+  font-weight: 700;
+  position: absolute;
+  left: 0.75rem;
+  color: $color-primary;
+  transition: all 0.3s ease;
+}
+
+// Change to minus when expanded
+.accordion-section .accordion-header .accordion-button:not(.collapsed)::before {
+  content: "\f068"; // Minus icon
+  color: $color-primary;
+  transform: rotate(180deg);
+}
+
+// Style for expanded state
+.accordion-section .accordion-header .accordion-button:not(.collapsed) {
+  color: $color-primary;
+  font-weight: 700;
+  background: none;
+}
+
+// Hover effects
+.accordion-section .accordion-header .accordion-button:hover {
+  color: darken($color-primary, 10%);
+}
+
+.accordion-section .accordion-header .accordion-button:hover::before {
+  color: darken($color-primary, 10%);
+}
+
+// Focus states for accessibility
+.accordion-section .accordion-header .accordion-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.25rem rgba($color-primary, 0.25);
+  z-index: 1;
+}
+
+.accordion-section .accordion-header .accordion-button:focus-visible,
+.accordion-section .accordion-header .accordion-button.focus-visible {
+  outline: 2px solid $color-primary;
+  outline-offset: 2px;
+}
+
+// Body styles
+.accordion-section .accordion-body {
+  color: #000000;
+  font-size: 1.25rem;
+  padding: 1rem 1rem 1rem 3rem;
+  animation: fadeIn 0.3s ease;
+  
+  @include mobile {
+    font-size: 1rem;
+    padding: 1rem 0.75rem 1rem 2.5rem;
+  }
+}
+
+// Mobile adjustments
+@include mobile {
+  .accordion-section .accordion-header .accordion-button {
+    font-size: 1.1rem;
+    padding-left: 2.5rem;
+    
+    &::before {
+      left: 0.5rem;
+    }
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
