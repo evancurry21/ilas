@@ -1,47 +1,166 @@
-# Drupal CMS
+# ILAS Drupal Website
 
-Drupal CMS is a fast-moving open source product that enables site builders to easily create new Drupal sites and extend them with smart defaults, all using their browser.
+This repository contains the ILAS (International Legal Aid Services) Drupal website codebase.
 
-## Getting started
+## Project Overview
 
-If you want to use [DDEV](https://ddev.com) to run Drupal CMS locally, follow these instructions:
+This is a Drupal-based website built with:
+- **Drupal Core**: Latest version
+- **Custom Theme**: B5 Subtheme (Bootstrap 5 based)
+- **Custom Modules**: Located in `/web/modules/custom/`
+- **Contributed Modules**: Various Drupal community modules
 
-1. Install DDEV following the [documentation](https://ddev.com/get-started/)
-2. Open the command line and `cd` to the root directory of this project
-3. Run the following commands:
-```shell
-ddev config --project-type=drupal11 --docroot=web
-ddev start
-ddev composer install
-ddev launch
+## Local Development Setup
+
+### Prerequisites
+- PHP 8.1 or higher
+- MySQL/MariaDB
+- Composer
+- Git
+- Web server (Apache/Nginx)
+- Drush (Drupal CLI)
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/ilas-drupal.git
+   cd ilas-drupal
+   ```
+
+2. Install dependencies:
+   ```bash
+   composer install
+   ```
+
+3. Create settings file:
+   ```bash
+   cp web/sites/default/default.settings.php web/sites/default/settings.php
+   ```
+
+4. Configure your database settings in `settings.php`
+
+5. Import the database (if you have a backup):
+   ```bash
+   drush sql-cli < backup.sql
+   ```
+
+6. Clear caches:
+   ```bash
+   drush cr
+   ```
+
+## Backup Strategy
+
+This project uses a dual backup approach:
+
+### 1. Git Version Control
+- All code changes are tracked in this repository
+- Custom themes and modules are version controlled
+- Configuration changes are tracked
+
+### 2. Full Site Backups
+- Use the `backup-drupal.sh` script for complete backups
+- Creates backups of:
+  - Database
+  - Files directory
+  - Custom code
+  - Full site archive
+- Backups are stored in `/web/backups/`
+
+To run a backup:
+```bash
+cd web
+./backup-drupal.sh
 ```
 
-Drupal CMS has the same system requirements as Drupal core, so you can use your preferred setup to run it locally. [See the Drupal User Guide for more information](https://www.drupal.org/docs/user_guide/en/installation-chapter.html) on how to set up Drupal.
+## Project Structure
 
-### Installation options
+```
+ilas/
+├── web/                    # Drupal web root
+│   ├── core/              # Drupal core (do not modify)
+│   ├── modules/           
+│   │   ├── contrib/       # Contributed modules
+│   │   └── custom/        # Custom modules
+│   ├── themes/
+│   │   ├── contrib/       # Contributed themes
+│   │   └── custom/        # Custom themes
+│   │       └── b5subtheme/  # Main custom theme
+│   ├── sites/
+│   │   └── default/
+│   │       ├── files/     # User uploads (not in git)
+│   │       └── settings.php # Site settings (not in git)
+│   └── backup-drupal.sh   # Backup script
+├── vendor/                # Composer dependencies (not in git)
+├── composer.json          # PHP dependencies
+└── README.md             # This file
+```
 
-The Drupal CMS installer offers a list of features preconfigured with smart defaults. You will be able to customize whatever you choose, and add additional features, once you are logged in.
+## Custom Theme
 
-After the installer is complete, you will land on the dashboard.
+The site uses a custom Bootstrap 5 subtheme located at `/web/themes/custom/b5subtheme/`.
 
-## Documentation
+Key features:
+- Responsive design
+- Custom CSS/JS for site functionality
+- Bootstrap 5 components
+- Accessibility compliant
 
-Coming soon ... [We're working on Drupal CMS specific documentation](https://www.drupal.org/project/drupal_cms/issues/3454527).
+## Deployment
 
-In the meantime, learn more about managing a Drupal-based application in the [Drupal User Guide](https://www.drupal.org/docs/user_guide/en/index.html).
+1. Push code changes to GitHub:
+   ```bash
+   git add .
+   git commit -m "Your commit message"
+   git push
+   ```
+
+2. On the production server:
+   ```bash
+   git pull
+   composer install --no-dev
+   drush cr
+   drush updb -y
+   drush cim -y
+   ```
+
+## Security Notes
+
+- Never commit sensitive files (settings.php, .env, etc.)
+- Keep Drupal core and modules updated
+- Regular security updates via Composer
+- Use the `.gitignore` file to exclude sensitive data
+
+## Maintenance
+
+### Updating Drupal Core
+```bash
+composer update drupal/core --with-dependencies
+drush updb -y
+drush cr
+```
+
+### Updating Modules
+```bash
+composer update drupal/module_name
+drush updb -y
+drush cr
+```
 
 ## Contributing
 
-Drupal CMS is developed in the open on [Drupal.org](https://www.drupal.org). We are grateful to the community for reporting bugs and contributing fixes and improvements.
+1. Create a feature branch
+2. Make your changes
+3. Test thoroughly
+4. Commit with descriptive messages
+5. Push to GitHub
+6. Create a pull request
 
-[Report issues in the queue](https://drupal.org/node/add/project-issue/drupal_cms), providing as much detail as you can. You can also join the #drupal-cms-support channel in the [Drupal Slack community](https://www.drupal.org/slack).
+## Support
 
-Drupal CMS has adopted a [code of conduct](https://www.drupal.org/dcoc) that we expect all participants to adhere to.
-
-To contribute to Drupal CMS development, see the [drupal_cms project](https://www.drupal.org/project/drupal_cms).
+For issues or questions about this codebase, please create an issue in the GitHub repository.
 
 ## License
 
-Drupal CMS and all derivative works are licensed under the [GNU General Public License, version 2 or later](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html).
-
-Learn about the [Drupal trademark and logo policy here](https://www.drupal.com/trademark).
+This project is proprietary software for ILAS. All rights reserved.
