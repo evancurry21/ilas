@@ -1,0 +1,51 @@
+# Node modules
+node_modules/
+
+# Build artifacts and source maps
+*.map
+*.css.map
+*.js.map
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Mix manifest (regenerated on build)
+mix-manifest.json
+
+# Test and debug files
+test-*.html
+test-*.css
+validate-*.html
+*-debug.js
+*-debug.html
+
+# ngrok files
+ngrok
+ngrok-*
+*.tgz
+
+# Alternative/backup files
+*.alternative
+*.backup
+*.bak
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.idea/
+.vscode/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Temporary files
+*.tmp
+*.temp
+
+# Documentation files that contain sensitive info
+civicrm-integration-docs/

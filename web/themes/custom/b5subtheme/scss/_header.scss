@@ -9,7 +9,8 @@
 // ===================================
 // Configuration Variables
 // ===================================
-$header-height: 2.6rem;
+// Using local header height to avoid conflict with global $header-height
+$utility-bar-height: 2.6rem;
 $transition-speed: 0.3s;
 
 // Note: Body padding removed - using margin-top on navbar instead
@@ -22,8 +23,8 @@ $transition-speed: 0.3s;
   top: 0;
   left: 0;
   width: 100%;
-  height: $header-height;
-  z-index: 1040; // Higher than dropdown menus (1030)
+  height: $utility-bar-height;
+  z-index: 99; // Lower than Gin sticky regions (101) and admin toolbar
   background-color: $color-primary;
   color: $color-white;
   font-weight: 600;
@@ -54,8 +55,9 @@ $transition-speed: 0.3s;
   .search-col,
   .exit-link,
   .get-help {
-    a,
-    button {
+    // Target the actual link/button elements
+    > a,
+    > button {
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
@@ -73,14 +75,21 @@ $transition-speed: 0.3s;
       font-size: inherit;
       cursor: pointer;
       
+      // Ensure all text is white by default
+      &,
+      * {
+        color: $color-white;
+      }
+      
       &:hover,
       &:focus {
-        background-color: $color-white !important;
-        color: $color-primary !important;
+        background-color: $color-white;
         text-decoration: none;
         
-        i {
-          color: $color-primary !important;
+        // Force all elements to primary color on hover
+        &,
+        * {
+          color: $color-primary;
         }
       }
       
@@ -109,17 +118,64 @@ $transition-speed: 0.3s;
   }
 }
 
+// Override Bootstrap's text-white class specifically for utility bar
+.utility-bar {
+  // Hotline link with phone number
+  .hotline > a {
+    &:hover,
+    &:focus {
+      &,
+      &.text-white {
+        color: $color-primary;
+      }
+    }
+  }
+  
+  // Search button
+  .search-col > button {
+    &:hover,
+    &:focus {
+      &,
+      &.text-white {
+        color: $color-primary;
+      }
+    }
+  }
+  
+  // Exit link
+  .exit-link > a {
+    &:hover,
+    &:focus {
+      &,
+      &.text-white {
+        color: $color-primary;
+      }
+    }
+  }
+  
+  // Get Help button
+  .get-help > button {
+    &:hover,
+    &:focus {
+      &,
+      &.text-white {
+        color: $color-primary;
+      }
+    }
+  }
+}
+
 // ===================================
 // 2) CENTERED LOGO NAVBAR
 // ===================================
 .centered-logo-navbar {
   position: sticky;
-  top: $header-height; // Below utility bar
+  top: $utility-bar-height; // Below utility bar
   z-index: 100;
-  background-color: #fff;
+  background-color: $color-white;
   padding: 3.5rem 0;
   overflow: visible;
-  margin-top: $header-height; // Original spacing below utility bar
+  margin-top: $utility-bar-height; // Original spacing below utility bar
   transition: all 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0);
   
@@ -135,18 +191,18 @@ $transition-speed: 0.3s;
     // Adjust menu spacing when shrunk
     .unified-menu .navbar-nav {
       > .nav-item:nth-child(3) {
-        margin-right: 5rem !important; // Reduced from 7rem
+        margin-right: 5rem; // Reduced from 7rem
       }
       
       > .nav-item:nth-child(4) {
-        margin-left: 5rem !important; // Reduced from 7rem
+        margin-left: 5rem; // Reduced from 7rem
       }
     }
   }
 
   // Basic nav-link styling for all viewports
   .nav-link {
-    color: #333 !important;
+    color: $color-gray-dark;
     white-space: nowrap;
     padding: 0.5rem 1rem;
     font-weight: 500;
@@ -400,6 +456,7 @@ $transition-speed: 0.3s;
     font-weight: 500;
     line-height: 1.5;
     text-decoration: none;
+    text-transform: uppercase;
     border-radius: 4px;
     transition: all $transition-speed ease;
 

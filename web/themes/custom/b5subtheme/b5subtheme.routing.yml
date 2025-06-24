@@ -1,9 +1,0 @@
-employment_application.submit:
-  path: '/employment-application/submit'
-  defaults:
-    _controller: '\Drupal\b5subtheme\Controller\EmploymentApplicationController::submit'
-    _title: 'Submit Employment Application'
-  requirements:
-    _permission: 'access content'
-  options:
-    _csrf_token: 'TRUE'

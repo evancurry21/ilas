@@ -99,7 +99,7 @@
                itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
             <div class="accordion-body" itemprop="text">
               {% if item['#paragraph'].field_faq_answer.value %}
-                {{ item['#paragraph'].field_faq_answer.value }}
+                {{ item['#paragraph'].field_faq_answer|view }}
               {% endif %}
             </div>
           </div>

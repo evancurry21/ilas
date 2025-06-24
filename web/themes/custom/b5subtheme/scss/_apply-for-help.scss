@@ -25,7 +25,30 @@
       }
     }
   }
+  
+  // Reduce main-content bottom margin for this page only
+  .main-content {
+    margin-bottom: 1rem !important;  // Override the default 3rem for better flow
+  }
+  
 
-  // Note: Schedule section table styling has been moved to _layout-components.scss
-  // as .apply-schedule-section for reusability
+  
+  // Reduce content-section padding for this page
+  .content-section {
+    padding: 1rem 0 !important;  // Override default 3rem padding
+  }
+  
+  // Make section-title match subtitle-section styling exactly
+  .content-section .section-title {
+    margin: 0 !important;  // Match subtitle margin
+    font-size: 2.5rem !important;
+    color: $color-primary !important;
+    font-weight: 700 !important;  // Match subtitle weight
+    text-align: center !important;
+    text-transform: uppercase !important;
+    
+    @include mobile {
+      font-size: 1.2rem !important;  // Match subtitle mobile size
+    }
+  }
 }

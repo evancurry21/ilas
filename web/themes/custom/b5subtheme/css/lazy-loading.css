@@ -1,0 +1,83 @@
+/**
+ * Lazy loading styles
+ */
+
+/* Placeholder for lazy-loaded images */
+img[data-src] {
+  background: #f0f2f5;
+  min-height: 100px;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Loaded images */
+img.lazy-loaded {
+  opacity: 1;
+}
+
+/* Error state */
+img.lazy-error {
+  opacity: 1;
+  background: #fafafa;
+  position: relative;
+}
+
+img.lazy-error::after {
+  content: "Image failed to load";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #666;
+  font-size: 0.875rem;
+}
+
+/* Lazy content containers */
+[data-lazy-load] {
+  min-height: 200px;
+  position: relative;
+}
+
+[data-lazy-load]:not(.lazy-loaded)::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  border: 3px solid #f0f2f5;
+  border-top-color: #1263a0;
+  border-radius: 50%;
+  animation: lazy-spin 1s linear infinite;
+}
+
+/* Loading animation */
+@keyframes lazy-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Hotspot lazy loading */
+[data-lazy-load="hotspot"]:not(.lazy-loaded) {
+  min-height: 400px;
+  background: #fafafa;
+}
+
+/* Iframe lazy loading */
+[data-lazy-load="iframe"]:not(.lazy-loaded) {
+  background: #f0f2f5;
+  min-height: 300px;
+}
+
+/* Native lazy loading support */
+img[loading="lazy"] {
+  /* Browser handles lazy loading */
+}
+
+/* Responsive images with lazy loading */
+picture img[data-src] {
+  width: 100%;
+  height: auto;
+}

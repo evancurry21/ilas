@@ -1,6 +1,194 @@
 document.addEventListener('DOMContentLoaded', () => {
   
   // ==========================================
+  // HELP OVERLAY
+  // ==========================================
+  
+  const helpToggle = document.getElementById('helpToggle');
+  const helpOverlay = document.getElementById('helpOverlay');
+  const helpBackdrop = document.getElementById('helpOverlayBackdrop');
+  
+  if (helpToggle && helpOverlay && helpBackdrop) {
+    
+    helpOverlay.setAttribute('aria-hidden', 'true');
+    helpToggle.setAttribute('aria-expanded', 'false');
+    
+    helpToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // Toggle the class
+      const active = helpOverlay.classList.toggle('show-overlay');
+      
+      // Force inline styles as a failsafe
+      if (active) {
+        helpOverlay.style.setProperty('display', 'block', 'important');
+        helpOverlay.style.setProperty('opacity', '1', 'important');
+        helpOverlay.style.setProperty('visibility', 'visible', 'important');
+        helpOverlay.style.setProperty('pointer-events', 'auto', 'important');
+        const panel = helpOverlay.querySelector('.help-panel');
+        if (panel) {
+          panel.style.setProperty('right', '5%', 'important');
+        }
+      } else {
+        helpOverlay.style.removeProperty('display');
+        helpOverlay.style.removeProperty('opacity');
+        helpOverlay.style.removeProperty('visibility');
+        helpOverlay.style.removeProperty('pointer-events');
+        const panel = helpOverlay.querySelector('.help-panel');
+        if (panel) {
+          panel.style.removeProperty('right');
+        }
+      }
+      
+      // Update ARIA attributes
+      helpOverlay.setAttribute('aria-hidden', String(!active));
+      helpToggle.setAttribute('aria-expanded', String(active));
+      
+    });
+    
+    helpBackdrop.addEventListener('click', function() {
+      helpOverlay.classList.remove('show-overlay');
+      
+      // Remove inline styles
+      helpOverlay.style.removeProperty('display');
+      helpOverlay.style.removeProperty('opacity');
+      helpOverlay.style.removeProperty('visibility');
+      helpOverlay.style.removeProperty('pointer-events');
+      const panel = helpOverlay.querySelector('.help-panel');
+      if (panel) {
+        panel.style.removeProperty('right');
+      }
+      
+      helpOverlay.setAttribute('aria-hidden', 'true');
+      helpToggle.setAttribute('aria-expanded', 'false');
+    });
+    
+  }
+  
+  // ==========================================
+  // UTILITY BAR HOVER FIX
+  // ==========================================
+  // Fix hover functionality for utility bar items with Bootstrap text-white class
+  const utilityBarItems = document.querySelectorAll('.utility-bar .hotline > a, .utility-bar .search-col > button, .utility-bar .exit-link > a, .utility-bar .get-help > button');
+  
+  utilityBarItems.forEach(item => {
+    // Store original styles
+    const originalStyles = {
+      backgroundColor: item.style.backgroundColor || '',
+      color: item.style.color || ''
+    };
+    
+    // Handle mouse enter
+    item.addEventListener('mouseenter', function() {
+      // Override inline styles during hover
+      this.style.setProperty('background-color', '#fff', 'important');
+      this.style.setProperty('color', '#1263a0', 'important');
+      
+      // Also update all child elements
+      const allElements = this.querySelectorAll('*');
+      allElements.forEach(el => {
+        el.style.setProperty('color', '#1263a0', 'important');
+      });
+    });
+    
+    // Handle mouse leave
+    item.addEventListener('mouseleave', function() {
+      // Restore original styles
+      this.style.backgroundColor = originalStyles.backgroundColor;
+      this.style.color = originalStyles.color;
+      
+      // Remove inline styles from child elements
+      const allElements = this.querySelectorAll('*');
+      allElements.forEach(el => {
+        el.style.color = '';
+      });
+    });
+    
+    // Handle focus
+    item.addEventListener('focus', function() {
+      this.style.setProperty('background-color', '#fff', 'important');
+      this.style.setProperty('color', '#1263a0', 'important');
+      
+      const allElements = this.querySelectorAll('*');
+      allElements.forEach(el => {
+        el.style.setProperty('color', '#1263a0', 'important');
+      });
+    });
+    
+    // Handle blur
+    item.addEventListener('blur', function() {
+      this.style.backgroundColor = originalStyles.backgroundColor;
+      this.style.color = originalStyles.color;
+      
+      const allElements = this.querySelectorAll('*');
+      allElements.forEach(el => {
+        el.style.color = '';
+      });
+    });
+  });
+  
+  // ==========================================
+  // BUTTON TEXT COLOR FIX
+  // ==========================================
+  // Ensure white text is visible on primary and success buttons
+  const primaryButtons = document.querySelectorAll('.btn-primary, .btn-success');
+  
+  primaryButtons.forEach(button => {
+    // Set initial white color
+    if (button.classList.contains('btn-primary') || button.classList.contains('btn-success')) {
+      // Force white text color for non-hover state
+      if (!button.matches(':hover')) {
+        button.style.setProperty('color', '#fff', 'important');
+        
+        // Also update all child elements
+        const allElements = button.querySelectorAll('*');
+        allElements.forEach(el => {
+          el.style.setProperty('color', '#fff', 'important');
+        });
+      }
+    }
+    
+    // Handle hover states for primary buttons
+    if (button.classList.contains('btn-primary')) {
+      button.addEventListener('mouseenter', function() {
+        this.style.setProperty('color', '#1263a0', 'important');
+        const allElements = this.querySelectorAll('*');
+        allElements.forEach(el => {
+          el.style.setProperty('color', '#1263a0', 'important');
+        });
+      });
+      
+      button.addEventListener('mouseleave', function() {
+        this.style.setProperty('color', '#fff', 'important');
+        const allElements = this.querySelectorAll('*');
+        allElements.forEach(el => {
+          el.style.setProperty('color', '#fff', 'important');
+        });
+      });
+    }
+    
+    // Success buttons keep white text on hover
+    if (button.classList.contains('btn-success')) {
+      button.addEventListener('mouseenter', function() {
+        this.style.setProperty('color', '#fff', 'important');
+        const allElements = this.querySelectorAll('*');
+        allElements.forEach(el => {
+          el.style.setProperty('color', '#fff', 'important');
+        });
+      });
+      
+      button.addEventListener('mouseleave', function() {
+        this.style.setProperty('color', '#fff', 'important');
+        const allElements = this.querySelectorAll('*');
+        allElements.forEach(el => {
+          el.style.setProperty('color', '#fff', 'important');
+        });
+      });
+    }
+  });
+  
+  // ==========================================
   // SEARCH TOGGLE
   // ==========================================
   const toggleBtn = document.getElementById('searchToggle');
@@ -18,28 +206,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // HELP OVERLAY
-  // ==========================================
-  const helpToggle = document.getElementById('helpToggle');
-  const helpOverlay = document.getElementById('helpOverlay');
-  const helpBackdrop = document.getElementById('helpOverlayBackdrop');
-  if (helpToggle && helpOverlay && helpBackdrop) {
-    helpOverlay.setAttribute('aria-hidden', 'true');
-    helpToggle.setAttribute('aria-expanded', 'false');
-    helpToggle.addEventListener('click', e => {
-      e.preventDefault();
-      const active = helpOverlay.classList.toggle('active');
-      helpOverlay.setAttribute('aria-hidden', String(!active));
-      helpToggle.setAttribute('aria-expanded', String(active));
-    });
-    helpBackdrop.addEventListener('click', () => {
-      helpOverlay.classList.remove('active');
-      helpOverlay.setAttribute('aria-hidden', 'true');
-      helpToggle.setAttribute('aria-expanded', 'false');
-    });
-  }
-
-  // ==========================================
   // IMPACT CARDS FLIP + A11Y - ENHANCED VERSION
   // ==========================================
   
@@ -48,7 +214,6 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   function isMobileDevice() {
     const isMobile = window.innerWidth < 768;
-    // Uncomment for debugging: console.log('Mobile detected:', isMobile, 'Width:', window.innerWidth);
     return isMobile;
   }
 

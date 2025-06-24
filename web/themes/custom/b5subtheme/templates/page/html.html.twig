@@ -41,6 +41,75 @@
     <head-placeholder token="{{ placeholder_token }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ head_title|safe_join(' | ') }}</title>
+    
+    {# Critical CSS for above-the-fold content #}
+    <style id="critical-css">
+      /* Critical CSS for immediate rendering - prevents FOUC */
+      :root {
+        --bs-primary: #1263a0;
+        --bs-primary-dark: #0a58ca;
+        --bs-font-sans-serif: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      }
+      
+      /* Base body styles to prevent layout shift */
+      body {
+        margin: 0;
+        font-family: var(--bs-font-sans-serif);
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #212529;
+        background-color: #fff;
+      }
+      
+      /* Container basics for proper layout */
+      .container {
+        width: 100%;
+        padding-right: 15px;
+        padding-left: 15px;
+        margin-right: auto;
+        margin-left: auto;
+      }
+      
+      /* Header elements to prevent jump */
+      .utility-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 2.6rem;
+        z-index: 1040;
+        background-color: var(--bs-primary);
+        color: #fff;
+      }
+      
+      .centered-logo-navbar {
+        position: sticky;
+        top: 2.6rem;
+        background-color: #fff;
+        padding: 3.5rem 0;
+        margin-top: 2.6rem;
+      }
+      
+      /* Prevent image layout shift */
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+      
+      /* Hide elements until fully styled */
+      .search-overlay,
+      .help-overlay,
+      .mobile-menu {
+        display: none;
+      }
+    </style>
+    
+    {# Preload critical resources #}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
     <css-placeholder token="{{ placeholder_token }}">
     <js-placeholder token="{{ placeholder_token }}">
   </head>

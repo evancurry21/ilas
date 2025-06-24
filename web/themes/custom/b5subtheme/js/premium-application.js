@@ -47,15 +47,12 @@
   // Main behavior
   Drupal.behaviors.premiumApplicationWizard = {
     attach: function (context, settings) {
-      console.log('Premium application wizard behavior attaching...');
       try {
         const $wizard = $(CONFIG.SELECTORS.WIZARD, context);
-        console.log('Found wizards:', $wizard.length);
         
         if ($wizard.length) {
           $wizard.each(function () {
             if (!$(this).data('wizard-initialized')) {
-              console.log('Initializing wizard...');
               $(this).data('wizard-initialized', true);
               const wizard = new PremiumApplicationWizard($(this));
               wizard.init();
@@ -89,7 +86,6 @@
      */
     init: function() {
       try {
-        console.log('Setting up wizard with container:', this.$container);
         this.setupEventListeners();
         this.setupFileUploads();
         this.setupAutoSave();
@@ -100,7 +96,6 @@
         // Focus first input
         this.focusFirstInput();
         
-        console.log('Premium application wizard initialized successfully');
       } catch (error) {
         console.error('Wizard initialization error:', error);
       }
@@ -112,14 +107,9 @@
     setupEventListeners: function() {
       const self = this;
       
-      console.log('Setting up event listeners...');
-      console.log('Container:', this.$container);
-      console.log('Next button selector:', CONFIG.SELECTORS.NAV_NEXT);
-      console.log('Next buttons found:', this.$container.find(CONFIG.SELECTORS.NAV_NEXT).length);
 
       // Navigation buttons
       this.$container.on('click', CONFIG.SELECTORS.NAV_NEXT, function(e) {
-        console.log('Next button clicked');
         e.preventDefault();
         self.nextStep();
       });
@@ -370,7 +360,6 @@
       const fieldName = $field.attr('name') || $field.attr('id');
       const $group = $field.closest('.form-group');
       
-      console.log('Validating field:', fieldName, 'value:', '"' + value + '"', 'required:', isRequired, 'type:', type);
       
       let isValid = true;
       let message = '';
@@ -379,7 +368,6 @@
       if (isRequired && !value) {
         isValid = false;
         message = CONFIG.MESSAGES.REQUIRED;
-        console.log('Field failed: required but empty');
       }
       // Email validation
       else if (type === 'email' && value && !CONFIG.VALIDATION.EMAIL_PATTERN.test(value)) {
@@ -395,7 +383,6 @@
       // Update UI
       this.updateFieldValidation($group, isValid, message);
       
-      console.log('Field validation result:', fieldName, 'isValid:', isValid);
       return isValid;
     },
 
@@ -420,17 +407,13 @@
      * Validate current step
      */
     validateCurrentStep: function() {
-      console.log('Validating current step:', this.currentStep);
       const $currentStep = this.$container.find(CONFIG.SELECTORS.STEP + '[data-step="' + this.currentStep + '"]');
-      console.log('Current step element:', $currentStep.length);
       const $requiredFields = $currentStep.find('[required]');
-      console.log('Required fields found:', $requiredFields.length);
       let isValid = true;
 
       $requiredFields.each((index, field) => {
         const $field = $(field);
         const fieldValid = this.validateField($field);
-        console.log('Field', $field.attr('name'), 'valid:', fieldValid);
         if (!fieldValid) {
           isValid = false;
         }
@@ -439,7 +422,6 @@
       // Update next button state
       const $nextBtn = this.$container.find(CONFIG.SELECTORS.NAV_NEXT);
       $nextBtn.prop('disabled', !isValid);
-      console.log('Next button disabled:', !isValid);
 
       return isValid;
     },
@@ -448,21 +430,16 @@
      * Go to next step
      */
     nextStep: function() {
-      console.log('nextStep() called, current step:', this.currentStep);
       const isValid = this.validateCurrentStep();
-      console.log('Validation result:', isValid);
       
       if (!isValid) {
-        console.log('Validation failed, showing error');
         this.showValidationError('Please complete all required fields before continuing.');
         return;
       }
 
       if (this.currentStep < this.totalSteps) {
-        console.log('Moving to next step:', this.currentStep + 1);
         this.goToStep(this.currentStep + 1);
       } else {
-        console.log('Already at last step');
       }
     },
 
@@ -778,15 +755,12 @@
      * Submit application
      */
     submitApplication: function() {
-      console.log('Submit application called');
       
       // Final validation
       if (!this.validateFinalSubmission()) {
-        console.log('Final validation failed');
         return;
       }
 
-      console.log('Final validation passed, submitting...');
 
       // Show loading state
       const $submitBtn = this.$container.find(CONFIG.SELECTORS.NAV_SUBMIT);
@@ -799,7 +773,6 @@
       // Submit to Drupal
       this.submitToDrupal(applicationData)
         .then(() => {
-          console.log('Application submitted successfully');
           this.showSuccessModal();
           
           // Clear saved data
@@ -844,11 +817,8 @@
      * Show success modal
      */
     showSuccessModal: function() {
-      console.log('showSuccessModal called');
       // Modal is outside the wizard container, so search in the entire document
       const $modal = $(CONFIG.SELECTORS.SUCCESS_MODAL);
-      console.log('Modal element found:', $modal.length);
-      console.log('Modal selector:', CONFIG.SELECTORS.SUCCESS_MODAL);
       
       $modal.fadeIn();
 

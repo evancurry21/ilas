@@ -8,11 +8,10 @@ libraries:
   - b5subtheme/bootstrap-icons
   - b5subtheme/fontawesome
   - b5subtheme/custom-scripts
-  - b5subtheme/info-card
-  - b5subtheme/employment-form
   - b5subtheme/smart-faq
   - b5subtheme/search-overlay
   - b5subtheme/scroll-behaviors
+  - b5subtheme/lazy-loading
   
 ckeditor_stylesheets:
   - css/style.css

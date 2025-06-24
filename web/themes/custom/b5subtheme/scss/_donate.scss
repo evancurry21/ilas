@@ -38,6 +38,51 @@
     }
   }
 
+  .main-content {
+    margin-bottom: 3rem;
+    padding: 0 1rem;
+    font-size: 1.5rem;
+    line-height: 1.6;
+    text-transform: none;
+    color: $color-black;
+    text-align: center;
+    
+    @include tablet {
+      font-size: 1.4rem;
+    }
+    
+    @include mobile {
+      font-size: 1.25rem;
+    }
+    
+    p {
+      margin-bottom: 1rem;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+    
+    ul, ol {
+      margin: 1rem 0;
+      padding-left: 2rem;
+    }
+    
+    h2, h3, h4, h5, h6 {
+      margin: 1.5rem 0 1rem;
+      font-weight: 600;
+    }
+    
+    a {
+      color: $color-primary;
+      text-decoration: underline;
+      
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+
   .donate-body {
     margin-bottom: 3rem;
     padding: 0 1rem;
@@ -83,11 +128,25 @@
     }
   }
 
+  .resource-sections {
+    margin-bottom: 3rem;
+    // Remove any padding constraints to match standard pages
+    
+    .paragraph {
+      margin-bottom: 2rem;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
   .custom-donation-form {
     max-width: 600px;
     margin: 3rem auto;
     padding: 2rem;
     background: $color-white;
+    border: 6px solid $color-primary;
     border-radius: 8px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     
@@ -101,17 +160,22 @@
       margin-bottom: 2rem;
       
       h3 {
+        // Match accordion-section-title style
+        font-size: 2.5rem;
         color: $color-primary;
-        font-size: 1.5rem;
-        margin-bottom: 0.5rem;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 0;
+        margin-bottom: 1.5rem;
         
         @include mobile {
-          font-size: 1.25rem;
+          font-size: 1.5rem;
+          margin-bottom: 1rem;
         }
       }
       
       p {
-        color: #666;
+        color: $color-black;
         margin-bottom: 0;
         
         @include mobile {
@@ -122,44 +186,46 @@
 
     .amount-selection {
       margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 4px solid $color-primary;
       
       .amount-buttons {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, 1fr);
         gap: 0.75rem;
         margin-bottom: 1rem;
         
         @include mobile {
           grid-template-columns: repeat(2, 1fr);
+          grid-template-rows: repeat(3, 1fr);
           gap: 0.5rem;
         }
         
         .amount-btn {
-          padding: 1rem;
-          border: 2px solid #e0e0e0;
-          background: $color-white;
-          border-radius: 6px;
+          // Inherit from standard button styles
+          @extend .btn;
+          @extend .btn-primary;
+          
+          // Reset any potential margins
+          margin: 0 !important;
+          
+          // Ensure buttons fill their grid cells
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           font-size: 1.1rem;
-          font-weight: 600;
-          color: $color-black;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          min-height: 44px;
           
           @include mobile {
-            padding: 0.75rem 0.5rem;
             font-size: 1rem;
           }
           
-          &:hover, &.active {
+          &.active {
+            background-color: $color-white;
             border-color: $color-primary;
-            background-color: $color-primary;
-            color: $color-white;
-          }
-          
-          &:focus {
-            outline: 2px solid $color-primary;
-            outline-offset: 2px;
+            color: $color-primary;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
           }
         }
       }
@@ -189,7 +255,7 @@
         input {
           flex: 1;
           padding: 0.75rem;
-          border: 2px solid #e0e0e0;
+          border: 2px solid $color-primary;
           border-radius: 6px;
           font-size: 1rem;
           min-height: 44px;
@@ -225,66 +291,45 @@
         }
         
         .frequency-btn {
+          // Inherit from standard button styles
+          @extend .btn;
+          @extend .btn-primary;
+          
+          // Additional styling for frequency buttons
           flex: 1;
-          padding: 0.75rem 1rem;
-          border: 2px solid #e0e0e0;
-          background: #fff;
-          border-radius: 6px;
-          font-weight: 500;
-          color: #333;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          min-height: 44px;
           
-          &:hover, &.active {
-            border-color: $color-primary;
-            background-color: $color-primary;
-            color: #fff;
-          }
-          
-          &:focus {
-            outline: 2px solid $color-primary;
-            outline-offset: 2px;
+          &.active {
+            background-color: $color-white !important;
+            border-color: $color-primary !important;
+            color: $color-primary !important;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            
+            // Ensure hover state matches active state
+            &:hover,
+            &:focus {
+              background-color: $color-white !important;
+              color: $color-primary !important;
+              border-color: $color-primary !important;
+            }
           }
         }
       }
     }
 
     .donate-button {
-      width: 100%;
-      padding: 1rem 2rem;
-      background-color: $color-primary;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
+      // Inherit from standard button styles
+      @extend .btn;
+      @extend .btn-primary;
+      
+      // Additional styling
+      display: block;
+      width: 60%;
+      margin: 0 auto;
       font-size: 1.2rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      display: inline-block;
-      text-align: center;
-      min-height: 44px;
       
       @include mobile {
+        width: 80%;
         font-size: 1.1rem;
-      }
-      
-      &:hover {
-        background-color: darken($color-primary, 10%);
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        color: #fff;
-        text-decoration: none;
-      }
-      
-      &:focus {
-        outline: 2px solid #fff;
-        outline-offset: 2px;
-      }
-      
-      &:active {
-        transform: translateY(0);
       }
     }
 
@@ -292,7 +337,7 @@
       text-align: center;
       margin-top: 1.5rem;
       font-size: 0.9rem;
-      color: #666;
+      color: $color-black;
       
       @include mobile {
         font-size: 0.85rem;
@@ -315,4 +360,332 @@
   .curved-section-blue {
     @include bottom-blue-curve();
   }
+
+  // Multi-step Donation Inquiry Form
+  .donation-inquiry-form {
+    padding: 3rem 0;
+    background-color: $color-gray-bg;
+    
+    .multi-step-form {
+      max-width: 800px;
+      margin: 0 auto;
+      background: $color-white;
+      padding: 3rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      position: relative;
+      
+      @include mobile {
+        padding: 2rem 1rem;
+      }
+    }
+    
+    .form-step {
+      display: none;
+      
+      &.active {
+        display: block;
+      }
+      
+      h2 {
+        color: $color-primary;
+        margin-bottom: 1rem;
+        text-align: center;
+        font-size: 2.5rem;
+        
+        @include mobile {
+          font-size: 2rem;
+        }
+      }
+      
+      .form-instruction {
+        text-align: center;
+        color: $color-gray-text;
+        margin-bottom: 2rem;
+        font-size: 1.1rem;
+      }
+    }
+    
+    .checkbox-group {
+      display: grid;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      
+      @include desktop {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      // For text-based checkboxes in step 2
+      label:not(.checkbox-option) {
+        display: flex;
+        align-items: flex-start;
+        padding: 0.75rem 1rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        line-height: 1.5;
+        
+        &:hover {
+          background-color: $color-gray-bg;
+          border-color: $color-primary;
+        }
+        
+        input[type="checkbox"] {
+          margin-right: 0.75rem;
+          margin-top: 0.25rem;
+          flex-shrink: 0;
+        }
+        
+        &:has(input:checked) {
+          background-color: lighten($color-primary, 47%);
+          border-color: $color-primary;
+        }
+      }
+    }
+    
+    .checkbox-option {
+      display: flex;
+      align-items: center;
+      padding: 1.5rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: $color-white;
+      
+      &:hover {
+        border-color: $color-primary;
+        background-color: lighten($color-primary, 47%);
+      }
+      
+      input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        margin-right: 1rem;
+        cursor: pointer;
+      }
+      
+      .checkbox-label {
+        display: flex;
+        align-items: center;
+        font-size: 1.1rem;
+        
+        i {
+          font-size: 1.5rem;
+          margin-right: 0.75rem;
+          color: $color-primary;
+        }
+      }
+      
+      &:has(input:checked) {
+        border-color: $color-primary;
+        background-color: lighten($color-primary, 45%);
+      }
+    }
+    
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      
+      label {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        
+        &:hover {
+          background-color: $color-gray-bg;
+        }
+        
+        input[type="radio"] {
+          margin-right: 0.75rem;
+        }
+      }
+    }
+    
+    .conditional-section {
+      display: none;
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background-color: $color-gray-bg;
+      border-radius: 8px;
+      
+      &.visible {
+        display: block;
+      }
+      
+      h3 {
+        color: $color-primary;
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+      }
+      
+      .form-control {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 4px;
+        font-size: 1rem;
+        
+        &:focus {
+          outline: none;
+          border-color: $color-primary;
+          box-shadow: 0 0 0 2px rgba($color-primary, 0.2);
+        }
+      }
+      
+      textarea.form-control {
+        resize: vertical;
+        min-height: 100px;
+      }
+      
+      .mt-3 {
+        margin-top: 1rem;
+      }
+    }
+    
+    .form-navigation {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+      gap: 1rem;
+      
+      .btn {
+        min-width: 120px;
+        padding: 0.75rem 1.5rem;
+        font-size: 1.1rem;
+        
+        &.prev-step {
+          background-color: $color-gray-border;
+          border-color: $color-gray-border;
+          color: $color-white;
+          
+          &:hover {
+            background-color: darken($color-gray-border, 10%);
+            border-color: darken($color-gray-border, 10%);
+          }
+        }
+        
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+      }
+      
+      @include mobile {
+        flex-direction: column;
+        
+        .btn {
+          width: 100%;
+        }
+      }
+    }
+    
+    .form-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      
+      @include mobile {
+        flex-direction: column;
+      }
+    }
+    
+    .form-group {
+      flex: 1;
+      margin-bottom: 1rem;
+      
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: $color-gray-dark;
+      }
+      
+      .form-control {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 4px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        
+        &:focus {
+          outline: none;
+          border-color: $color-primary;
+          box-shadow: 0 0 0 2px rgba($color-primary, 0.2);
+        }
+        
+        &:required:valid {
+          border-color: $color-success;
+        }
+      }
+    }
+    
+    .form-progress {
+      position: absolute;
+      bottom: -3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 400px;
+      
+      @include mobile {
+        bottom: -2.5rem;
+        max-width: 90%;
+      }
+      
+      .progress {
+        height: 8px;
+        background-color: #e0e0e0;
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 0.5rem;
+        
+        .progress-bar {
+          height: 100%;
+          background-color: $color-primary;
+          transition: width 0.3s ease;
+        }
+      }
+      
+      .progress-text {
+        text-align: center;
+        color: $color-gray-text;
+        font-size: 0.9rem;
+      }
+    }
+    
+    // reCAPTCHA styling
+    .g-recaptcha {
+      margin: 1.5rem 0;
+      display: flex;
+      justify-content: center;
+    }
+    
+    // Success message styling
+    .alert-success {
+      text-align: center;
+      padding: 3rem;
+      
+      h3 {
+        color: $color-success;
+        margin-bottom: 1rem;
+      }
+      
+      p {
+        font-size: 1.1rem;
+        color: $color-gray-dark;
+      }
+    }
+  }
+  
 }
+
+// Donate page accordion styling is now handled by standard accordion styles
+// Container wrapper in twig template provides proper width context

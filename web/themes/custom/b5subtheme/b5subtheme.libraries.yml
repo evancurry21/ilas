@@ -6,14 +6,12 @@ global-styling:
 bootstrap-icons:
   css:
     theme:
-      "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css":
-        type: external
+      css/bootstrap-icons.min.css: { minified: true }
 
 fontawesome:
   css:
     theme:
-      "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css":
-        type: external
+      css/fontawesome.min.css: { minified: true }
 
 custom-scripts:
   js:
@@ -87,7 +85,7 @@ mobile-menu:
 donation-form:
   version: 1.0
   js:
-    js/donation-form.min.js: {}
+    js/donation-form.js: {}
   dependencies:
     - core/jquery
     - core/drupal
@@ -122,3 +120,22 @@ resources:
     - core/drupal
     - core/once
     - b5subtheme/fontawesome
+
+lazy-loading:
+  version: 1.0
+  js:
+    js/lazy-loading.js: { weight: -10, loading: defer }
+  css:
+    theme:
+      css/lazy-loading.css: {}
+  dependencies:
+    - core/drupal
+
+donation-inquiry:
+  version: 1.0
+  js:
+    js/donation-inquiry.js: {}
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal

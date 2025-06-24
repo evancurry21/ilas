@@ -13,74 +13,52 @@
     attach: function (context, settings) {
       // Initialize topic filter pills
       once('resources-filter', '.resource-filters', context).forEach(function (filterContainer) {
-        console.log('Initializing resource filters');
         
         // First, collect all unique topics from the cards
         const resourceCards = document.querySelectorAll('.resource-card');
-        console.log('Found resource cards:', resourceCards.length);
         
-        const topicsMap = new Map();
+        // Create a map of unique topic text to all their IDs
+        const topicTextToIds = new Map();
         
         resourceCards.forEach(function(card) {
           // Get the topics from the card body
           const topicElements = card.querySelectorAll('.resource-topics .topic-item');
-          topicElements.forEach(function(topicEl) {
-            const topicText = topicEl.textContent.trim();
-            const dataTopics = card.getAttribute('data-topics');
-            if (dataTopics) {
-              // Extract individual topic IDs
-              const topicIds = dataTopics.split(' ');
-              topicIds.forEach(function(topicId) {
-                if (topicId && !topicsMap.has(topicId)) {
-                  // Try to match this topic ID with the topic text
-                  topicsMap.set(topicId, topicText);
-                }
-              });
-            }
-          });
-        });
-        
-        // Build the topic pills if we have topics
-        if (topicsMap.size > 0) {
-          const pillList = filterContainer.querySelector('.nav-pills');
+          const dataTopics = card.getAttribute('data-topics');
           
-          // Create a mapping of topic text to IDs for deduplication
-          const textToId = new Map();
-          const cardTopicData = [];
-          
-          resourceCards.forEach(function(card) {
-            const topicElements = card.querySelectorAll('.resource-topics .topic-item');
-            const dataTopics = card.getAttribute('data-topics') || '';
-            const topicIds = dataTopics.split(' ').filter(id => id);
+          if (dataTopics) {
+            const topicIds = dataTopics.split(' ');
             
-            console.log('Card data-topics:', dataTopics);
-            console.log('Topic elements found:', topicElements.length);
-            
+            // Collect unique topic texts with their IDs
             topicElements.forEach(function(topicEl, index) {
               const topicText = topicEl.textContent.trim();
               if (topicIds[index] && topicText) {
-                console.log('Mapping topic:', topicText, 'to ID:', topicIds[index]);
-                if (!textToId.has(topicText)) {
-                  textToId.set(topicText, topicIds[index]);
-                  cardTopicData.push({id: topicIds[index], text: topicText});
+                if (!topicTextToIds.has(topicText)) {
+                  topicTextToIds.set(topicText, new Set());
                 }
+                topicTextToIds.get(topicText).add(topicIds[index]);
               }
             });
-          });
+          }
+        });
+        
+        // Build the topic pills if we have topics
+        if (topicTextToIds.size > 0) {
+          const pillList = filterContainer.querySelector('.nav-pills');
           
-          // Sort topics alphabetically and add pills
-          cardTopicData.sort((a, b) => a.text.localeCompare(b.text));
+          // Convert the map to an array and sort alphabetically
+          const sortedTopics = Array.from(topicTextToIds.keys()).sort();
           
-          cardTopicData.forEach(function(topic) {
+          sortedTopics.forEach(function(topicText) {
             const li = document.createElement('li');
             li.className = 'nav-item';
             
             const button = document.createElement('button');
             button.className = 'nav-link pill-link';
-            button.setAttribute('data-filter', topic.id);
-            button.textContent = topic.text;
+            // Store all IDs for this topic text as a space-separated string
+            const topicIds = Array.from(topicTextToIds.get(topicText)).join(' ');
+            button.setAttribute('data-filter', topicIds);
+            button.textContent = topicText;
             
-            console.log('Creating pill:', topic.text, 'with filter:', topic.id);
             
             li.appendChild(button);
             pillList.appendChild(li);
@@ -102,29 +80,40 @@
             
             // Get the filter value
             const filterValue = this.getAttribute('data-filter');
-            console.log('Filter clicked:', filterValue);
             
             // Get all resource cards - they're inside column wrappers
-            const resourceColumns = document.querySelectorAll('.resource-card-grid .col');
-            console.log('Found columns:', resourceColumns.length);
+            // The template uses: <div class="row row-cols-1 row-cols-md-2 g-4 resource-card-grid">
+            const resourceColumns = document.querySelectorAll('.resource-card-grid.row .col, .resource-card-grid .col');
             
             resourceColumns.forEach(function (column) {
               const card = column.querySelector('.resource-card');
               if (card) {
                 const cardTopics = card.getAttribute('data-topics') || '';
-                console.log('Card topics:', cardTopics, 'Filter value:', filterValue);
                 
                 if (filterValue === 'all') {
                   // Show all cards
                   column.style.display = '';
+                  column.classList.remove('d-none');
                   column.classList.add('d-flex'); // Ensure flex display is maintained
                 } else {
-                  // Check if card has this topic
-                  if (cardTopics.split(' ').includes(filterValue)) {
+                  // Check if card has any of the filter topic IDs
+                  const filterTopicIds = filterValue.split(' ');
+                  const cardTopicIds = cardTopics.split(' ');
+                  
+                  // Check if any of the filter IDs match any of the card IDs
+                  const hasMatchingTopic = filterTopicIds.some(filterId => 
+                    cardTopicIds.includes(filterId)
+                  );
+                  
+                  
+                  if (hasMatchingTopic) {
                     column.style.display = '';
+                    column.classList.remove('d-none');
                     column.classList.add('d-flex'); // Ensure flex display is maintained
                   } else {
                     column.style.display = 'none';
+                    column.classList.add('d-none');
+                    column.classList.remove('d-flex');
                   }
                 }
               }

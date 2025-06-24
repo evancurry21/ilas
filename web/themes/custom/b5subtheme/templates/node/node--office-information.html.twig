@@ -13,6 +13,32 @@
  */
 #}
 
+<style>
+  /* Make info cards equal height */
+  .node--office-information .info-card {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Reduce card padding to give more room for title */
+  .node--office-information .info-card {
+    padding: 1rem;
+  }
+  
+  @media (max-width: 767.98px) {
+    .node--office-information .info-card {
+      padding: 0.75rem;
+    }
+  }
+  
+  /* Make the row items stretch to full height */
+  .node--office-information .content-section .row > [class*="col-"] {
+    display: flex;
+    flex-direction: column;
+  }
+</style>
+
 <article{{ attributes.addClass('node', 'node--office-information') }}>
 
   {# Main content section with two-column layout #}
@@ -23,7 +49,7 @@
         {# Left Column - Office Information #}
         <div class="col-md-5 mb-4 mb-md-0">
           <div class="info-card">
-            <h2 class="info-card__title">Office Information</h2>
+            <h2 class="info-card__title">Office Details</h2>
             
             <dl class="info-list">
               {% if node.field_address.value %}
@@ -31,9 +57,9 @@
                 <dd>{{ node.field_address.value }}</dd>
               {% endif %}
               
-              {% if node.field_telephone.value %}
+              {% if content.field_phone_number|render %}
                 <dt>Telephone:</dt>
-                <dd>{{ node.field_telephone.value }}</dd>
+                <dd>{{ content.field_phone_number }}</dd>
               {% endif %}
               
               {% if node.field_office_hours.value %}
@@ -59,8 +85,35 @@
             
             {% if content.field_legal_advice_line %}
               <dl class="info-list">
-                <dt>Legal Advice Line:</dt>
-                <dd>{{ content.field_legal_advice_line }}</dd>
+                <dt>Legal Advice Line(s):</dt>
+                <dd>
+                  {% set phone_text = content.field_legal_advice_line|render|striptags|trim %}
+                  {% if phone_text %}
+                    {# Define the phrases that should become phone links #}
+                    {% set phone_number = 'tel:+12087467541' %}
+                    {% set link_phrases = [
+                      'Domestic and Sexual Violence Legal Advice Line',
+                      'Housing Advice Line',
+                      'Senior and Public Benefits Legal Advice Line'
+                    ] %}
+                    
+                    {# Process the text and convert phrases to links #}
+                    {% set processed_text = phone_text %}
+                    {% for phrase in link_phrases %}
+                      {% set link_html = '<a href="' ~ phone_number ~ '">' ~ phrase ~ '</a>' %}
+                      {% set processed_text = processed_text|replace({(phrase): link_html}) %}
+                    {% endfor %}
+                    
+                    {# Replace newlines with paragraph breaks - try both double and single #}
+                    {% if '\n\n' in processed_text %}
+                      {% set processed_text = processed_text|replace({'\n\n': '</p><p>'}) %}
+                    {% else %}
+                      {% set processed_text = processed_text|replace({'\n': '</p><p>'}) %}
+                    {% endif %}
+                    
+                    <p>{{ processed_text|raw }}</p>
+                  {% endif %}
+                </dd>
               </dl>
             {% endif %}
             

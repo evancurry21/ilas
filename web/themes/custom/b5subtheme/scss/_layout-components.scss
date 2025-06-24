@@ -349,12 +349,47 @@
   }
 }
 
+/* Centered list wrapper utility */
+.centered-list-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 1rem 0;
+  
+  ul, ol {
+    text-align: left;
+    display: inline-block;
+    margin: 1rem 0;
+    padding-left: 2rem;
+    max-width: 600px;
+    width: 100%;
+    
+    @include mobile {
+      padding-left: 1.5rem;
+    }
+    
+    li {
+      margin-bottom: 0.5rem;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+  
+  // For nested lists
+  ul ul, ol ol, ul ol, ol ul {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
 /* Apply for Help Schedule Section */
 .apply-schedule-section {
   padding: 0 2rem;
   max-width: 800px;
   width: 100%;
-  margin: 0 auto 4rem auto;
+  margin: 0 auto 2rem auto;
   font-size: 1.125rem;
   line-height: 1.6;
   color: $color-black;
@@ -368,14 +403,25 @@
     padding: 0 1rem;
   }
   
+  // Style for the schedule header
+  h2, h3 {
+    color: $color-primary;
+  }
+  
+  // Target table within the field class as well
+  .field--name-field-apply-schedule table,
   table {
     width: 100%;
     max-width: 600px;
-    border-collapse: collapse;
+    border-collapse: separate !important;
+    border-spacing: 0;
     margin: 1rem auto;
     text-align: left;
     background-color: $color-white;
-    border: 2px solid #ddd;
+    border: 6px solid $color-primary !important;
+    border-width: 6px !important;
+    border-style: solid !important;
+    border-color: $color-primary !important;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     overflow: hidden;
@@ -411,6 +457,11 @@
     
     tbody tr:last-child td {
       border-bottom: none;
+    }
+    
+    // Ensure tbody doesn't override table border
+    tbody {
+      border: none !important;
     }
     
     // Style for closed days

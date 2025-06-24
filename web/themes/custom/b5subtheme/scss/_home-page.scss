@@ -13,42 +13,28 @@
  * 1) GRAY HERO BANNER - Title with curved background
  *--------------------------------------*/
 .curved-page-header {
-  @include curved-section-base(14rem);
+  @include curved-section-base(8rem);
   @include full-bleed-bg($color-gray-bg, z('background'));
   @include curved-bottom($color-white, $curve-height-desktop, $curve-height-mobile, z('background'), $curve-border-width solid $color-gray-border);
 
-  .col-md-8 {
-    float: none;
-    margin: 0 auto;
-    text-align: center;
-  }
-
   .curved-page-header-title {
+    position: relative;
+    z-index: z('foreground');
     font-size: 3.5rem;
     font-weight: bold;
+    text-align: center;
     margin: 0;
     color: $color-primary;
-    position: relative;
-    z-index: 3;
-    white-space: nowrap;
+    white-space: normal;
     word-break: break-word;
-    text-align: center;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-
+    
     @include tablet {
       font-size: 2.5rem;
-      white-space: normal;
     }
+    
     @include mobile {
       font-size: 2.25rem;
-      position: relative;
-      left: auto;
-      transform: none;
       width: 100%;
-      white-space: normal;
-      word-break: break-word;
     }
   }
 }
@@ -130,19 +116,25 @@
  *--------------------------------------*/
 .how-we-help-section {
   position: relative;
-  padding: 0;
   background: transparent;
   overflow: visible;
-  min-height: 600px;
-
+  
+  // Dynamic height based on content with padding
+  min-height: 700px;
+  padding: 8rem 0;
+  
   @include tablet {
-    padding: 4rem 0 6rem;
-    min-height: 450px;
+    min-height: 550px;
+    padding: 6rem 0;
   }
   @include mobile {
-    padding: 3rem 0 4rem;
-    min-height: 300px;
+    min-height: auto;
+    padding: 4rem 0;
   }
+
+  // Flexbox container for vertical centering
+  display: flex;
+  align-items: center;
 
   &::before {
     content: '';
@@ -150,7 +142,7 @@
     top: -2px;
     left: 50%;
     width: 100vw;
-    height: 800px;
+    height: 100%;
     margin-left: -50vw;
     background-image: url('/themes/custom/b5subtheme/images/curved-background.svg');
     background-repeat: no-repeat;
@@ -158,38 +150,34 @@
     background-position: center;
     z-index: -1;
     pointer-events: none;
-
-    @include tablet {
-      height: 450px;
-    }
-
-    @include mobile {
-      height: 300px;
-    }
   }
 
   .container {
     position: relative;
     z-index: 1;
+    width: 100%;
   }
 
   .section-heading {
     font-size: 2.5rem;
     font-weight: 700;
-    margin-top: 14.5rem;
+    margin: 0 0 3rem 0;  // Remove fixed top margin, add consistent bottom margin
     color: $color-white;
     text-align: center;
 
     @include tablet {
       font-size: 2.2rem;
+      margin-bottom: 2.5rem;
     }
     @include mobile {
       font-size: 1.7rem;
+      margin-bottom: 2rem;
     }
   }
 
   .topic-cards-row {
     display: flex;
+    margin-top: 0;  // Remove top margin since heading handles spacing
     flex-wrap: wrap;
     gap: 2rem;
     justify-content: center;
@@ -228,7 +216,7 @@
  * 4) IMPACT SECTION - Impact title, quote and cards
  *--------------------------------------*/
 .impact-section {
-  padding: 10rem 0 2.5rem;
+  padding: 1rem 0 1.5rem;  // Minimal top padding for tight integration
   position: relative;
   z-index: z('content');
 
@@ -242,7 +230,7 @@
   .impact-title {
     font-weight: 700;
     font-size: 2.5rem;
-    margin: 0;
+    margin: 0 0 1.5rem 0;
     color: $color-primary;
     text-align: center;
 
@@ -390,75 +378,7 @@
   }
 }
 
-/* Help overlay mobile optimization */
-@media (max-width: 767.98px) {
-  .help-overlay {
-    padding: 1rem;
-  }
-  
-  .help-panel {
-    width: 95vw;
-    max-height: 90vh;
-    overflow-y: auto;
-    border-radius: 8px;
-    
-    .help-panel-header {
-      padding: 1rem;
-      font-size: 1.1rem;
-    }
-    
-    .help-panel-content {
-      flex-direction: column;
-      padding: 1rem;
-    }
-    
-    .help-column {
-      margin-bottom: 1.5rem;
-      
-      &:last-child {
-        margin-bottom: 0;
-      }
-      
-      h3 {
-        font-size: 1.1rem;
-        margin-bottom: 0.75rem;
-      }
-      
-      ul {
-        li {
-          margin-bottom: 0.5rem;
-          
-          a {
-            font-size: 0.95rem;
-            line-height: 1.4;
-          }
-        }
-      }
-    }
-  }
-}
 
-/* Search overlay mobile improvements */
-@media (max-width: 767.98px) {
-  .search-overlay {
-    padding: 1rem;
-    
-    .search-overlay-form {
-      .search-input-wrapper {
-        .search-overlay-input {
-          font-size: 16px; // Prevents zoom on iOS
-          padding: 0.75rem 3rem 0.75rem 1rem;
-        }
-        
-        .search-overlay-submit,
-        .search-close {
-          width: 2.5rem;
-          height: 2.5rem;
-        }
-      }
-    }
-  }
-}
 
 /* Navigation improvements for smaller tablets */
 @media (max-width: 991.98px) {

@@ -17,12 +17,9 @@
 
 <article{{ attributes.addClass('node', 'node--type-resource', 'node--view-mode-full', 'resource-full') }}>
   <div class="container">
-    <div class="row">
+    <div class="row align-items-start">
       {# Main content column #}
       <div class="col-lg-8">
-        {# Page title #}
-        <h1 class="page-title">{{ label }}</h1>
-        
         {# Main content field #}
         {% if content.field_main_content %}
           <div class="main-content">
@@ -66,66 +63,56 @@
       
       {# Sidebar column #}
       <div class="col-lg-4 sidebar-column">
-        <div class="sidebar-card card">
+        <div class="sidebar-sticky-wrapper">
+          <div class="sidebar-card card">
           <div class="card-header">
             <h3>Resource Information</h3>
           </div>
           
           <div class="card-body">
             {# Service Areas #}
-            {% if content.field_service_areas %}
-              <div class="service-areas mb-3">
-                <h4>Service Areas</h4>
-                <ul class="service-areas-list">
+            {% if node.field_service_areas %}
+              <div class="resource-service-areas mb-3 text-center">
+                <h4>SERVICE AREAS</h4>
+                <div class="service-areas-badges">
                   {% for item in node.field_service_areas %}
                     {% if item.entity %}
-                      <li>
-                        <span class="badge bg-primary">{{ item.entity.label }}</span>
-                      </li>
+                      <span class="service-area-badge">{{ item.entity.label }}</span>
                     {% endif %}
                   {% endfor %}
-                </ul>
+                </div>
               </div>
             {% endif %}
             
             {# Topics #}
-            {% if content.field_topics %}
-              <div class="topics mb-3">
-                <h4>Topics</h4>
-                <ul class="topics-list">
+            {% if node.field_topics %}
+              <div class="resource-topics mb-3 text-center">
+                <h4>TOPICS</h4>
+                <div class="topics-items">
                   {% for item in node.field_topics %}
                     {% if item.entity %}
-                      <li>{{ item.entity.label }}</li>
+                      <span class="topic-item">{{ item.entity.label }}</span>
+                      {% if not loop.last %}<span class="topic-separator">|</span>{% endif %}
                     {% endif %}
                   {% endfor %}
-                </ul>
+                </div>
               </div>
             {% endif %}
             
             {# Last updated #}
-            <div class="last-updated">
+            <div class="last-updated text-center">
               <h4>Last Updated</h4>
               <p>{{ node.changed.value|date('F j, Y') }}</p>
             </div>
           </div>
           
-          {# Card footer with action buttons #}
-          <div class="card-footer">
-            {% if node.field_file.entity %}
-              <a href="{{ file_url(node.field_file.entity.uri.value) }}" 
-                 class="sidebar-btn" 
-                 download>
-                <i class="fas fa-download me-1"></i> Download
-              </a>
-            {% elseif node.field_link.0.uri %}
-              <a href="{{ node.field_link.0.uri }}" 
-                 class="sidebar-btn" 
-                 target="_blank"
-                 rel="noopener">
-                <i class="fas fa-external-link-alt me-1"></i> View
-              </a>
-            {% endif %}
+          {# Card footer with back button #}
+          <div class="card-footer text-center">
+            <a href="javascript:history.back()" class="sidebar-btn">
+              BACK
+            </a>
           </div>
+        </div>
         </div>
       </div>
     </div>

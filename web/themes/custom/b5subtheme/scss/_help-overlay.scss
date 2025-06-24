@@ -1,25 +1,31 @@
 /* _help-overlay.scss */
-@import 'variables_theme';
 /**********************************************
  * HELP OVERLAY: FADE + SLIDE FROM RIGHT
  **********************************************/
 
 /* 1) Keep the overlay in the layout, but invisible initially */
 .help-overlay {
+  display: block;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
   position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  z-index: 9999;
+  top: 0; 
+  left: 0;
+  width: 100vw; 
+  height: 100vh;
+  z-index: 9990; /* Reduced from 9999 to allow CKEditor dialogs to appear above */
   transition: opacity 0.6s ease; /* fade in/out the backdrop */
+}
 
-  &.active {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto; /* now clickable */
-  }
+/* Use more specific selectors to increase specificity */
+body .help-overlay.show-overlay,
+html body .help-overlay.show-overlay,
+.help-overlay.show-overlay.show-overlay {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important; /* now clickable */
 }
 
 /* 2) Dark backdrop behind the panel, fades with parent's opacity */
@@ -37,7 +43,7 @@
   position: absolute;
   top: 5%;
   right: -800px;               /* offscreen horizontally */
-  width: 700px;                /* bigger panel width */
+  width: 625px;                /* panel width */
   max-height: 80vh;            /* if content is tall, it scrolls internally */
   background-color: #fff;
   box-shadow: 0 2px 10px rgba(0,0,0,0.3);
@@ -45,11 +51,13 @@
   overflow-y: auto;
   border-radius: 8px;
   transition: right 0.6s ease; /* sliding animation */
+}
 
-  /* Slide panel to visible position when .active is toggled */
-  .help-overlay.active & {
-    right: 5%;
-  }
+/* Slide panel to visible position when .active is toggled */
+body .help-overlay.show-overlay .help-panel,
+html body .help-overlay.show-overlay .help-panel,
+.help-overlay.show-overlay .help-panel {
+  right: 5% !important;
 }
 
 /* 4) Header link (Get The Help You Need + arrow on the far right) */
@@ -62,19 +70,19 @@
   color: #1263a0;
   text-decoration: none;
   transition: color 0.3s ease;
+}
 
-  .header-text {
-    margin-right: 1rem; /* spacing before arrow if you like */
-  }
+.help-panel-header .header-text {
+  margin-right: 1rem; /* spacing before arrow if you like */
+}
 
-  i.fa-solid.fa-arrow-right-long {
-    font-size: 1.25rem;
-  }
+.help-panel-header i.fa-solid.fa-arrow-right-long {
+  font-size: 1.25rem;
+}
 
-  &:hover {
-    text-decoration: none;      /* no underline */
-    color: #0b4e7b;             /* slight color shift on hover */
-  }
+.help-panel-header:hover {
+  text-decoration: none;      /* no underline */
+  color: #0b4e7b;             /* slight color shift on hover */
 }
 
 /* Darker horizontal line */
@@ -88,69 +96,83 @@
 .help-panel-content {
   display: flex;
   gap: 2rem;
+}
+
+.help-panel-content .help-column {
+  flex: 1;
+  text-align: center; /* center headings & links in each column */
+}
+
+/* HEADINGS (LEGAL TOPICS / RESOURCES) 
+   bigger font, no underline on hover, blue background */
+.help-panel-content h3 a {
+  text-decoration: none;
+  color: #1263a0;
+  font-size: 1.2rem; 
+  font-weight: bold;
+  display: inline-block;
+  padding: 0.5rem 1.25rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.help-panel-content h3 a:hover,
+.help-panel-content h3 a:focus {
+  background-color: #1263a0 !important;
+  color: #fff !important;
+  text-decoration: none;
+}
+
+.help-panel-content h3 a:focus-visible {
+  outline: 2px solid #1263a0;
+  outline-offset: 2px;
+}
+
+.help-panel-content ul {
+  list-style: none;
+  margin: 0; 
+  padding: 0;
+}
+
+.help-panel-content ul li {
+  margin-bottom: 0;
+}
+
+.help-panel-content ul li a {
+  color: #000;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  display: inline-block;
+  padding: 0.5rem 1.25rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.help-panel-content ul li a:hover,
+.help-panel-content ul li a:focus {
+  background-color: #1263a0 !important;
+  color: #fff !important;
+  text-decoration: none;
+}
+
+.help-panel-content ul li a:focus-visible {
+  outline: 2px solid #1263a0;
+  outline-offset: 2px;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 767.98px) {
+  .help-overlay {
+    padding: 1rem;
+  }
   
-  .help-column {
-    flex: 1;
-    text-align: center; /* center headings & links in each column */
-
-    /* HEADINGS (LEGAL TOPICS / RESOURCES) 
-       bigger font, no underline on hover, blue background */
-    h3 {
-      a {
-        text-decoration: none;
-        color: #1263a0;
-        font-size: 1.2rem; 
-        font-weight: bold;
-        display: inline-block;
-        padding: 0.5rem 1.25rem;
-        border-radius: 4px;
-        transition: all 0.3s ease;
-
-        &:hover,
-        &:focus {
-          background-color: #1263a0 !important;
-          color: #fff !important;
-          text-decoration: none;
-        }
-        
-        &:focus-visible {
-          outline: 2px solid #1263a0;
-          outline-offset: 2px;
-        }
-      }
-    }
-
-    ul {
-      list-style: none;
-      margin: 0; 
-      padding: 0;
-
-      li {
-        margin-bottom: 0.5rem;
-        
-        a {
-          color: #000;
-          font-weight: 600;
-          font-size: 1rem;
-          text-decoration: none;
-          display: inline-block;
-          padding: 0.5rem 1.25rem;
-          border-radius: 4px;
-          transition: all 0.3s ease;
-
-          &:hover,
-          &:focus {
-            background-color: #1263a0 !important;
-            color: #fff !important;
-            text-decoration: none;
-          }
-          
-          &:focus-visible {
-            outline: 2px solid #1263a0;
-            outline-offset: 2px;
-          }
-        }
-      }
-    }
+  .help-panel {
+    width: 95vw;
+    right: -100vw;
+  }
+  
+  .help-overlay.show-overlay .help-panel {
+    right: 2.5vw !important;
   }
 }

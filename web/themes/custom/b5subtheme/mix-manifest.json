@@ -9,5 +9,9 @@
     "/webfonts/fa-solid-900.ttf": "/webfonts/fa-solid-900.ttf",
     "/webfonts/fa-solid-900.woff2": "/webfonts/fa-solid-900.woff2",
     "/webfonts/fa-v4compatibility.ttf": "/webfonts/fa-v4compatibility.ttf",
-    "/webfonts/fa-v4compatibility.woff2": "/webfonts/fa-v4compatibility.woff2"
+    "/webfonts/fa-v4compatibility.woff2": "/webfonts/fa-v4compatibility.woff2",
+    "/css/fontawesome.min.css": "/css/fontawesome.min.css",
+    "/css/bootstrap-icons.min.css": "/css/bootstrap-icons.min.css",
+    "/css/fonts/bootstrap-icons.woff": "/css/fonts/bootstrap-icons.woff",
+    "/css/fonts/bootstrap-icons.woff2": "/css/fonts/bootstrap-icons.woff2"
 }

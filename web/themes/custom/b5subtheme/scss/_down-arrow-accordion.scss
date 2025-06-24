@@ -50,6 +50,7 @@
   border-radius: 0.25rem;
   padding: 1rem;
   margin-bottom: 2rem;
+  overflow: hidden; // Prevent content from spilling outside container
   
   @include mobile {
     padding: 1rem;
@@ -189,22 +190,27 @@
   justify-content: center;
   max-width: 900px;
   margin: 0 auto;
+  padding: 0 $spacer-sm; // Add horizontal padding to prevent edge overflow
   
   // Mobile adjustments
   @media (max-width: $mobile-breakpoint) {
     gap: $spacer-xs;
+    padding: 0 $spacer-xs;
   }
   
   // Download button item - inherits from .btn and .btn-primary
   &__item {
     // Make buttons smaller width
     display: inline-flex;
-    width: auto !important;
+    min-width: 0; // Allow button to shrink below its content width
+    max-width: 100%; // Prevent overflow beyond container
     padding: 0.5rem 1.5rem !important;
     font-size: 1rem !important;
     
     // Override only what's needed for accordion context
-    white-space: nowrap; // Keep text on one line
+    white-space: normal; // Allow text to wrap on small screens
+    overflow-wrap: break-word; // Break long words if needed
+    word-break: break-word; // Additional support for word breaking
     align-items: center;
     justify-content: center;
     text-align: center;
@@ -214,6 +220,23 @@
     font-weight: inherit;
     line-height: 1.4;
     text-transform: none; // Reset any transforms
+    
+    // For larger screens, prevent wrapping
+    @media (min-width: $tablet-breakpoint) {
+      white-space: nowrap;
+      width: auto !important;
+    }
+    
+    // On mobile, allow buttons to take more space if needed
+    @media (max-width: $mobile-breakpoint) {
+      flex: 0 1 calc(50% - #{$spacer-xs}); // Two buttons per row on mobile
+      min-width: 120px; // Minimum reasonable button width
+    }
+    
+    // For very small screens, go full width
+    @media (max-width: 480px) {
+      flex: 0 1 100%; // One button per row on very small screens
+    }
     
     // Ensure button text is always visible (not just on hover)
     .daa-downloads__name {

@@ -9,6 +9,8 @@
     "watch-poll": "npx mix watch -- --watch-options-poll=1000",
     "hot": "npx mix watch --hot",
     "prod": "npx mix --production",
+    "optimize-images": "node optimize-images.js",
+    "build": "npm run prod && npm run optimize-images",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -19,12 +21,21 @@
     "bootswatch": "^5.3.6",
     "browser-sync": "^3.0.4",
     "browser-sync-webpack-plugin": "^2.4.0",
+    "imagemin": "^9.0.1",
+    "imagemin-cli": "^8.0.0",
+    "imagemin-gifsicle": "^7.0.0",
+    "imagemin-mozjpeg": "^10.0.0",
+    "imagemin-pngquant": "^10.0.0",
+    "imagemin-svgo": "^11.0.1",
+    "imagemin-webpack-plugin": "^2.4.2",
     "laravel-mix": "^6.0.49",
+    "laravel-mix-purgecss": "^6.0.0",
     "sass": "^1.89.2",
     "sass-loader": "^12.6.0"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.7.2",
-    "bootstrap": "^5.3.6"
+    "bootstrap": "^5.3.6",
+    "bootstrap-icons": "^1.13.1"
   }
 }

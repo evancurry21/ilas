@@ -15,7 +15,7 @@
   font-family: $font-family-sans-serif;
   font-weight: 600;
   text-align: center;
-  text-decoration: none !important;
+  text-decoration: none;
   white-space: nowrap;
   vertical-align: middle;
   user-select: none;
@@ -50,20 +50,41 @@
   }
 }
 
-// Primary button variant
+// Primary button variant - increase specificity for Bootstrap override
+.b5subtheme .btn-primary,
 .btn-primary {
-  background-color: $color-primary !important;
-  border-color: $color-primary !important;
-  color: $color-white !important;
+  background-color: $color-primary;
+  border-color: $color-primary;
+  color: $color-white;
+  
+  // Ensure text is white even with Bootstrap utility classes
+  &,
+  &.text-white,
+  &.text-light {
+    color: $color-white;
+  }
+  
+  // Force all child elements to be white
+  * {
+    color: $color-white;
+  }
   
   &:hover,
   &:focus {
-    background-color: $color-white !important;
-    border-color: $color-primary !important;
-    color: $color-primary !important;
-    text-decoration: none !important;
+    background-color: $color-white;
+    border-color: $color-primary;
+    color: $color-primary;
+    text-decoration: none;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    
+    // Ensure hover text color overrides utility classes
+    &,
+    &.text-white,
+    &.text-light,
+    * {
+      color: $color-primary;
+    }
   }
   
   &:active {
@@ -127,19 +148,38 @@
 }
 
 // Success button variant
+$color-success: #38a169; // Define as variable
 .btn-success {
-  background-color: #38a169;
-  border-color: #38a169;
+  background-color: $color-success;
+  border-color: $color-success;
   color: $color-white;
+  
+  // Ensure text is white even with Bootstrap utility classes
+  &,
+  &.text-white,
+  &.text-light {
+    color: $color-white;
+  }
+  
+  // Force all child elements to be white
+  * {
+    color: $color-white;
+  }
   
   &:hover,
   &:focus {
-    background-color: darken(#38a169, 10%);
-    border-color: darken(#38a169, 10%);
+    background-color: darken($color-success, 10%);
+    border-color: darken($color-success, 10%);
     color: $color-white;
     text-decoration: none;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    
+    // Ensure hover text remains white
+    &,
+    * {
+      color: $color-white;
+    }
   }
   
   &:active {
@@ -204,13 +244,32 @@ button.btn {
 }
 
 // Ensure anchor tags with button classes never have underlines
+// Use higher specificity instead of !important
+body a.btn,
 a.btn {
-  text-decoration: none !important;
+  text-decoration: none;
   
   &:hover,
   &:focus,
   &:active,
   &:visited {
-    text-decoration: none !important;
+    text-decoration: none;
   }
+}
+
+// Additional specificity overrides for Bootstrap utility classes
+// Target buttons with text-white class specifically
+.btn-primary.text-white,
+.btn-success.text-white,
+a.btn-primary.text-white,
+a.btn-success.text-white,
+button.btn-primary.text-white,
+button.btn-success.text-white {
+  color: $color-white;
+}
+
+// Ensure visited links maintain button colors
+a.btn-primary:visited,
+a.btn-success:visited {
+  color: $color-white;
 }

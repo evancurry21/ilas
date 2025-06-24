@@ -17,21 +17,6 @@
       return;
     }
     
-    // Check for sticky positioning issues
-    if (navbar) {
-      let parent = navbar.parentElement;
-      while (parent && parent !== document.body) {
-        const style = window.getComputedStyle(parent);
-        if (style.overflow !== 'visible' || style.transform !== 'none' || style.filter !== 'none') {
-          console.warn('Sticky positioning blocked by parent:', parent, {
-            overflow: style.overflow,
-            transform: style.transform,
-            filter: style.filter
-          });
-        }
-        parent = parent.parentElement;
-      }
-    }
     
     // Back to top button click handler
     if (backToTopBtn) {
@@ -52,13 +37,6 @@
       if (navbar) {
         if (scrolled > shrinkThreshold) {
           navbar.classList.add('navbar-shrink');
-          // Test if sticky is working
-          const rect = navbar.getBoundingClientRect();
-          console.log('Navbar position test:', {
-            position: window.getComputedStyle(navbar).position,
-            top: rect.top,
-            expectedTop: 41.6 // 2.6rem = 41.6px
-          });
         } else {
           navbar.classList.remove('navbar-shrink');
         }
