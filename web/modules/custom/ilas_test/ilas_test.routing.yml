@@ -1,0 +1,31 @@
+ilas_test.dashboard:
+  path: '/admin/config/development/ilas-test'
+  defaults:
+    _controller: '\Drupal\ilas_test\Controller\TestDashboardController::dashboard'
+    _title: 'ILAS Test Dashboard'
+  requirements:
+    _permission: 'run ilas tests'
+
+ilas_test.run:
+  path: '/admin/config/development/ilas-test/run'
+  defaults:
+    _controller: '\Drupal\ilas_test\Controller\TestDashboardController::runTests'
+  requirements:
+    _permission: 'run ilas tests'
+    _format: 'json'
+
+ilas_test.history:
+  path: '/admin/config/development/ilas-test/history'
+  defaults:
+    _controller: '\Drupal\ilas_test\Controller\TestDashboardController::history'
+    _title: 'Test History'
+  requirements:
+    _permission: 'view test reports'
+
+ilas_test.report:
+  path: '/admin/config/development/ilas-test/report/{report_id}'
+  defaults:
+    _controller: '\Drupal\ilas_test\Controller\TestDashboardController::viewReport'
+    _title: 'Test Report'
+  requirements:
+    _permission: 'view test reports'

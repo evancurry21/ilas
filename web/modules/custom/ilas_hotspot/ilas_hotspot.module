@@ -18,7 +18,7 @@
  * @return array
  *   Render array for the hotspot.
  */
-function ilas_hotspot_create($background_image, array $hotspots, $responsive = TRUE) {
+function ilas_hotspot_create($background_image, array $hotspots, $responsive = TRUE, $lazy_load = TRUE) {
   $build = [
     '#type' => 'container',
     '#attributes' => [
@@ -30,16 +30,28 @@ function ilas_hotspot_create($background_image, array $hotspots, $responsive = T
     ],
   ];
 
-  // Background image
+  // Add lazy loading support
+  if ($lazy_load) {
+    $build['#attributes']['data-lazy-load'] = 'hotspot';
+    $build['#attached']['library'][] = 'b5subtheme/lazy-loading';
+  }
+
+  // Background image with lazy loading
   $build['background'] = [
     '#type' => 'html_tag',
     '#tag' => 'img',
     '#attributes' => [
-      'src' => $background_image,
       'alt' => t('Impact graphic'),
       'class' => ['hotspot-background'],
     ],
   ];
+  
+  if ($lazy_load) {
+    $build['background']['#attributes']['data-src'] = $background_image;
+    $build['background']['#attributes']['src'] = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"%3E%3C/svg%3E';
+  } else {
+    $build['background']['#attributes']['src'] = $background_image;
+  }
 
   // Add hotspots
   foreach ($hotspots as $index => $hotspot) {

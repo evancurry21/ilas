@@ -14,6 +14,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
  * @Block(
  *  id = "chatbot_block",
  *  admin_label = @Translation("ILAS Chatbot"),
+ *  category = @Translation("Custom"),
  * )
  */
 class ChatbotBlock extends BlockBase implements ContainerFactoryPluginInterface {
@@ -50,10 +51,10 @@ class ChatbotBlock extends BlockBase implements ContainerFactoryPluginInterface 
    */
   public function defaultConfiguration() {
     return [
+      'override_global_settings' => FALSE,
       'agent_id' => '',
-      'language_code' => 'en',
-      'welcome_intent' => 'WELCOME',
-      'form_mappings' => [],
+      'language_code' => '',
+      'welcome_intent' => '',
     ] + parent::defaultConfiguration();
   }
 
@@ -61,18 +62,50 @@ class ChatbotBlock extends BlockBase implements ContainerFactoryPluginInterface 
    * {@inheritdoc}
    */
   public function blockForm($form, FormStateInterface $form_state) {
-    $form['agent_id'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Dialogflow Agent ID'),
-      '#description' => $this->t('The unique identifier for your Dialogflow agent.'),
-      '#default_value' => $this->configuration['agent_id'],
-      '#required' => TRUE,
+    $config = $this->configFactory->get('ilas_chatbot.settings');
+
+    $form['info'] = [
+      '#type' => 'item',
+      '#markup' => $this->t('This block displays the ILAS chatbot. Global settings can be configured at <a href="@url">ILAS Chatbot Settings</a>.', [
+        '@url' => '/admin/config/services/ilas-chatbot'
+      ]),
     ];
 
-    $form['language_code'] = [
+    $form['override_global_settings'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Override global settings'),
+      '#description' => $this->t('Use custom settings for this block instead of the global configuration.'),
+      '#default_value' => $this->configuration['override_global_settings'],
+    ];
+
+    $form['block_settings'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Block-specific Settings'),
+      '#states' => [
+        'visible' => [
+          ':input[name="settings[override_global_settings]"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+
+    $form['block_settings']['agent_id'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Dialogflow Agent ID'),
+      '#description' => $this->t('Override the global agent ID for this block.'),
+      '#default_value' => $this->configuration['agent_id'],
+      '#maxlength' => 36,
+      '#states' => [
+        'required' => [
+          ':input[name="settings[override_global_settings]"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+
+    $form['block_settings']['language_code'] = [
       '#type' => 'select',
       '#title' => $this->t('Language Code'),
       '#options' => [
+        '' => $this->t('- Use global setting -'),
         'en' => $this->t('English'),
         'es' => $this->t('Spanish'),
         'fr' => $this->t('French'),
@@ -80,18 +113,32 @@ class ChatbotBlock extends BlockBase implements ContainerFactoryPluginInterface 
       '#default_value' => $this->configuration['language_code'],
     ];
 
-    $form['welcome_intent'] = [
+    $form['block_settings']['welcome_intent'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Welcome Intent'),
-      '#description' => $this->t('The intent to trigger when the chat opens.'),
+      '#description' => $this->t('Override the global welcome intent for this block.'),
       '#default_value' => $this->configuration['welcome_intent'],
+      '#maxlength' => 100,
     ];
 
-    $form['form_mappings'] = [
-      '#type' => 'textarea',
-      '#title' => $this->t('Form Mappings'),
-      '#description' => $this->t('JSON mapping of form types to URLs. Example: {"eviction": "/form/eviction", "divorce": "/form/divorce"}'),
-      '#default_value' => json_encode($this->configuration['form_mappings']),
+    // Display current global settings
+    $form['current_settings'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Current Global Settings'),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+    ];
+
+    $form['current_settings']['current_agent_id'] = [
+      '#type' => 'item',
+      '#title' => $this->t('Global Agent ID'),
+      '#markup' => $config->get('agent_id') ?: $this->t('Not configured'),
+    ];
+
+    $form['current_settings']['current_language'] = [
+      '#type' => 'item',
+      '#title' => $this->t('Global Language'),
+      '#markup' => $config->get('language_code') ?: 'en',
     ];
 
     return $form;
@@ -100,32 +147,79 @@ class ChatbotBlock extends BlockBase implements ContainerFactoryPluginInterface 
   /**
    * {@inheritdoc}
    */
+  public function blockValidate($form, FormStateInterface $form_state) {
+    if ($form_state->getValue('override_global_settings')) {
+      $agent_id = $form_state->getValue(['block_settings', 'agent_id']);
+      if ($agent_id && !preg_match('/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/', $agent_id)) {
+        $form_state->setErrorByName('block_settings][agent_id', $this->t('Agent ID must be a valid UUID format.'));
+      }
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function blockSubmit($form, FormStateInterface $form_state) {
-    $this->configuration['agent_id'] = $form_state->getValue('agent_id');
-    $this->configuration['language_code'] = $form_state->getValue('language_code');
-    $this->configuration['welcome_intent'] = $form_state->getValue('welcome_intent');
-    $this->configuration['form_mappings'] = json_decode($form_state->getValue('form_mappings'), TRUE) ?: [];
+    $this->configuration['override_global_settings'] = $form_state->getValue('override_global_settings');
+    $this->configuration['agent_id'] = $form_state->getValue(['block_settings', 'agent_id']);
+    $this->configuration['language_code'] = $form_state->getValue(['block_settings', 'language_code']);
+    $this->configuration['welcome_intent'] = $form_state->getValue(['block_settings', 'welcome_intent']);
   }
 
   /**
    * {@inheritdoc}
    */
   public function build() {
+    $global_config = $this->configFactory->get('ilas_chatbot.settings');
+    
+    // Use block-specific settings if override is enabled, otherwise use global
+    if ($this->configuration['override_global_settings']) {
+      $agent_id = $this->configuration['agent_id'];
+      $language_code = $this->configuration['language_code'] ?: $global_config->get('language_code');
+      $welcome_intent = $this->configuration['welcome_intent'] ?: $global_config->get('welcome_intent');
+      $form_mappings = $global_config->get('form_mappings'); // Always use global form mappings
+    } else {
+      $agent_id = $global_config->get('agent_id');
+      $language_code = $global_config->get('language_code');
+      $welcome_intent = $global_config->get('welcome_intent');
+      $form_mappings = $global_config->get('form_mappings');
+    }
+
+    // Don't render if no agent ID is configured
+    if (!$agent_id) {
+      return [
+        '#markup' => $this->t('<div class="messages messages--warning">ILAS Chatbot: No agent ID configured. Please configure the chatbot in the <a href="@url">settings</a>.</div>', [
+          '@url' => '/admin/config/services/ilas-chatbot'
+        ]),
+        '#cache' => [
+          'tags' => ['config:ilas_chatbot.settings'],
+        ],
+      ];
+    }
+    
     $build = [];
     
     // Add settings for JavaScript
     $build['#attached']['drupalSettings']['ilasChatbot'] = [
-      'agentId' => $this->configuration['agent_id'],
-      'languageCode' => $this->configuration['language_code'],
-      'welcomeIntent' => $this->configuration['welcome_intent'],
-      'formMappings' => $this->configuration['form_mappings'],
+      'agentId' => $agent_id,
+      'languageCode' => $language_code ?: 'en',
+      'welcomeIntent' => $welcome_intent ?: 'WELCOME',
+      'formMappings' => $form_mappings ?: [],
+      'trustedDomains' => $global_config->get('trusted_domains') ?: [],
+      'enableAnalytics' => $global_config->get('enable_analytics') ?: TRUE,
     ];
     
     // Attach library
     $build['#attached']['library'][] = 'ilas_chatbot/chatbot';
     
     // The actual chatbot is rendered via JavaScript
-    $build['#markup'] = '<div id="ilas-chatbot-root"></div>';
+    $build['#markup'] = '<div id="ilas-chatbot-root" data-block-instance="' . $this->getPluginId() . '"></div>';
+    
+    // Add cache tags
+    $build['#cache'] = [
+      'tags' => ['config:ilas_chatbot.settings'],
+      'contexts' => ['url.path', 'user.permissions'],
+    ];
     
     return $build;
   }

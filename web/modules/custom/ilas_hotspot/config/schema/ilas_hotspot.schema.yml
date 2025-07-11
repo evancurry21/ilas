@@ -1,0 +1,32 @@
+ilas_hotspot.settings:
+  type: config_object
+  label: 'ILAS Hotspot settings'
+  mapping:
+    hotspot_image:
+      type: string
+      label: 'Hotspot base image path'
+    hotspot_data:
+      type: sequence
+      label: 'Hotspot configurations'
+      sequence:
+        type: mapping
+        label: 'Hotspot item'
+        mapping:
+          title:
+            type: string
+            label: 'Title'
+          content:
+            type: text
+            label: 'Content'
+          category:
+            type: string
+            label: 'Category'
+          icon:
+            type: string
+            label: 'Icon path'
+          placement:
+            type: string
+            label: 'Placement position'
+    enable_analytics:
+      type: boolean
+      label: 'Enable analytics tracking'

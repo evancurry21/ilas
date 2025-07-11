@@ -7,18 +7,6 @@
 
 <article{{ attributes.addClass('node', 'node--type-donate', 'donate-page') }}>
 
-  {# The top curved gray header area, containing ONLY the title #}
-  <header class="curved-page-header">
-    {% if label %}
-      <h1 class="curved-page-header-title">
-        {{ label }}
-      </h1>
-    {% elseif node.getTitle() %}
-      <h1 class="curved-page-header-title">
-        {{ node.getTitle() }}
-      </h1>
-    {% endif %}
-  </header>
 
 
   {# The rest of the content below the curve #}

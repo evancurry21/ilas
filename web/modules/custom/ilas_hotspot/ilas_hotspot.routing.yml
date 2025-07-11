@@ -1,0 +1,7 @@
+ilas_hotspot.settings:
+  path: '/admin/config/content/ilas-hotspot'
+  defaults:
+    _form: '\Drupal\ilas_hotspot\Form\HotspotSettingsForm'
+    _title: 'ILAS Hotspot Settings'
+  requirements:
+    _permission: 'administer site configuration'

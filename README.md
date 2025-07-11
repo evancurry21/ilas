@@ -42,7 +42,11 @@ This is a Drupal-based website built with:
 
 5. Import the database (if you have a backup):
    ```bash
-   drush sql-cli < backup.sql
+   # For main database
+   gunzip < backup.sql.gz | drush sql-cli
+   
+   # For CiviCRM database (if applicable)
+   gunzip < civicrm_backup.sql.gz | ddev mysql -d ilas_civicrm
    ```
 
 6. Clear caches:
@@ -52,7 +56,7 @@ This is a Drupal-based website built with:
 
 ## Backup Strategy
 
-This project uses a dual backup approach:
+This project uses a comprehensive backup approach following Drupal best practices:
 
 ### 1. Git Version Control
 - All code changes are tracked in this repository
@@ -60,19 +64,25 @@ This project uses a dual backup approach:
 - Configuration changes are tracked
 
 ### 2. Full Site Backups
-- Use the `backup-drupal.sh` script for complete backups
+- Use the `backup-drupal-updated.sh` script for complete backups
 - Creates backups of:
-  - Database
-  - Files directory
-  - Custom code
+  - Main Drupal database
+  - CiviCRM database (separate)
+  - Files directory (public and private)
+  - Custom code (modules and themes)
   - Full site archive
-- Backups are stored in `/web/backups/`
+  - CiviCRM settings
+- Backups are stored in `~/drupal-backups/ilas/` (outside web root as per Drupal guidelines)
+- Automatic cleanup keeps only the 5 most recent backups
+- Optional: Copies to Windows Desktop and Google Drive
 
 To run a backup:
 ```bash
 cd web
-./backup-drupal.sh
+./backup-drupal-updated.sh
 ```
+
+**Note**: Never store backups in the web root or modules directories as this can interfere with Drupal's auto-discovery mechanism.
 
 ## Project Structure
 
@@ -91,7 +101,8 @@ ilas/
 │   │   └── default/
 │   │       ├── files/     # User uploads (not in git)
 │   │       └── settings.php # Site settings (not in git)
-│   └── backup-drupal.sh   # Backup script
+│   ├── backup-drupal.sh   # Original backup script
+│   └── backup-drupal-updated.sh   # Updated backup script (recommended)
 ├── vendor/                # Composer dependencies (not in git)
 ├── composer.json          # PHP dependencies
 └── README.md             # This file
@@ -134,19 +145,41 @@ Key features:
 
 ## Maintenance
 
+### Before Any Updates
+1. **Always create a backup first**:
+   ```bash
+   cd web
+   ./backup-drupal-updated.sh
+   ```
+2. **Put site in maintenance mode**:
+   ```bash
+   ddev drush state:set system.maintenance_mode 1
+   ```
+
 ### Updating Drupal Core
 ```bash
-composer update drupal/core --with-dependencies
-drush updb -y
-drush cr
+ddev composer update drupal/core --with-dependencies
+ddev drush updb -y
+ddev drush cr
 ```
 
 ### Updating Modules
 ```bash
-composer update drupal/module_name
-drush updb -y
-drush cr
+ddev composer update drupal/module_name
+ddev drush updb -y
+ddev drush cr
 ```
+
+### After Updates
+1. **Take site out of maintenance mode**:
+   ```bash
+   ddev drush state:set system.maintenance_mode 0
+   ```
+2. **Clear caches**:
+   ```bash
+   ddev drush cr
+   ```
+3. **Test the site thoroughly**
 
 ## Contributing
 

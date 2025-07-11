@@ -1,205 +1,229 @@
-# ILAS Chatbot Module - Professional Implementation Guide
+# ILAS Chatbot Module
+
+Integrates Google Dialogflow chatbot for providing automated legal assistance to Idaho residents.
 
 ## Overview
-This module implements a Google Dialogflow-powered chatbot for legal assistance, replicating the Idaho Legal Aid chatbot functionality with professional-grade features.
 
-## Prerequisites
-- Drupal 10/11
-- Google Cloud Account with billing enabled
-- Webform module installed
-- PHP 8.1+
+The ILAS Chatbot module provides a conversational AI interface that helps users:
+- Navigate legal resources
+- Find appropriate forms
+- Get answers to common legal questions
+- Connect with legal aid services
 
-## Installation Steps
+## Features
 
-### 1. Google Cloud Setup
+- **Dialogflow Integration**: Seamless integration with Google Dialogflow
+- **Secure Webhook**: CSRF-protected webhook endpoint for fulfillment
+- **Form Integration**: Dynamic form loading within chat interface
+- **Multi-language Support**: Configurable language settings
+- **Analytics Tracking**: Optional analytics for user interactions
+- **Configurable UI**: Customizable appearance and positioning
 
-1. **Create Google Cloud Project**
-   ```bash
-   gcloud projects create ilas-chatbot-[unique-id]
-   gcloud config set project ilas-chatbot-[unique-id]
-   ```
+## Installation
 
-2. **Enable Required APIs**
-   ```bash
-   gcloud services enable dialogflow.googleapis.com
-   gcloud services enable cloudbuild.googleapis.com
-   ```
-
-3. **Create Service Account**
-   ```bash
-   gcloud iam service-accounts create dialogflow-chatbot \
-     --display-name="ILAS Chatbot Service Account"
-   
-   gcloud projects add-iam-policy-binding [PROJECT-ID] \
-     --member="serviceAccount:dialogflow-chatbot@[PROJECT-ID].iam.gserviceaccount.com" \
-     --role="roles/dialogflow.client"
-   ```
-
-### 2. Dialogflow Agent Configuration
-
-1. **Create Agent**
-   - Go to [Dialogflow Console](https://dialogflow.cloud.google.com/)
-   - Create new agent
-   - Select your project
-   - Choose "en" as default language
-
-2. **Import Intents**
-   Create these essential intents:
-
-   **Welcome Intent**
-   - Training phrases: "Hi", "Hello", "Help"
-   - Response: "Welcome to Legal Aid Services. How can I help you today?"
-   - Add quick replies for main categories
-
-   **Legal Categories Intent**
-   - Training phrases: "I need legal help", "What services do you offer"
-   - Response: Present category options
-   - Parameters: `category` (entity type: @legal_category)
-
-   **Form Trigger Intents**
-   - Create intent for each form type
-   - Training phrases: "I need help with eviction", "File for divorce"
-   - Parameters: `formType` (maps to form IDs)
-
-### 3. Module Installation
-
-1. **Enable Module**
+1. Install the module:
    ```bash
    drush en ilas_chatbot -y
    ```
 
-2. **Configure Block**
-   - Navigate to Structure > Block layout
-   - Place "ILAS Chatbot" block
-   - Configure with your Dialogflow agent ID
+2. Configure Dialogflow credentials:
+   - Navigate to `/admin/config/services/ilas-chatbot`
+   - Enter your Dialogflow Agent ID
+   - Configure webhook security settings
 
-3. **Create Webforms**
-   Create webforms for each legal service:
-   - eviction_assistance
-   - divorce_custody
-   - benefits_appeal
-   - small_claims
+3. Place the chatbot block or enable global loading
 
-### 4. Advanced Configuration
+## Configuration
 
-#### Custom Styling
-Edit `/css/ilas-chatbot.css` to match your brand:
-```css
-df-messenger {
-  --df-messenger-button-titlebar-color: #your-brand-color;
-  --df-messenger-user-message: #your-accent-color;
-}
-```
+### Basic Settings
 
-#### Form Mappings
-Configure in block settings:
+- **Agent ID**: Your Dialogflow agent UUID
+- **Language Code**: Primary language (default: 'en')
+- **Welcome Intent**: Intent triggered on chat open
+
+### Security Settings
+
+The webhook endpoint requires authentication via one of:
+1. **Bearer Token**: Secret token in Authorization header
+2. **IP Whitelist**: Restrict to specific IP addresses
+
+### Form Integration
+
+Map form types to URLs in JSON format:
 ```json
 {
-  "eviction": "/form/embed/eviction_assistance",
-  "divorce": "/form/embed/divorce_custody",
-  "benefits": "/form/embed/benefits_appeal",
-  "small_claims": "/form/embed/small_claims"
+  "eviction": "/form/eviction-assistance",
+  "divorce": "/form/divorce-custody"
 }
 ```
 
-#### Webhook Setup (Optional)
-For advanced fulfillment:
-1. Set webhook URL in Dialogflow: `https://yoursite.com/api/chatbot/webhook`
-2. Enable webhook for relevant intents
+## Architecture
 
-## Testing Strategy
+### Components
 
-### 1. Unit Tests
-```php
-// Test chatbot initialization
-public function testChatbotInitialization() {
-  $this->drupalPlaceBlock('chatbot_block', [
-    'agent_id' => 'test-agent-id',
-  ]);
-  $this->drupalGet('');
-  $this->assertSession()->responseContains('df-messenger');
+1. **ChatbotController**: Handles webhook requests and form configuration
+2. **ChatbotBlock**: Provides block plugin for placement
+3. **JavaScript Client**: Manages chat UI and form loading
+
+### Security
+
+- CSRF protection on all endpoints
+- Input sanitization for webhook data
+- Domain validation for form URLs
+- XSS prevention in responses
+
+### Webhook Flow
+
+1. Dialogflow sends POST request to `/api/chatbot/webhook`
+2. Module validates authentication (token or IP)
+3. Intent is processed and response generated
+4. Response includes fulfillment text and rich content
+
+## JavaScript API
+
+### Initialization
+
+```javascript
+Drupal.behaviors.ilasChatbot = {
+  attach: function(context, settings) {
+    // Chatbot initialized automatically
+  }
+};
+```
+
+### Events
+
+The chatbot triggers custom events:
+- `ilas-chatbot-ready`: Chat interface loaded
+- `ilas-chatbot-form-load`: Form loading initiated
+- `ilas-chatbot-error`: Error occurred
+
+## Theming
+
+### CSS Variables
+
+```css
+:root {
+  --df-messenger-fab-color: #1263a0;
+  --df-messenger-primary-color: #1263a0;
+  --df-messenger-chat-width: 400px;
 }
 ```
 
-### 2. Integration Tests
-- Test form loading in iframe
-- Test mobile responsiveness
-- Test conversation flows
+### Templates
 
-### 3. User Acceptance Testing
-- Test with real users
-- Gather feedback on conversation quality
-- Monitor Dialogflow analytics
+- `templates/ilas-chatbot-embedded-form.html.twig`: Form wrapper template
 
-## Performance Optimization
+## Testing
 
-1. **Lazy Loading**
-   - Chatbot loads only when user interacts
-   - Forms load on-demand
+Run tests with PHPUnit:
+```bash
+./vendor/bin/phpunit web/modules/custom/ilas_chatbot/tests/
+```
 
-2. **Caching**
-   - Cache form configurations
-   - Use Drupal's dynamic page cache
+### Test Coverage
 
-3. **CDN Integration**
-   - Serve static assets via CDN
-   - Minimize JavaScript bundle
+- Unit tests for controller logic
+- Security validation tests
+- Form configuration tests
+- Webhook authentication tests
 
-## Security Considerations
+## Dialogflow Setup
 
-1. **CORS Configuration**
-   ```php
-   // In settings.php
-   $settings['cors_enabled'] = TRUE;
-   $settings['cors_allowed_origins'] = ['https://dialogflow.googleapis.com'];
-   ```
+### Required Intents
 
-2. **Content Security Policy**
-   ```
-   frame-src 'self' https://dialogflow.googleapis.com;
-   script-src 'self' https://www.gstatic.com;
-   ```
+1. **Welcome Intent**: Initial greeting
+2. **GetLegalHelp**: Main navigation
+3. **StartForm**: Form initiation
 
-3. **Data Privacy**
-   - No PII in Dialogflow logs
-   - Implement data retention policies
-   - Add privacy notice to chat
+### Entities
 
-## Monitoring & Analytics
+- `@formType`: Types of legal forms
+- `@legalCategory`: Legal issue categories
 
-1. **Dialogflow Analytics**
-   - Monitor intent usage
-   - Track conversation success rates
-   - Identify improvement areas
+### Fulfillment
 
-2. **Custom Analytics**
-   ```javascript
-   // Track form completions
-   gtag('event', 'form_complete', {
-     'form_type': formType,
-     'source': 'chatbot'
-   });
-   ```
+Enable webhook for intents requiring dynamic responses:
+- Webhook URL: `https://yoursite.com/api/chatbot/webhook`
+- Add authentication header
 
 ## Troubleshooting
 
-**Chat not appearing:**
-- Verify agent ID in block configuration
-- Check browser console for errors
-- Ensure Dialogflow API is enabled
+### Chat not appearing
 
-**Forms not loading:**
-- Verify webform IDs match configuration
-- Check CORS settings
-- Test form URLs directly
+1. Check Agent ID is correct
+2. Verify Dialogflow API is enabled
+3. Check browser console for errors
 
-**Mobile issues:**
-- Clear caches after CSS changes
-- Test on actual devices
-- Check viewport meta tag
+### Webhook failures
 
-## Support
-For issues or questions:
-- Check Dialogflow logs
-- Review Drupal watchdog
-- Contact: support@ilas.org
+1. Verify authentication configured
+2. Check webhook URL in Dialogflow
+3. Review Drupal logs for errors
+
+### Form loading issues
+
+1. Confirm form URLs are correct
+2. Check CORS settings if cross-origin
+3. Verify form permissions
+
+## API Reference
+
+### Endpoints
+
+#### GET `/api/chatbot/form/{form_type}`
+Returns form configuration for specified type.
+
+**Response:**
+```json
+{
+  "form_type": "eviction",
+  "title": "Eviction Assistance Form",
+  "description": "Get help with eviction",
+  "url": "/form/eviction"
+}
+```
+
+#### POST `/api/chatbot/webhook`
+Dialogflow fulfillment webhook.
+
+**Headers:**
+- `Authorization: Bearer <token>`
+- `Content-Type: application/json`
+
+## Extending
+
+### Custom Intents
+
+Add intent handlers in `ChatbotController::processIntent()`:
+
+```php
+case 'CustomIntent':
+  $response['fulfillmentText'] = 'Custom response';
+  break;
+```
+
+### Form Types
+
+Register new form types in configuration:
+1. Add to form_mappings
+2. Add title and description
+3. Update Dialogflow entities
+
+## Performance
+
+- Webhook responses cached for 1 hour
+- Form configurations cached with config tags
+- JavaScript loaded asynchronously
+
+## Security Considerations
+
+- Never expose sensitive data in responses
+- Validate all user inputs
+- Keep webhook token secret
+- Regularly review IP whitelist
+- Monitor webhook logs for anomalies
+
+## License
+
+Part of the ILAS project - see main project license.

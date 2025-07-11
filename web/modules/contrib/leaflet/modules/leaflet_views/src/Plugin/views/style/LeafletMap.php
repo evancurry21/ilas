@@ -1234,7 +1234,7 @@ class LeafletMap extends StylePluginBase implements ContainerFactoryPluginInterf
           ->view($entity, $popup_view_mode, $langcode);
         $render_context = new RenderContext();
         $popup_content = $this->renderer->executeInRenderContext($render_context, function () use (&$build) {
-          return $this->renderer->render($build, TRUE);
+          return $this->renderer->render($build);
         });
         if (!$render_context->isEmpty()) {
           $render_context->update($build_for_bubbleable_metadata);

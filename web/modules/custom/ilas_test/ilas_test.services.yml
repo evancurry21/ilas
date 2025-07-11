@@ -1,0 +1,4 @@
+services:
+  ilas_test.runner:
+    class: Drupal\ilas_test\TestRunner
+    arguments: ['@logger.factory', '@messenger', '@file_system']

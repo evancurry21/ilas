@@ -202,15 +202,15 @@
 
 /* Base content section */
 .content-section {
-  padding: 3rem 0;
+  padding: 1rem 0;
   position: relative;
   
   @include tablet {
-    padding: 2.5rem 0;
+    padding: 1rem 0;
   }
   
   @include mobile {
-    padding: 2rem 0;
+    padding: 1rem 0;
   }
   
   /* Section modifiers */
@@ -386,10 +386,10 @@
 
 /* Apply for Help Schedule Section */
 .apply-schedule-section {
-  padding: 0 2rem;
+  padding: 0 1rem;
   max-width: 800px;
   width: 100%;
-  margin: 0 auto 2rem auto;
+  margin: 0 auto .5rem auto;
   font-size: 1.125rem;
   line-height: 1.6;
   color: $color-black;

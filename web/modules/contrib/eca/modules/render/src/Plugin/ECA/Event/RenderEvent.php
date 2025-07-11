@@ -6,7 +6,7 @@ use Drupal\Core\Block\BlockManagerInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\eca\Attributes\Token;
+use Drupal\eca\Attribute\Token;
 use Drupal\eca\Entity\Eca;
 use Drupal\eca\Entity\Objects\EcaEvent;
 use Drupal\eca\Event\Tag;

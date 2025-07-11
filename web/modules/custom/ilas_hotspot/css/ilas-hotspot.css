@@ -7,6 +7,9 @@
   position: relative;
   display: inline-block;
   max-width: 100%;
+  width: auto;
+  margin: 0;
+  padding: 0;
 }
 
 .hotspot-background {
@@ -132,4 +135,78 @@
   background-color: #fbc15d;
   color: #000;
   border-bottom: 1px solid #fbc15d;
+}
+
+/* Impact Table Layout */
+.ilas-impact-wrapper {
+  padding: 0;
+  text-align: center;
+  width: 100%;
+}
+
+.ilas-impact-table {
+  width: 100%;
+  margin: 0;
+  border: none;
+  border-spacing: 0;
+  border-collapse: separate;
+  table-layout: fixed;
+}
+
+.ilas-impact-table td {
+  vertical-align: middle;
+  padding: 0;
+  border: none;
+}
+
+.hotspot-cell {
+  text-align: left;
+  width: 70%;
+  padding-left: 0;
+}
+
+.hotspot-cell .ilas-hotspot-container {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.annual-report-cell {
+  text-align: center;
+  width: 30%;
+  padding-left: 3rem;
+}
+
+.annual-report-content {
+  max-width: 300px;
+}
+
+.annual-report-cover {
+  transition: transform 0.3s ease;
+  cursor: pointer;
+  border: 6px solid #1263a0;
+  border-radius: 4px;
+}
+
+.annual-report-cover:hover {
+  transform: scale(1.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .ilas-impact-table {
+    display: block;
+  }
+  
+  .ilas-impact-table tr {
+    display: block;
+  }
+  
+  .ilas-impact-table td {
+    display: block;
+    text-align: center !important;
+  }
+  
+  .annual-report-cell {
+    margin-top: 2rem;
+  }
 }

@@ -1,0 +1,62 @@
+{#
+/**
+ * @file
+ * Template for test dashboard.
+ */
+#}
+<div class="test-dashboard">
+  <h1>{{ 'ILAS Test Dashboard'|t }}</h1>
+  
+  {% if results %}
+    <div class="test-summary">
+      <h2>{{ 'Latest Test Results'|t }}</h2>
+      <div class="summary-metrics">
+        <div class="metric">
+          <div class="value">{{ results.summary.total_tests }}</div>
+          <div class="label">{{ 'Total Tests'|t }}</div>
+        </div>
+        <div class="metric passed">
+          <div class="value">{{ results.summary.passed }}</div>
+          <div class="label">{{ 'Passed'|t }}</div>
+        </div>
+        <div class="metric failed">
+          <div class="value">{{ results.summary.failed }}</div>
+          <div class="label">{{ 'Failed'|t }}</div>
+        </div>
+        <div class="metric">
+          <div class="value">{{ results.summary.pass_rate }}%</div>
+          <div class="label">{{ 'Pass Rate'|t }}</div>
+        </div>
+      </div>
+      
+      {% if results.summary.performance_issues > 0 %}
+        <div class="alert alert-warning">
+          {{ 'Performance Issues:'|t }} {{ results.summary.performance_issues }}
+        </div>
+      {% endif %}
+      
+      {% if results.summary.security_vulnerabilities > 0 %}
+        <div class="alert alert-danger">
+          {{ 'Security Vulnerabilities:'|t }} {{ results.summary.security_vulnerabilities }}
+        </div>
+      {% endif %}
+      
+      {% if results.summary.accessibility_issues > 0 %}
+        <div class="alert alert-info">
+          {{ 'Accessibility Issues:'|t }} {{ results.summary.accessibility_issues }}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+  
+  <div class="test-execution">
+    <h2>{{ 'Run Tests'|t }}</h2>
+    {{ execute_form }}
+  </div>
+  
+  <div class="test-actions">
+    <a href="{{ path('ilas_test.history') }}" class="button">
+      {{ 'View Test History'|t }}
+    </a>
+  </div>
+</div>

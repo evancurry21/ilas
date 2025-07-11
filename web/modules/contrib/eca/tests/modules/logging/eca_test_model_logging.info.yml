@@ -10,7 +10,7 @@ config_devel:
   - eca.eca.eca_test_0006
   - eca.model.eca_test_0006
 
-# Information added by Drupal.org packaging script on 2025-06-02
-version: '2.1.8'
+# Information added by Drupal.org packaging script on 2025-06-24
+version: '2.1.9'
 project: 'eca'
-datestamp: 1748859797
+datestamp: 1750775149

@@ -1,5 +1,4 @@
 const mix = require('laravel-mix');
-require('laravel-mix-purgecss');
 
 /*
  |--------------------------------------------------------------------------
@@ -71,63 +70,6 @@ if (!mix.inProduction() && process.env.BROWSERSYNC_PROXY) {
   });
 }
 
-// PurgeCSS Configuration - Only in production
-if (mix.inProduction()) {
-  mix.purgeCss({
-    enabled: true,
-    paths: [
-      'templates/**/*.html.twig',
-      'js/**/*.js',
-      '../../../core/themes/stable9/templates/**/*.html.twig',
-      '../../../core/modules/*/templates/**/*.html.twig',
-      '../../../modules/contrib/*/templates/**/*.html.twig'
-    ],
-    safelist: {
-      standard: [
-        /^(is-|has-|js-|ajax-|views-|drupal-|contextual-|cke_)/,
-        /^(active|open|show|collapsed|hidden|processed)/,
-        /^(nav-|navbar-|dropdown-|btn-|badge-|alert-|modal-|collapse-)/,
-        /^(fa-|fas|far|fab|fal|fad)/,
-        /^bs-/,
-        /data-bs-/,
-        /aria-/,
-        /^form-/,
-        /^field-/,
-        /^node-/,
-        /^view-/,
-        /^block-/,
-        /^region-/,
-        /^path-/,
-        /^page-/,
-        /^user-/,
-        /^messages/,
-        /^tabs/,
-        /^pager/,
-        /^item-list/,
-        /^admin-/
-      ],
-      deep: [
-        /tippy/,
-        /tooltip/,
-        /popover/,
-        /carousel/,
-        /offcanvas/
-      ],
-      greedy: [
-        /^accordion/,
-        /^help-/,
-        /^search-/,
-        /^resource-/,
-        /^topic-/,
-        /^impact-/,
-        /^donate-/,
-        /^premium-/,
-        /^smart-faq/,
-        /^lazy-/
-      ]
-    }
-  });
-}
 
 // For image optimization, run: node optimize-images.js
 // This is separate from the build process to avoid webpack conflicts

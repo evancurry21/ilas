@@ -309,11 +309,11 @@ field.formatter.settings.leaflet_formatter_default:
           label: 'Automatically locate user current position'
     leaflet_tooltip:
       type: mapping
-      label: 'Tooltip Source'
+      label: 'Leaflet Tooltip'
       mapping:
         value:
           type: string
-          label: 'Value'
+          label: 'Tooltip Source'
         options:
           type: text
           label: 'Tooltip Options'
@@ -331,7 +331,7 @@ field.formatter.settings.leaflet_formatter_default:
       mapping:
         control:
           type: string
-          label: 'Enable'
+          label: 'Enable Leaflet Popup'
         content:
           type: text
           label: 'Popup content'
@@ -457,13 +457,10 @@ field.formatter.settings.leaflet_formatter_default:
           label: 'Control'
         options:
           type: text
-          label: 'Options'
-        excluded:
-          type: text
-          label: 'Exclude flag'
+          label: 'Marker Cluster Additional Options'
         include_path:
           type: boolean
-          label: 'Include Path'
+          label: 'Enable Markeclustering of Paths elements'
     fullscreen:
       type: mapping
       label: 'Leaflet Fullscreen'

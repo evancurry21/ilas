@@ -1,3 +1,11 @@
+ilas_chatbot.settings:
+  path: '/admin/config/services/ilas-chatbot'
+  defaults:
+    _form: '\Drupal\ilas_chatbot\Form\ChatbotSettingsForm'
+    _title: 'ILAS Chatbot Settings'
+  requirements:
+    _permission: 'administer site configuration'
+
 ilas_chatbot.form_config:
   path: '/api/chatbot/form/{form_type}'
   defaults:
@@ -5,6 +13,7 @@ ilas_chatbot.form_config:
     _title: 'Form Configuration'
   requirements:
     _permission: 'access content'
+    form_type: '^[a-z_]+$'
   methods: [GET]
 
 ilas_chatbot.embed_form:
@@ -14,11 +23,14 @@ ilas_chatbot.embed_form:
     _title: 'Embedded Form'
   requirements:
     _permission: 'access content'
+    webform_id: '^[a-z0-9_]+$'
+  methods: [GET]
 
 ilas_chatbot.webhook:
   path: '/api/chatbot/webhook'
   defaults:
     _controller: '\Drupal\ilas_chatbot\Controller\ChatbotController::webhook'
+    _title: 'Chatbot Webhook'
   requirements:
     _permission: 'access content'
   methods: [POST]

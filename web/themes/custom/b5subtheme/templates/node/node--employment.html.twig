@@ -12,55 +12,49 @@
  */
 #}
 
-{{ attach_library('b5subtheme/premium-application') }}
 
 <article{{ attributes.addClass('node', 'node--employment') }}>
-
-  {# Main Content Area #}
-  {% if content.field_main_content %}
-    <div class="main-content">
-      {{ content.field_main_content }}
-    </div>
-  {% endif %}
-
-  {# Job Opportunities Section #}
-  {% if content.field_job_listings %}
-    <section class="content-section">
-      <div class="container">
-        <h2 class="section-title text-center">Current Opportunities</h2>
-        {{ content.field_job_listings }}
+  <div class="container">
+    
+    {# Main Content Area #}
+    {% if content.field_main_content %}
+      <div class="main-content">
+        {{ content.field_main_content }}
       </div>
-    </section>
-  {% endif %}
+    {% endif %}
 
-  {# Benefits Section #}
-  {% if content.field_benefits %}
-    <section class="content-section content-section--gray">
-      <div class="container">
+    {# Job Opportunities Section - Using Accordion #}
+    {% if content.field_job_listings %}
+      <div class="job-opportunities-section mt-4">
+        <div class="accordion" id="jobListingsAccordion">
+          {{ content.field_job_listings }}
+        </div>
+      </div>
+    {% endif %}
+
+    {# Benefits Section #}
+    {% if content.field_benefits %}
+      <div class="benefits-section mt-4">
         <h2 class="section-title text-center">Why Work With Us?</h2>
         {{ content.field_benefits }}
       </div>
-    </section>
-  {% endif %}
+    {% endif %}
 
-  {# Call to Action Section #}
-  <section class="content-section content-section--cta">
-    <div class="container">
+    {# Call to Action Section #}
+    <div class="cta-section mt-5 text-center">
       <h2 class="section-title">Ready to Join Our Team?</h2>
       <p class="lead">We're looking for dedicated professionals who share our commitment to providing quality legal services to our community.</p>
       <a href="/eapplication" class="btn btn-primary btn-lg">
         Apply Today
       </a>
     </div>
-  </section>
 
-  {# Additional Content #}
-  {% if content.field_additional_content %}
-    <section class="content-section">
-      <div class="container">
+    {# Additional Content #}
+    {% if content.field_additional_content %}
+      <div class="additional-content mt-4">
         {{ content.field_additional_content }}
       </div>
-    </section>
-  {% endif %}
-
+    {% endif %}
+  
+  </div>{# End container #}
 </article>

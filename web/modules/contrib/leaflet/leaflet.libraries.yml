@@ -65,6 +65,7 @@ leaflet-drupal:
     - core/jquery
     - core/once
     - core/drupal
+    - core/drupal.ajax
     - leaflet/leaflet
 
 leaflet-geoman:
@@ -97,7 +98,6 @@ leaflet-geojson-overlay:
 
 # Control Fullscreen
 leaflet.fullscreen:
-  header: true
   remote: https://github.com/Leaflet/Leaflet.fullscreen
   version: 1.0.2
   license:
@@ -114,7 +114,6 @@ leaflet.fullscreen:
 
 # Control Reset View
 leaflet.reset_map_view:
-  header: true
   remote: https://github.com/drustack/Leaflet.ResetView
   version: 1.1.1
   license:
@@ -131,7 +130,6 @@ leaflet.reset_map_view:
 
 # Gesture Handling Leaflet Library
 leaflet.gesture_handling:
-  header: true
   remote: https://github.com/elmarquis/Leaflet.GestureHandling
   version: 1.2.2
   license:
@@ -148,7 +146,6 @@ leaflet.gesture_handling:
 
 # User Locate Control.
 leaflet.locatecontrol:
-  header: true
   remote: https://github.com/domoritz/leaflet-locatecontrol
   version: 0.78.0
   license:

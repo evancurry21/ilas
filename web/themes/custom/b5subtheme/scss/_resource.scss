@@ -39,26 +39,10 @@
 
 /*──────────── Resource page header consistency ────────────*/
 .node--type-resource {
-  /* Ensure resource pages follow standard curved header pattern */
-  .curved-header-gray {
-    .curved-header-title {
-      position: relative;
-      z-index: 3;
-      font-size: 3.5rem;
-      font-weight: bold;
-      text-align: center;
-      margin: 0;
-      color: var(--resource-primary); // Use CSS custom property
-      white-space: normal;
-      word-break: break-word;
-
-      @include tablet {
-        font-size: 2.5rem;
-      }
-
-      @include mobile {
-        font-size: 2.25rem;
-      }
+  /* Override the standard curved header for resource pages */
+  .curved-page-header {
+    .curved-page-header-title {
+      color: var(--resource-primary); // Use CSS custom property for resource pages
     }
   }
 }

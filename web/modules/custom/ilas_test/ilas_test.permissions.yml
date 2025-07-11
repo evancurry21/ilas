@@ -1,0 +1,8 @@
+run ilas tests:
+  title: 'Run ILAS tests'
+  description: 'Execute the ILAS test suite'
+  restrict access: true
+
+view test reports:
+  title: 'View test reports'
+  description: 'View ILAS test reports and history'

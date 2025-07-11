@@ -119,17 +119,17 @@
   background: transparent;
   overflow: visible;
   
-  // Dynamic height based on content with padding
-  min-height: 700px;
-  padding: 8rem 0;
+  // Match height to background SVG for perfect centering
+  min-height: 600px;
+  padding: 3.5rem 0 3rem; // Move content up by reducing top padding
   
   @include tablet {
-    min-height: 550px;
-    padding: 6rem 0;
+    min-height: 500px;
+    padding: 3rem 0 2rem;
   }
   @include mobile {
     min-height: auto;
-    padding: 4rem 0;
+    padding: 2.5rem 0 1.5rem;
   }
 
   // Flexbox container for vertical centering
@@ -139,15 +139,15 @@
   &::before {
     content: '';
     position: absolute;
-    top: -2px;
     left: 50%;
+    top: 0; // Align with section top
     width: 100vw;
-    height: 100%;
+    height: 100%; // Match section height
     margin-left: -50vw;
-    background-image: url('/themes/custom/b5subtheme/images/curved-background.svg');
+    background-image: url('/themes/custom/b5subtheme/images/curved-background (2400 x 600 px).svg');
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center;
+    background-position: center center;
     z-index: -1;
     pointer-events: none;
   }

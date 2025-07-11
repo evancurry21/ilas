@@ -7,5 +7,5 @@
         "drupal/core": "^10.4 || ^11",
         "drupal/drupal_cms_content_type_base": "~1.1.0"
     },
-    "version": "1.1.1"
+    "version": "1.1.3"
 }

@@ -62,8 +62,26 @@
   <nav class="navbar navbar-expand-lg centered-logo-navbar" role="navigation" aria-label="{{ 'Main navigation'|t }}">
     <div class="container">
       
-      {# Logo - always present but positioned differently per viewport #}
-      <a href="{{ path('<front>') }}" class="navbar-brand site-logo" title="{{ 'Home'|t }}" rel="home">
+      {# Desktop: Split navigation with centered logo #}
+      <div class="d-none d-lg-flex split-navigation">
+        {# Left navigation - will show items 1-3 via CSS #}
+        <div class="nav-section nav-left">
+          {{ drupal_menu('main') }}
+        </div>
+        
+        {# Centered Logo #}
+        <a href="{{ path('<front>') }}" class="navbar-brand site-logo" title="{{ 'Home'|t }}" rel="home">
+          <img src="/themes/custom/b5subtheme/images/Primary Logo & Tagline(2)_0.svg" alt="{{ 'Idaho Legal Aid Services'|t }}" />
+        </a>
+        
+        {# Right navigation - will show items 4-6 via CSS #}
+        <div class="nav-section nav-right">
+          {{ drupal_menu('main') }}
+        </div>
+      </div>
+      
+      {# Tablet/Mobile: Logo on left #}
+      <a href="{{ path('<front>') }}" class="navbar-brand site-logo d-lg-none" title="{{ 'Home'|t }}" rel="home">
         <img src="/themes/custom/b5subtheme/images/Primary Logo & Tagline(2)_0.svg" alt="{{ 'Idaho Legal Aid Services'|t }}" />
       </a>
       
@@ -75,12 +93,6 @@
               aria-label="{{ 'Toggle navigation'|t }}">
         <span class="navbar-toggler-icon"></span>
       </button>
-      
-      {# Navigation content - Desktop only #}
-      {# Desktop: unified menu #}
-      <div class="d-none d-lg-block unified-menu">
-        {{ drupal_menu('main') }}
-      </div>
       
     </div>
   </nav>
@@ -97,12 +109,22 @@
 
   {# Determine layout type #}
   {% set use_standard_layout = not is_front %}
+  {% set is_custom_content = false %}
   
-  {# Check for custom page types #}
+  {# Check for custom content types - these handle their own layout #}
   {% if node is defined and node.getType is defined %}
-    {% set custom_types = ['home_page', 'donate'] %}
+    {% set custom_types = [
+      'apply_for_help',
+      'donate', 
+      'employment_application',
+      'employment',
+      'office_information',
+      'office_locations',
+      'resource'
+    ] %}
     {% if node.getType() in custom_types %}
       {% set use_standard_layout = false %}
+      {% set is_custom_content = true %}
     {% endif %}
   {% endif %}
   
@@ -169,26 +191,50 @@
 
   {% else %}
     
-    {# Custom/Front Page Layout #}
-    <div class="container">
-      <div class="row">
-        {% if page.sidebar_first %}
-          <div class="order-2 order-lg-1 {{ sidebar_first_classes }}">
-            {{ page.sidebar_first }}
+    {# Custom Content Types - Include curved header/footer but no container wrapper #}
+    {% if is_custom_content %}
+      
+      {# Gray Curved Header #}
+      {% if node and node.getTitle() %}
+        <section class="curved-page-header">
+          <div class="container">
+            <h1 class="curved-page-header-title">{{ node.getTitle() }}</h1>
           </div>
-        {% endif %}
-
-        <div class="order-1 order-lg-2 {{ content_classes }}">
-          {{ page.content }}
+        </section>
+      {% endif %}
+      
+      {# Render content directly #}
+      {{ page.content }}
+      
+      {# Blue Section Below #}
+      <div class="curved-section-blue">
+        <div class="curved-section-container">
+          {# Additional content can go here #}
         </div>
-
-        {% if page.sidebar_second %}
-          <div class="order-3 {{ sidebar_second_classes }}">
-            {{ page.sidebar_second }}
-          </div>
-        {% endif %}
       </div>
-    </div>
+      
+    {% else %}
+      {# Other non-standard pages (like front page) #}
+      <div class="container">
+        <div class="row">
+          {% if page.sidebar_first %}
+            <div class="order-2 order-lg-1 {{ sidebar_first_classes }}">
+              {{ page.sidebar_first }}
+            </div>
+          {% endif %}
+
+          <div class="order-1 order-lg-2 {{ content_classes }}">
+            {{ page.content }}
+          </div>
+
+          {% if page.sidebar_second %}
+            <div class="order-3 {{ sidebar_second_classes }}">
+              {{ page.sidebar_second }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
 
   {% endif %}
 </main>

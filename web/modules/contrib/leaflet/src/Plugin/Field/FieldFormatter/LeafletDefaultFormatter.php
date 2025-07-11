@@ -551,7 +551,7 @@ class LeafletDefaultFormatter extends FormatterBase implements ContainerFactoryP
     // cache-ability to $results.
     $render_context = new RenderContext();
     $rendered = $this->renderer->executeInRenderContext($render_context, function () use (&$build) {
-      return $this->renderer->render($build, TRUE);
+      return $this->renderer->render($build);
     });
     $result = !empty($rendered) ? $rendered : $entity->label();
     if (!$render_context->isEmpty()) {

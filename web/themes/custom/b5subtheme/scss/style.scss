@@ -5,8 +5,8 @@
 @import 'variables_theme';
 // Import mixins.
 @import 'mixins';
-// Include bootstrap and bootswatch.
-@import '../../../../themes/contrib/bootstrap5/scss/style';
+// Include bootstrap.
+@import '~bootstrap/scss/bootstrap';
 @import 'bootswatch';
 
 // Import Font Awesome

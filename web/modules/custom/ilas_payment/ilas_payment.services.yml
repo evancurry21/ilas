@@ -1,0 +1,20 @@
+services:
+  ilas_payment.processor:
+    class: Drupal\ilas_payment\Service\PaymentProcessor
+    arguments: ['@logger.factory', '@config.factory', '@http_client', '@messenger']
+  
+  ilas_payment.stripe:
+    class: Drupal\ilas_payment\Service\StripePaymentService
+    arguments: ['@logger.factory', '@config.factory', '@ilas_payment.processor']
+  
+  ilas_payment.paypal:
+    class: Drupal\ilas_payment\Service\PayPalPaymentService
+    arguments: ['@logger.factory', '@config.factory', '@ilas_payment.processor']
+  
+  ilas_payment.acknowledgment:
+    class: Drupal\ilas_payment\Service\AcknowledgmentService
+    arguments: ['@logger.factory', '@plugin.manager.mail', '@token', '@renderer']
+  
+  ilas_payment.donation_manager:
+    class: Drupal\ilas_payment\Service\DonationManager
+    arguments: ['@logger.factory', '@entity_type.manager']

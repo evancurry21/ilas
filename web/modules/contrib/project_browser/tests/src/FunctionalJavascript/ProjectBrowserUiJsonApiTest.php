@@ -6,6 +6,7 @@ namespace Drupal\Tests\project_browser\FunctionalJavascript;
 
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 use Drupal\project_browser\ProjectBrowser\Filter\BooleanFilter;
+use PHPUnit\Framework\Attributes\Group;
 
 // cspell:ignore cashpresso Adnuntius Paypage Redsys ZURB Superfish TMGMT Toki
 // cspell:ignore Webtheme Pitchburgh Gotem Webform Bsecurity Bstatus Cardless
@@ -15,6 +16,7 @@ use Drupal\project_browser\ProjectBrowser\Filter\BooleanFilter;
  *
  * @group project_browser
  */
+#[Group('project_browser')]
 final class ProjectBrowserUiJsonApiTest extends WebDriverTestBase {
 
   use ProjectBrowserUiTestTrait;

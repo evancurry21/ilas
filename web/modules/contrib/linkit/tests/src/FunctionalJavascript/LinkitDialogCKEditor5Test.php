@@ -157,7 +157,8 @@ class LinkitDialogCKEditor5Test extends WebDriverTestBase {
     // Make sure the autocomplete result container is visible.
     $this->assertTrue($autocomplete_container->isVisible());
 
-    // Make sure the autocomplete result container is excluded from CKEditor5 CSS resets:
+    // Make sure the autocomplete result container is excluded from CKEditor5
+    // CSS resets:
     $assert_session->elementExists('css', '.ck-link-form .linkit-ui-autocomplete.ck-reset_all-excluded');
 
     // Find all the autocomplete results.
